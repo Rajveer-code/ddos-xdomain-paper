@@ -173,15 +173,29 @@ def load(
 
     # The textual attack column carries the family; the numeric Label column does not.
     label_col = _find_label_col(raw, ds.label_col)
-    labels = raw[label_col].astype(str)
-    rep.label_map, rep.family_map = build_label_maps(labels)
+
+    # Resolve labels through the *vocabulary*, not row by row. These datasets have ~15
+    # distinct labels across up to 18.9M rows, so `.astype(str).map(fn)` would build
+    # millions of Python string objects and push the machine into swap. Categorical codes
+    # plus a lookup table make it an O(n) numpy gather instead.
+    labels_cat = raw[label_col].astype("category")
+    vocab = [str(c) for c in labels_cat.cat.categories]
+    rep.label_map = {v: label_of(v) for v in vocab}
+    rep.family_map = {v: family_of(v) for v in vocab}
+
+    codes = labels_cat.cat.codes.to_numpy()
+    class_lut = np.array([rep.label_map[v] for v in vocab], dtype=np.int8)
+    fam_lut = np.array(["other"] + [rep.family_map[v] for v in vocab], dtype=object)
+    del labels_cat
 
     df, rep.dropped_leaky = _harmonize_columns(raw)
+    del raw
     # Drop every label-ish column from the feature matrix.
     df = df.drop(columns=[c for c in ("Label", "label", "Attack", "Class", "class")
                           if c in df.columns], errors="ignore")
 
-    X = df.select_dtypes(include=[np.number]).copy()
+    X = df.select_dtypes(include=[np.number])
+    del df
 
     # Count infinities column by column. Materialising the whole frame as float64 to call
     # np.isinf once needs ~5.9 GB on the 18.9M-row datasets and sends the machine to swap;
@@ -194,8 +208,9 @@ def load(
     if n_inf:
         X = X.replace([np.inf, -np.inf], np.nan)
 
-    y = labels.map(lambda s: label_of(s)).astype(int)
-    fam = labels.map(lambda s: family_of(s)).astype(str)
+    # codes == -1 marks a NaN label; fam_lut is offset by one so that maps to "other".
+    y = pd.Series(np.where(codes >= 0, class_lut[codes], OTHER_ATTACK), name="y")
+    fam = pd.Series(fam_lut[codes + 1], name="family")
     rep.other_attack_rows = int((y == OTHER_ATTACK).sum())
 
     if other_policy == "drop":
