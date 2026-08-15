@@ -34,3 +34,6 @@ desktop.ini
 
 # plan files are working state, kept local
 PLAN_*.md
+
+# transient run logs
+results/_*.log

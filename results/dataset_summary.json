@@ -2,33 +2,34 @@
   "nf_cse_cic_ids2018": {
     "key": "nf_cse_cic_ids2018",
     "rows_raw": 17129715,
-    "rows_out": 8981074,
+    "rows_out": 8981062,
     "n_features": 39,
     "dropped_leaky": [
       "L4_SRC_PORT",
       "L4_DST_PORT"
     ],
     "class_counts": {
-      "benign": 8436211,
+      "benign": 8436199,
       "ddos": 453237,
       "other_attack": 91626
     },
     "other_attack_rows": 267960,
     "other_policy": "keep",
-    "n_duplicates": 8148641,
+    "n_duplicates": 8148653,
     "duplicate_fraction": 0.4757,
     "n_contradictory_groups": 1940,
     "n_inf_coerced": 0,
+    "n_float32_overflow": 213,
     "family_counts": {
-      "benign": 8436211,
+      "benign": 8436199,
       "volumetric": 453034,
       "other": 91626,
       "low_rate_application": 203
     },
     "benign_to_ddos_ratio": 18.61,
     "ddos_base_rate": 0.050466,
-    "missing_cells": 0,
-    "seconds": 58.3
+    "missing_cells": 201,
+    "seconds": 57.4
   },
   "nf_bot_iot": {
     "key": "nf_bot_iot",
@@ -50,6 +51,7 @@
     "duplicate_fraction": 0.9967,
     "n_contradictory_groups": 0,
     "n_inf_coerced": 0,
+    "n_float32_overflow": 0,
     "family_counts": {
       "volumetric": 53005,
       "other": 27462,
@@ -58,7 +60,7 @@
     "benign_to_ddos_ratio": 0.39,
     "ddos_base_rate": 0.522892,
     "missing_cells": 0,
-    "seconds": 68.8
+    "seconds": 100.3
   },
   "nf_ton_iot": {
     "key": "nf_ton_iot",
@@ -80,6 +82,7 @@
     "duplicate_fraction": 0.8114,
     "n_contradictory_groups": 0,
     "n_inf_coerced": 0,
+    "n_float32_overflow": 216,
     "family_counts": {
       "other": 1334884,
       "benign": 613176,
@@ -87,8 +90,8 @@
     },
     "benign_to_ddos_ratio": 1.16,
     "ddos_base_rate": 0.21384,
-    "missing_cells": 0,
-    "seconds": 31.5
+    "missing_cells": 216,
+    "seconds": 29.5
   },
   "nf_unsw_nb15": {
     "key": "nf_unsw_nb15",
@@ -110,6 +113,7 @@
     "duplicate_fraction": 0.8807,
     "n_contradictory_groups": 858,
     "n_inf_coerced": 0,
+    "n_float32_overflow": 0,
     "family_counts": {
       "benign": 199838,
       "other": 34086,
@@ -118,7 +122,7 @@
     "benign_to_ddos_ratio": 64.99,
     "ddos_base_rate": 0.012975,
     "missing_cells": 0,
-    "seconds": 4.5
+    "seconds": 4.0
   },
   "cic_ddos2019": {
     "key": "cic_ddos2019",
@@ -137,6 +141,7 @@
     "duplicate_fraction": 0.0289,
     "n_contradictory_groups": 29,
     "n_inf_coerced": 0,
+    "n_float32_overflow": 0,
     "family_counts": {
       "volumetric": 172001,
       "reflection_amplification": 152196,
@@ -145,7 +150,7 @@
     "benign_to_ddos_ratio": 0.29,
     "ddos_base_rate": 0.773954,
     "missing_cells": 0,
-    "seconds": 2.6
+    "seconds": 3.1
   },
   "cic_ids2017": {
     "key": "cic_ids2017",
@@ -164,6 +169,7 @@
     "duplicate_fraction": 0.0356,
     "n_contradictory_groups": 270,
     "n_inf_coerced": 0,
+    "n_float32_overflow": 0,
     "family_counts": {
       "benign": 1895206,
       "volumetric": 311093,
@@ -173,7 +179,7 @@
     "benign_to_ddos_ratio": 5.89,
     "ddos_base_rate": 0.144163,
     "missing_cells": 0,
-    "seconds": 13.8
+    "seconds": 13.0
   },
   "cic_ids2017_fixed": {
     "key": "cic_ids2017_fixed",
@@ -192,6 +198,7 @@
     "duplicate_fraction": 0.0224,
     "n_contradictory_groups": 746,
     "n_inf_coerced": 0,
+    "n_float32_overflow": 0,
     "family_counts": {
       "benign": 1456664,
       "volumetric": 261160,
@@ -201,6 +208,6 @@
     "benign_to_ddos_ratio": 5.46,
     "ddos_base_rate": 0.152753,
     "missing_cells": 0,
-    "seconds": 13.1
+    "seconds": 11.0
   }
 }
