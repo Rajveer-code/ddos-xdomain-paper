@@ -1,5 +1,14 @@
 # Manuscript Audit & Strategy — *Confidently Wrong*
 
+> **Status 2026-08-15, post-fix.** BLOCKER-1 (bibliography), BLOCKER-2 (figures),
+> BLOCKER-3 (pre-registration wording) and MAJOR-4 (missing interval), MAJOR-5 (length),
+> MINOR-6 and MINOR-7 are all resolved. MAJOR-4 changed the paper's claim rather than
+> merely defending it: the capacity hypothesis is now reported as unsupported at this
+> power (+0.0132 [-0.0084, +0.0320], p=0.209) rather than refuted, and computing the
+> intervals surfaced a genuine sub-effect the coarse grouping had hidden
+> (drop_size_volume +0.0615 [+0.0278, +0.0991], p<0.001). Remaining open item:
+> Reviewer C's benign-pool contamination sensitivity, deliberately deferred.
+
 Audit date: 2026-08-15. Venue economics verified this session (see §VI).
 **Scope note:** this is a partial run of the manuscript-elevator pipeline. Executed: pre-scan,
 novelty/statistics audit, gatekeeping, simulated peer review, venue strategy, action plan.

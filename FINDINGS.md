@@ -1,7 +1,8 @@
 # FINDINGS
 
 Every number here traces to a file in `results/`. Nothing is quoted from another paper.
-Where a pre-registered hypothesis failed, it is recorded as failed.
+Where a pre-specified hypothesis was not supported, it is recorded as not supported, with
+its interval and the smallest effect the design could have detected.
 
 Protocol: shared 39-feature NetFlow v2 space, exact de-duplication in the model's own
 feature space, source-only scaling and imputation, balanced sample weights, stratified
@@ -38,7 +39,7 @@ sole exception is `NF-BoT-IoT → NF-CSE-CIC-IDS2018`, which holds AUC 0.9656 wh
 
 ---
 
-## F2 — The cause is not a semantic feature class. The pre-registered hypothesis failed.
+## F2 — The pre-specified capacity hypothesis is not supported (and the grouping hid a real sub-effect).
 
 `results/feature_ablation.json`
 
@@ -54,8 +55,22 @@ performance. It does not.
 | `drop_rate_throughput` | 35 | 0.3739 | −0.0010 |
 | `capacity_only` | 20 | 0.3738 | −0.0011 |
 
-Stripping every capacity feature buys 0.013 macro-F1. Capacity features *alone* transfer
-as well as the full set. The effect is not located in the semantic class of the features.
+Stripping every capacity feature buys +0.0132 macro-F1, 95% CI [−0.0084, +0.0320],
+p = 0.209 by paired bootstrap over the 12 source-seed pairs. The interval spans zero, so
+this is a failure to detect an effect rather than a demonstration that none exists; the
+design has 80% power for a true difference of 0.0301.
+
+**The coarse grouping hid a real sub-effect.** Dropping the 13 size/volume features alone
+gives **+0.0615 [+0.0278, +0.0991], p < 0.001**, and dropping the three duration features
+gives +0.0114 [+0.0009, +0.0277], p = 0.021. Byte and packet counts do carry testbed
+identity as the hypothesis anticipated. What failed was the aggregation: bundling them with
+throughput features that contribute nothing (−0.0010 [−0.0033, +0.0013]) dilutes the effect
+below significance. Reported as an aggregation failure rather than re-cutting the classes
+until something reached significance. See `results/ablation_intervals.json`.
+
+**Provenance.** The hypothesis was committed in `ed7fb10` at 13:32:00 and the result in
+`6d82cd1` at 15:49:37 on 2026-08-15. That is pre-specification in public history, not
+pre-registration, and the manuscript says so.
 
 ## F3 — It is a feature-set *size* effect. One protocol bit beats the standard set.
 
