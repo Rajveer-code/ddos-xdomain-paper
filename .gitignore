@@ -1,0 +1,36 @@
+# data (downloaded from Kaggle, never committed)
+data/
+*.parquet
+*.csv.gz
+
+# generated artifacts
+models/*.pkl
+models/*.joblib
+figures/*.png
+figures/*.pdf
+*.zip
+
+# local TLS bundle (machine-specific, contains local AV root)
+configs/ca_bundle.pem
+
+# credentials — never commit
+kaggle.json
+.env
+*.key
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# editors / os
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+
+# plan files are working state, kept local
+PLAN_*.md

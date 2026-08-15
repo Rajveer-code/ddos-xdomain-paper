@@ -1,0 +1,14 @@
+# Pinned to the versions this study was run with (2026-08-15, Python 3.13.12).
+numpy==2.4.4
+pandas==3.0.2
+scipy==1.17.1
+scikit-learn==1.6.1
+lightgbm==4.6.0
+xgboost==3.1.1
+shap==0.48.0
+pyarrow==23.0.1
+matplotlib==3.10.8
+joblib==1.5.3
+kaggle==1.7.4.5
+kagglehub==1.0.2
+certifi
