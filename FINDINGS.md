@@ -202,12 +202,63 @@ because no threshold repairs an inverted ranking.
 **The operational recommendation is concrete:** unsupervised domain adaptation is not
 worth the effort in this setting; labelling a few dozen flows from the target network is.
 
+## F8 — The finding replicates in the conventional feature space, but the *failure mode* depends on which datasets you pick.
+
+`results/cic_pair.json` · CIC-DDoS2019 ↔ CICIDS2017, 76 shared CICFlowMeter features,
+4 models × 5 seeds, both directions
+
+The gap replicates: in-domain 0.9675–0.9995, external 0.3368–0.4986, mean LightGBM paired
+gap **0.5848**, significant in **10/10** pair-seeds. So neither the size of the gap nor the
+inversion is an artefact of choosing the NetFlow v2 feature set.
+
+The decomposition, however, comes out differently:
+
+| pair | model | ext AUC | ranking loss | threshold loss |
+|---|---|---:|---:|---:|
+| ids2017→ddos2019 | RandomForest | **0.9348** | +0.0651 | **+0.5643** |
+| ids2017→ddos2019 | XGBoost | 0.8693 | +0.1306 | +0.5232 |
+| ids2017→ddos2019 | LightGBM | 0.7594 | +0.2406 | +0.4180 |
+| ddos2019→ids2017 | XGBoost | 0.7875 | +0.2125 | +0.2506 |
+
+Where the NetFlow quartet is ranking-dominated in 11 of 12 pairs, the CIC pairing is
+**threshold-dominated in most configurations**, and RandomForest retains ROC-AUC 0.9348
+across it.
+
+This is a substantive point about the literature rather than a detail. CIC-DDoS2019 and
+CICIDS2017 come from the same institution, testbed lineage and extractor. Ranking largely
+survives that move and the failure is an operating-point failure — which is recoverable,
+and which is exactly the optimistic conclusion some prior work draws. Moving between
+*independently built* testbeds destroys the ranking instead, and no threshold can repair
+it.
+
+**The choice of dataset pair determines which failure mode you observe, and therefore
+which remedy appears to work.** Studies that evaluate transfer only within one
+institution's dataset family will systematically overstate how recoverable the problem is.
+
+## F9 — Correcting label errors makes transfer look *worse*, not better.
+
+`results/label_noise.json` · identical CIC-DDoS2019 source model applied to the original
+CICIDS2017 and to the DistriNet-corrected release (Engelen et al., 2021)
+
+| model | original labels | corrected labels | Δ macro-F1 | Δ AUC |
+|---|---:|---:|---:|---:|
+| LightGBM | 0.4827 | 0.3375 | **−0.1453** | −0.0566 |
+| XGBoost | 0.4986 | 0.3391 | −0.1595 | −0.0246 |
+| RandomForest | 0.4824 | 0.3381 | −0.1443 | −0.0798 |
+| LogisticRegression | 0.4543 | 0.3287 | −0.1256 | −0.2252 |
+
+Mean **|Δ| = 0.1437**, consistent in sign and magnitude across all four model families.
+
+Label error was not masking good transfer — it was manufacturing the appearance of it.
+Roughly a quarter of the external macro-F1 reported against the original CICIDS2017
+labels does not survive correction. Any cross-dataset result using uncorrected CICIDS2017
+as a target is optimistic by about this margin.
+
 ---
 
 ## Still open
 
-- A3: label-noise isolation via DistriNet-corrected CICIDS2017 `[running]`
-- Secondary CICFlowMeter study, both directions `[running — early: in 0.9995,
-  ext 0.4801, AUC 0.7114, 76 shared features; pattern replicates]`
-- Full-data confirmation run for the headline pair
-- Per-attack-family transfer table (data collected, not yet summarised)
+- Full-data confirmation run for the headline pair (currently 50k/class cap)
+- Per-attack-family transfer table (data collected in `transfer_matrix.json`, not yet
+  summarised into its own table)
+- Manuscript assembly and a final number-consistency pass
