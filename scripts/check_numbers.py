@@ -32,7 +32,7 @@ ALLOW = {
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "17", "18",
     "19", "20", "39", "43", "50", "76", "80", "95", "99", "100", "240", "400", "500",
     "1000", "2000", "1.0", "0.5", "0.0",
-    "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2024", "2026", "2027",
+    "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2024", "2026", "2027",
     "2402.10974",  # arXiv identifier, not a measurement
 }
 
@@ -80,7 +80,13 @@ def main() -> int:
     for doc in docs:
         if not doc.exists():
             continue
-        for ln, line in enumerate(doc.read_text(encoding="utf-8").splitlines(), 1):
+        text = doc.read_text(encoding="utf-8")
+        # Bibliographic numbers (years, volumes, pages, arXiv ids) are citations, not
+        # measurements, and correctly have no backing result file.
+        cut = text.find("## References")
+        if cut != -1:
+            text = text[:cut]
+        for ln, line in enumerate(text.splitlines(), 1):
             if line.strip().startswith(("<!--", "`[PENDING", "[PENDING")):
                 continue
             for tok in NUM.findall(line):

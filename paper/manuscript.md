@@ -118,45 +118,78 @@ trained on.
 
 ## 2. Related work
 
-**Cross-dataset evaluation.** D'hooge et al. [2020] cross-evaluated CIC-IDS2017 and
-CSE-CIC-IDS2018 and found near-perfect in-domain scores collapsing across datasets.
-Cantone et al. [2024] extended this to four datasets and four classifiers, reporting
-cross-dataset accuracy "largely commensurate with random chance" and diagnosing data
-anomalies behind it. Our work departs on the question asked: prior studies establish
-*that* the gap exists and how large it is, whereas we characterise its *sign*, decompose
-it into ranking and threshold components, and test whether it is predictable and
-recoverable. The inversion we report is visible in an aggregate below 0.5 but not
-interpretable from aggregate accuracy alone.
+### 2.1 The cross-dataset gap
 
-**Feature standardisation.** Sarhan et al. [2021] observed that the absence of a common
-feature set makes cross-dataset comparison unreliable, and released NetFlow v2 versions of
-four datasets sharing 43 fields. We adopt that feature set precisely so that our transfer
-results cannot be attributed to ad-hoc harmonisation, and verify the shared space by
-assertion rather than assumption.
+That flow-based intrusion detectors transfer badly is not in dispute. D'Hooge et al. [2020]
+established reference scores on CIC-IDS2017 and CSE-CIC-IDS2018 across twelve supervised
+algorithms and concluded that the classifiers could not operate reliably on traffic from a
+network unseen at training time. Cantone et al. [2024] extended the design to four datasets
+and four classifiers, reported cross-dataset accuracy largely commensurate with random
+chance, and traced part of it to anomalies in the data itself.
 
-**Dataset quality.** Engelen et al. [2021] documented labelling and extraction defects in
-CICIDS2017 and released a corrected version; Lanvin et al. [2022] extended that analysis.
-We use the corrected release to isolate label error from domain shift, and find the
-correction moves external performance *downward*, which to our knowledge has not been
-reported.
+Our study shares their protocol and departs on the question. Prior work establishes *that*
+the gap exists and how large it is. We ask what kind of failure it is. That distinction is
+not rhetorical: an aggregate accuracy near chance is compatible with a detector that has
+lost its signal and with one that has reversed it, and only the second is visible once
+ROC-AUC is reported per ordered pair. The remedies implied by the two readings differ
+completely, which is why sections 4.4 to 4.6 test three of them rather than proposing a
+fourth.
 
-**Methodology.** Arp et al. [2022] catalogue ten recurring pitfalls in machine learning
-for security. We map our protocol against all ten (Table 2). Axelsson [2000] established
-that intrusion detection is dominated by the base rate; our datasets span base rates from
-1.3% to 77.4%, so we report operating-point metrics alongside F1.
+### 2.2 Feature standardisation and dataset quality
 
-**Predicting performance without labels.** Garg et al. [2022] introduced Average
-Thresholded Confidence for estimating target accuracy from source-calibrated scores. We
-evaluate it against distribution-divergence measures in the intrusion-detection setting
-and find the ordering between them reversed relative to the assumption embedded in most
-domain-adaptation work.
+Sarhan et al. [2021] identified the absence of a common feature set as a structural
+obstacle to cross-dataset claims, and released NetFlow v2 conversions of four datasets
+sharing 43 fields. We adopt that feature set precisely so our transfer results cannot be
+attributed to ad-hoc harmonisation, and verify the shared space by assertion rather than
+assumption. The four source datasets themselves are CSE-CIC-IDS2018 [Sharafaldin et al.
+2018], BoT-IoT [Koroniotis et al. 2019], ToN-IoT [Alsaedi et al. 2020] and UNSW-NB15
+[Moustafa and Slay 2015]; the secondary study uses CIC-DDoS2019 [Sharafaldin et al. 2019]
+and CICIDS2017 [Sharafaldin et al. 2018].
 
-**Domain adaptation for NIDS.** CORAL [Sun et al. 2016] and domain-invariant NIDS
-approaches are established; we include CORAL as the zero-label baseline. Our contribution
-is not a new adaptation method but a measurement of what the existing ones recover here,
-which is close to nothing.
+Dataset quality has its own literature. Engelen et al. [2021] documented labelling and
+traffic-generation defects in CICIDS2017 and released a corrected version; Lanvin et al.
+[2022] extended the analysis and quantified the effect of the corrections on measured
+performance. Both studies examine in-domain consequences. We use the corrected release
+differently, as an instrument: applying one identical source model to the original and
+corrected targets isolates label error from domain shift, and the result runs opposite to
+the intuitive direction (§4.9).
 
----
+Our duplicate accounting (§3.3) is adjacent to this work but, to our knowledge, has not
+been reported at this scale for the NetFlow v2 datasets. That three of four are more than
+80% duplicate in the model's own feature space bounds every in-domain number computed on
+them.
+
+### 2.3 Methodology and evaluation norms
+
+Arp et al. [2022] catalogue ten recurring pitfalls in machine learning for security, of
+which sampling bias, data snooping, spurious correlations and the base-rate fallacy bear
+directly on cross-dataset evaluation. We map the protocol against all ten in Table 2 rather
+than asserting compliance in prose. Axelsson [2000] established that intrusion detection is
+dominated by the base rate; the datasets here span base rates from 1.3% to 77.4%, so
+balanced-test-set F1 is not comparable across them and operating-point metrics are reported
+alongside.
+
+### 2.4 Predicting performance without labels
+
+Estimating target accuracy from unlabelled data is an active area outside security. Garg et
+al. [2022] introduced Average Thresholded Confidence, which learns a confidence threshold
+on source data and predicts accuracy as the fraction of unlabelled target points above it.
+The competing family of approaches measures distance between source and target feature
+distributions directly, which is also the theoretical motivation for domain-adversarial
+training. Section 4.5 evaluates both families on the same twelve ordered pairs and finds
+their ordering reversed relative to the assumption embedded in most of that work: the
+distribution-distance measures lose to a mean baseline, and the confidence-based estimator
+does not.
+
+### 2.5 Domain adaptation for intrusion detection
+
+Adapting a detector to a new network is a well-populated area, including covariance
+alignment [Sun et al. 2016] and domain-invariant representation learning for NIDS
+specifically. We make no methodological contribution here and do not claim one. CORAL
+appears in §4.6 as the standard zero-label baseline, and the contribution is the
+measurement: what the available zero-label methods actually recover in this setting, which
+is close to nothing, against what a handful of labelled target flows recovers, which is
+most of the gap.
 
 ## 3. Data and experimental protocol
 
@@ -251,7 +284,7 @@ assumed. Imbalance is handled with balanced sample weights, never resampling, si
 applied before a split leaks synthetic neighbours across it. Models are LightGBM
 (primary), XGBoost, RandomForest and LogisticRegression at fixed hyperparameters, with no
 tuning against any target. Five seeds are used for the transfer matrix and three for the
-ablations, and a stratified cap of 50,000 rows per class bounds cost.
+ablations and remedy experiments, which are correspondingly more expensive; the asymmetry is a cost decision and every reported interval states the number of pairs it rests on. A stratified cap of 50,000 rows per class bounds cost.
 
 The leakage guarantee is asserted rather than documented. The pipeline self-check verifies
 that a scaler fitted on train maps train exactly into [0, 1] **and** lets some unseen test
@@ -315,12 +348,25 @@ LightGBM averages 0.9817 macro-F1 across the four sources (0.9546–1.0000) at R
 0.9977–1.0000. The other three model families agree within a few points, and seed-to-seed
 standard deviations reach at most 0.0023. Nothing here suggests an unsolved problem.
 
+Two features of these numbers matter for what follows. First, they are obtained *after*
+de-duplication, so they are not inflated by the train/test contamination described in §3.3;
+the uncorrected figures would be higher still. Second, ROC-AUC reaches 1.0000 on
+NF-CSE-CIC-IDS2018 to four decimal places, meaning the classes are perfectly separable in
+the source domain. Perfect in-domain separability is what makes the threshold plateau of
+§3.6 wide, and it is the first hint that the model is fitting something more specific than
+attack behaviour.
+
 ### 4.2 Out-of-domain, the failure has a sign
 
 Applying the identical fitted model to another testbed across all 12 ordered pairs and 5
 seeds, LightGBM averages 0.3788 external macro-F1 (0.1935–0.5957). The mean paired gap is
 0.6029 and the paired bootstrap rejects a zero gap in **60 of 60** pair-seeds at p < 0.05
 (Figure 1).
+
+![Figure 1](../figures/fig1_generalization_gap.png)
+
+**Figure 1.** In-domain versus external macro-F1 for all 12 ordered pairs, LightGBM, mean over 5 seeds.
+
 
 The informative statistic is external ROC-AUC. It averages 0.5054, which is chance. A mean at
 chance could describe a detector that has merely lost its signal. That is not what
@@ -334,6 +380,11 @@ Figure 2 shows the matrix. The entire NF-UNSW-NB15 source row is inverted agains
 target. This is the paper's central claim: cross-network failure in flow-based DDoS
 detection is the reversal of a learned relationship, not its loss.
 
+![Figure 2](../figures/fig2_auc_matrix.png)
+
+**Figure 2.** External ROC-AUC per ordered pair. Values below 0.5 indicate the ranking inverts in the target domain.
+
+
 ### 4.3 Representation or operating point?
 
 A collapsed macro-F1 admits two explanations with opposite remedies. The model may no
@@ -345,9 +396,21 @@ Eleven of twelve pairs are ranking-dominated (Figure 3). The lone exception,
 NF-BoT-IoT → NF-CSE-CIC-IDS2018, retains ROC-AUC 0.9656, a ranking that transferred nearly
 intact, while losing 0.4217 macro-F1 to a stale operating point.
 
+![Figure 3](../figures/fig3_failure_decomposition.png)
+
+**Figure 3.** Ranking loss versus threshold loss per ordered pair. Points below the diagonal fail representationally; only one pair lies above it.
+
+
 The optimistic reading available in the literature, that cross-domain collapse is largely
 a calibration artefact, is therefore true here for exactly one pair in twelve. §4.6
 measures what that is worth.
+
+The decomposition also gives an operator a decision rule, though not a free one. Ranking
+loss requires target labels to compute, so it cannot be measured before deployment. What
+§4.5 shows is that a label-free proxy for the same quantity exists and is moderately
+informative, which is why the two sections are ordered as they are: the decomposition
+establishes that the distinction matters, and the prediction section asks whether it can be
+made without labels.
 
 ### 4.4 Which features cause it? A pre-specified hypothesis the data does not support
 
@@ -393,6 +456,11 @@ classes until something reached significance.
 
 **What the data does support is a size effect.** Ordering the same 17 sets by external
 performance puts the smallest on top (Figure 4).
+
+![Figure 4](../figures/fig4_feature_set_size.png)
+
+**Figure 4.** Feature-set size against in-domain and external macro-F1. The single-feature set attains the best external score of any subset tested.
+
 
 **Table 4. External performance by feature-set size.**
 
@@ -465,6 +533,11 @@ motivation behind a large body of domain-adaptation work. In this setting, how f
 two flow-feature distributions sit carries almost no information about how much a detector
 will lose.
 
+![Figure 5](../figures/fig5_gap_forecast.png)
+
+**Figure 5.** Observed generalization gap against three label-free predictors, with Spearman correlation and bootstrap CI.
+
+
 Measures of the model's own behaviour work, moderately. ATC reaches ρ = −0.726 against the
 gap and +0.756 [+0.585, +0.861] against external macro-F1, reducing leave-one-pair-out
 error by 24%. Twelve ordered pairs is a small sample, and a 24% error reduction supports
@@ -482,6 +555,11 @@ alert threshold.
 read from the target's benign-traffic quantiles requires no attack labels. Its recovery,
 as a fraction of the headroom between the deployed threshold and the all-labels oracle,
 tracks external AUC almost exactly (Figure 6).
+
+![Figure 6](../figures/fig6_remedies.png)
+
+**Figure 6.** External macro-F1 under the deployed threshold, zero-label benign-quantile recalibration, and the all-labels oracle, ordered by external AUC.
+
 
 **Table 7. Zero-label recalibration by pair.**
 
@@ -516,6 +594,11 @@ against an in-domain ceiling near 0.98 (Figure 7). Re-tuning the threshold on th
 labels plateaus at 0.5662, because no threshold repairs an inverted ranking. The
 operational conclusion is blunt: unsupervised domain adaptation is not worth the effort
 here, and labelling a few dozen flows from the target network is.
+
+![Figure 7](../figures/fig7_label_budget.png)
+
+**Figure 7.** External macro-F1 against the number of labelled target flows, averaged over all ordered pairs and seeds.
+
 
 ### 4.7 Which attacks stop being detected
 
@@ -678,7 +761,57 @@ result.
 
 ## References
 
-`[PLACEHOLDER: full bibliographic entries. Verified sources cited in text: Axelsson 2000;
-Sun et al. 2016; D'hooge et al. 2020 (JISA); Engelen et al. 2021 (WTMC); Sarhan et al. 2021;
-Arp et al. 2022 (USENIX Security); Garg et al. 2022; Lanvin et al. 2022 (CRiSIS); Cantone et
-al. 2024 (arXiv:2402.10974 / IEEE Access). Format per Computers & Security style.]`
+Entries marked (v) were verified against the publisher or arXiv record on 2026-08-15.
+Entries marked (c) are standard dataset citations reproduced from common usage; confirm the
+volume and page fields against the publisher before submission.
+
+1. (v) Arp, D., Quiring, E., Pendlebury, F., Warnecke, A., Pierazzi, F., Wressnegger, C.,
+   Cavallaro, L., and Rieck, K. "Dos and Don'ts of Machine Learning in Computer Security."
+   *31st USENIX Security Symposium*, 2022.
+
+2. (v) Axelsson, S. "The base-rate fallacy and the difficulty of intrusion detection."
+   *ACM Transactions on Information and System Security* 3(3), 186–205, 2000.
+
+3. (v) Cantone, M., Marrocco, C., and Bria, A. "On the Cross-Dataset Generalization of
+   Machine Learning for Network Intrusion Detection." arXiv:2402.10974, 2024.
+
+4. (v) D'Hooge, L., Wauters, T., Volckaert, B., and De Turck, F. "Inter-dataset
+   generalization strength of supervised machine learning methods for intrusion detection."
+   *Journal of Information Security and Applications* 54, 102564, 2020.
+
+5. (v) Engelen, G., Rimmer, V., and Joosen, W. "Troubleshooting an Intrusion Detection
+   Dataset: the CICIDS2017 Case Study." *IEEE Security and Privacy Workshops (WTMC)*, 2021.
+
+6. (v) Garg, S., Balakrishnan, S., Lipton, Z. C., Neyshabur, B., and Sedghi, H. "Leveraging
+   Unlabeled Data to Predict Out-of-Distribution Performance." *International Conference on
+   Learning Representations (ICLR)*, 2022. arXiv:2201.04234.
+
+7. (v) Lanvin, M., Gimenez, P.-F., Han, Y., Majorczyk, F., Mé, L., and Totel, E. "Errors in
+   the CICIDS2017 dataset and the resulting fair evaluation of machine learning."
+   *International Conference on Risks and Security of Internet and Systems (CRiSIS)*, 2022.
+
+8. (v) Sarhan, M., Layeghy, S., Moustafa, N., and Portmann, M. "Towards a Standard Feature
+   Set for Network Intrusion Detection System Datasets." arXiv:2101.11315, 2021.
+
+9. (v) Sun, B., Feng, J., and Saenko, K. "Return of Frustratingly Easy Domain Adaptation."
+   *AAAI Conference on Artificial Intelligence*, 2016.
+
+10. (c) Sharafaldin, I., Lashkari, A. H., and Ghorbani, A. A. "Toward Generating a New
+    Intrusion Detection Dataset and Intrusion Traffic Characterization." *International
+    Conference on Information Systems Security and Privacy (ICISSP)*, 2018. (CICIDS2017)
+
+11. (c) Sharafaldin, I., Lashkari, A. H., Hakak, S., and Ghorbani, A. A. "Developing
+    Realistic Distributed Denial of Service (DDoS) Attack Dataset and Taxonomy."
+    *International Carnahan Conference on Security Technology (ICCST)*, 2019. (CIC-DDoS2019)
+
+12. (c) Moustafa, N., and Slay, J. "UNSW-NB15: a comprehensive data set for network
+    intrusion detection systems." *Military Communications and Information Systems
+    Conference (MilCIS)*, 2015.
+
+13. (c) Koroniotis, N., Moustafa, N., Sitnikova, E., and Turnbull, B. "Towards the
+    development of realistic botnet dataset in the Internet of Things for network forensic
+    analytics: Bot-IoT dataset." *Future Generation Computer Systems* 100, 779–796, 2019.
+
+14. (c) Alsaedi, A., Moustafa, N., Tari, Z., Mahmood, A., and Anwar, A. "TON_IoT telemetry
+    dataset: A new generation dataset of IoT and IIoT for data-driven intrusion detection
+    systems." *IEEE Access* 8, 165130–165150, 2020.
