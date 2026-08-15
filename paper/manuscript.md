@@ -15,11 +15,13 @@ chance. It passes through it. Mean external ROC-AUC is 0.5054, 108 of 240 extern
 evaluations score below 0.5, and one pair reaches 0.0697. That detector ranks attack
 flows below benign flows almost perfectly, and its predictions would be 93% accurate if
 negated. A model at chance has lost its signal; a model at 0.07 has kept it and reversed
-it. Three consequences follow. Feature engineering does not help: we pre-registered the
-hypothesis that capacity-bound features carry testbed identity, and removing all twenty
-of them recovers 0.013 macro-F1, so we report the hypothesis as refuted; what the data
-supports instead is a size effect, in which a single protocol bit reaches external
-macro-F1 0.6512 where all 39 features reach 0.3748. Distribution-divergence monitoring
+it. Three consequences follow. Feature engineering along the obvious semantic axis does not
+help: we pre-specified the hypothesis that capacity-bound features carry testbed
+identity, and removing all twenty of them changes external macro-F1 by +0.0132 [-0.0084,
++0.0320], an interval spanning zero, so the hypothesis is not supported at the power this
+study affords. What the data does support is a size effect: a single protocol bit reaches
+external macro-F1 0.6512 against 0.3748 for all 39 features, a paired difference of
++0.2763 [+0.2230, +0.3366]. Distribution-divergence monitoring
 does not work: proxy A-distance, RBF-MMD and summed Wasserstein distance all predict the
 observed loss worse than assuming the average drop, while the model's own confidence
 (ATC) reaches Spearman −0.726 and cuts leave-one-pair-out error by 24%. Recalibration
@@ -68,13 +70,14 @@ expect when a model has learned a real property of the wrong network.
 
 Three consequences follow, each of which narrows a standard remedy:
 
-**Feature engineering does not help, and the obvious hypothesis is false.** We
-pre-registered the expectation that capacity-bound features (throughput, duration, volume)
-carry testbed identity and cause the collapse. Removing all twenty of them
-recovers 0.013 macro-F1, and capacity features alone transfer as well as the full set. We
-report the hypothesis as refuted. What the data supports is a size effect: a *single*
-protocol bit reaches external macro-F1 0.6512 where all 39 features reach 0.3748. The 38
-additional features buy 0.311 in-domain and cost 0.276 externally.
+**Feature engineering along the obvious axis does not help.** We pre-specified the
+expectation that capacity-bound features (throughput, duration, volume) carry testbed
+identity and cause the collapse, and committed it to the public repository before the
+experiment ran. Removing all twenty of them moves external macro-F1 by +0.0132 [-0.0084,
++0.0320], an interval spanning zero, and capacity features alone transfer as well as the
+full set. The hypothesis is not supported. What the data does support is a size effect: a
+*single* protocol bit reaches external macro-F1 0.6512 where all 39 features reach
+0.3748, a paired difference of +0.2763 [+0.2230, +0.3366].
 
 **Distribution-divergence monitoring does not work.** Proxy A-distance, RBF-MMD and
 summed Wasserstein distance, the quantities motivating much of the domain-adaptation
@@ -101,8 +104,9 @@ trained on.
 1. Evidence that cross-network failure in flow-based DDoS detection is **sign inversion**
    rather than degradation, across 240 external evaluations with paired-bootstrap
    intervals on the gap itself.
-2. A refuted pre-registered hypothesis about capacity features, and the size effect the
-   data supports instead.
+2. A pre-specified hypothesis about capacity features that the data does not support,
+   reported with its interval and the effect size this design could detect, alongside the
+   size effect the data does support.
 3. A negative result on distribution-divergence measures as deployment-risk predictors,
    with a confidence-based alternative that beats a mean baseline.
 4. A decomposition separating recoverable threshold failures from representational ones,
@@ -345,54 +349,72 @@ The optimistic reading available in the literature, that cross-domain collapse i
 a calibration artefact, is therefore true here for exactly one pair in twelve. §4.6
 measures what that is worth.
 
-### 4.4 Which features cause it? A pre-registered hypothesis, refuted
+### 4.4 Which features cause it? A pre-specified hypothesis the data does not support
 
 Flow features divide into those describing *how much traffic moved and how fast*
 (throughput, duration, byte and packet volumes) and those describing *what the endpoints
 did* (protocol, TCP flags, TTLs, retransmissions). The first group's values are set partly
-by the capturing testbed's link capacity and generator configuration. The natural
-hypothesis, and the one this study was designed around, is that these **capacity
-features** inflate in-domain accuracy while carrying testbed identity, so removing them
-should recover external performance.
+by the capturing testbed's link capacity and generator configuration. The hypothesis this
+study was designed around is that these **capacity features** inflate in-domain accuracy
+while carrying testbed identity, so removing them should recover external performance. It
+was committed to the project's public repository before the experiment ran; the commit
+that records it precedes the commit carrying the result by two hours and seventeen
+minutes.
 
 We assigned all 39 features to one of five semantic classes (20 capacity, 18 semantic, 1
-held out) and trained under 17 feature sets. The hypothesis is false.
+held out) and trained under 17 feature sets. Each set is evaluated on the same
+(source, seed) combinations as the full-feature baseline, so differences are paired and
+the bootstrap resamples pairs.
 
-**Table 3. Capacity ablation.**
+**Table 3. Capacity ablation, paired differences against the full 39-feature set.**
 
-| feature set | k | in-domain | external | Δ external vs `all` |
-|---|---:|---:|---:|---:|
-| `semantic_only` | 18 | 0.9690 | 0.3896 | +0.0148 |
-| `no_capacity` | 19 | 0.9683 | 0.3881 | +0.0132 |
-| **`all`** | **39** | **0.9821** | **0.3748** | n/a |
-| `drop_rate_throughput` | 35 | 0.9818 | 0.3739 | −0.0010 |
-| `capacity_only` | 20 | 0.9735 | 0.3738 | −0.0011 |
+| feature set | k | external macro-F1 | Δ vs `all` | 95% CI | p |
+|---|---:|---:|---:|---|---:|
+| `semantic_only` | 18 | 0.3896 | +0.0148 | [−0.0077, +0.0341] | 0.174 |
+| `no_capacity` | 19 | 0.3881 | +0.0132 | [−0.0084, +0.0320] | 0.209 |
+| **`all`** | **39** | **0.3748** | 0 | n/a | n/a |
+| `drop_rate_throughput` | 35 | 0.3739 | −0.0010 | [−0.0033, +0.0013] | 0.406 |
+| `capacity_only` | 20 | 0.3738 | −0.0011 | [−0.0293, +0.0314] | 0.915 |
 
-Removing every capacity feature buys 0.0132 macro-F1. Removing only the throughput
-features changes nothing. Capacity features alone transfer as well as the complete set.
-Whatever drives the inversion is not localised in this partition.
+Removing every capacity feature moves external macro-F1 by +0.0132, and the interval spans
+zero. The hypothesis is not supported. We state that carefully: this is a failure to detect
+an effect, not a demonstration that none exists. With 12 source-seed pairs the design has
+80% power for a true difference of 0.0301, so effects smaller than roughly three points of
+macro-F1 remain possible and unmeasured here.
 
-**What the data shows instead is a size effect.** Ordering the same 17 sets by external
+**The coarse grouping does, however, hide one real sub-effect.** Dropping the 13
+size and volume features alone yields +0.0615 [+0.0278, +0.0991], p < 0.001, and dropping
+the three duration features yields +0.0114 [+0.0009, +0.0277], p = 0.021. Byte and packet
+counts do carry testbed identity in the way the hypothesis anticipated. What fails is the
+aggregation: bundling them with the throughput features, which contribute nothing
+(−0.0010 [−0.0033, +0.0013]), dilutes the effect to non-significance. A semantic partition
+chosen a priori was the wrong instrument, and we report that rather than re-cutting the
+classes until something reached significance.
+
+**What the data does support is a size effect.** Ordering the same 17 sets by external
 performance puts the smallest on top (Figure 4).
 
 **Table 4. External performance by feature-set size.**
 
-| feature set | k | in-domain | external macro-F1 | external AUC |
-|---|---:|---:|---:|---:|
-| `only_identifier` | **1** | 0.6711 | **0.6512** | **0.7327** |
-| `only_duration_timing` | 3 | 0.7474 | 0.5407 | 0.5983 |
-| `only_rate_throughput` | 4 | 0.9593 | 0.4688 | 0.6248 |
-| `only_flags_behaviour` | 7 | 0.8380 | 0.4288 | 0.3759 |
-| `all` | 39 | 0.9821 | 0.3748 | 0.4931 |
+| feature set | k | in-domain | external macro-F1 | Δ vs `all` | 95% CI | external AUC |
+|---|---:|---:|---:|---:|---|---:|
+| `only_identifier` | **1** | 0.6711 | **0.6512** | **+0.2763** | [+0.2230, +0.3366] | **0.7327** |
+| `only_duration_timing` | 3 | 0.7474 | 0.5407 | +0.1659 | [+0.0944, +0.2340] | 0.5983 |
+| `only_rate_throughput` | 4 | 0.9593 | 0.4688 | +0.0939 | [+0.0493, +0.1405] | 0.6248 |
+| `only_flags_behaviour` | 7 | 0.8380 | 0.4288 | +0.0539 | [+0.0371, +0.0705] | 0.3759 |
+| `all` | 39 | 0.9821 | 0.3748 | 0 | n/a | 0.4931 |
 
-One feature out-generalises the entire standard set by 0.2764 macro-F1 and 0.2396 AUC. The
-38 features added on top of it purchase 0.3110 in-domain at a cost of 0.2764 externally.
+Every one of these differences is significant at p < 0.001. One feature out-generalises the
+entire standard set by 0.2763 macro-F1 [+0.2230, +0.3366] and 0.2396 AUC, and the 38
+features added on top of it purchase 0.3110 in-domain at a cost of 0.2764 externally.
 
 We read this as follows. A gradient-boosted ensemble given 39 correlated flow statistics
 finds high-order conjunctions that separate its own testbed's attack traffic essentially
 perfectly, and those conjunctions encode the testbed. Restricted to one or three features
 the model cannot express them, fits a coarser and more transferable rule, and pays for it
-only at home.
+only at home. On this reading the semantic class of a feature matters less than how many
+features the model is given to combine, which is consistent with size and volume mattering
+individually while the 20-feature capacity bundle does not.
 
 **A correction, stated where the claim depends on it.** `DNS_QUERY_ID` was placed in its
 own class as a null control, on the assumption that a 16-bit DNS transaction ID is random
@@ -412,8 +434,8 @@ indicator; in three of four datasets DNS traffic is essentially never attack-lab
 ID value itself carries nothing: AUC on the raw value equals AUC on the zero/nonzero bit
 to four decimal places in all four datasets, and conditioning on nonzero leaves AUC at
 0.48–0.49. The correct statement is therefore that **one crude protocol bit
-out-generalises the 39-feature standard set**. That is a sharper claim than the one we set out to
-test, and one that depends on no feature being noise.
+out-generalises the 39-feature standard set**. That is a sharper claim than the one we set
+out to test, and one that depends on no feature being noise.
 
 ### 4.5 Can an operator predict the loss without labels?
 
@@ -631,9 +653,11 @@ external evaluations below chance, and one pair at 0.0697 whose predictions woul
 accurate if negated.
 
 That distinction governs what can be done about it. Feature engineering along the obvious
-semantic axis does not help, since we pre-registered the capacity hypothesis and report it
-refuted, while feature-set *size* does, to the point that one protocol bit out-generalises
-the 39-feature standard. Distribution-divergence monitoring does not predict the loss;
+semantic axis does not help: the pre-specified capacity hypothesis is not supported
+(+0.0132 [−0.0084, +0.0320]), although size and volume features do matter individually
+(+0.0615 [+0.0278, +0.0991]). Feature-set *size* is the effect that survives, to the point
+that one protocol bit out-generalises the 39-feature standard by +0.2763 [+0.2230,
++0.3366]. Distribution-divergence monitoring does not predict the loss;
 model confidence partially does. Recalibration recovers almost everything in the one regime
 where ranking survived and nothing elsewhere, and ten labelled target flows outperform
 every zero-label method available.

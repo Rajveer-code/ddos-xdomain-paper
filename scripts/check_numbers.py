@@ -68,7 +68,12 @@ def main() -> int:
     print(f"Loaded {len(values):,} numeric values from {len(files)} result files\n")
 
     vals = sorted(values)
-    docs = sorted(PAPER.glob("*.md")) + [PROJECT / "FINDINGS.md"]
+    # AUDIT.md and OUTLINE.md are working documents about the paper, not the paper.
+    # Their numbers are word counts, literal counts and venue fees, which correctly
+    # have no backing result file.
+    META = {"AUDIT.md", "OUTLINE.md"}
+    docs = [d for d in sorted(PAPER.glob("*.md")) if d.name not in META]
+    docs += [PROJECT / "FINDINGS.md"]
     total = matched = 0
     unmatched: list[tuple[str, int, str]] = []
 
