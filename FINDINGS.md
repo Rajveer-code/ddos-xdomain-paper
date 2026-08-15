@@ -1,0 +1,162 @@
+# FINDINGS
+
+Every number here traces to a file in `results/`. Nothing is quoted from another paper.
+Where a pre-registered hypothesis failed, it is recorded as failed.
+
+Protocol: shared 39-feature NetFlow v2 space, exact de-duplication in the model's own
+feature space, source-only scaling and imputation, balanced sample weights, stratified
+cap of 50,000 rows per class, LightGBM primary with XGBoost / RandomForest /
+LogisticRegression alongside, 5 seeds for the matrix and 3 for the ablations.
+
+---
+
+## F1 — Cross-network transfer does not degrade. It inverts.
+
+`results/transfer_matrix.json`, `results/matrix_summary.json`
+
+| | LightGBM, 12 ordered pairs, 5 seeds |
+|---|---|
+| in-domain macro-F1 | 0.9817 (min 0.9546, max 1.0000) |
+| external macro-F1 | 0.3788 (min 0.1935, max 0.5957) |
+| external ROC-AUC | 0.5054 (min 0.0421, max 0.9683) |
+| external MCC | −0.0459 |
+| mean paired gap (macro-F1) | 0.6029, significant at p<0.05 in **60/60** pair-seeds |
+
+Across all four models and all seeds: **108 of 240** external runs score ROC-AUC below
+0.5, and **149 of 240** have negative MCC.
+
+`NF-UNSW-NB15 → NF-CSE-CIC-IDS2018` reaches **AUC 0.0697**. A detector that ranks
+attacks below benign traffic that consistently is not failing at random; inverting its
+output would score 0.93. The learned decision surface is not merely non-transferable,
+it is anti-correlated in the target domain.
+
+**Failure mode is overwhelmingly representational, not operational.** Decomposing each
+gap into ranking loss (ΔAUC) and threshold loss (external macro-F1 at the target-optimal
+threshold minus at the source threshold), **11 of 12 pairs are ranking-dominated**. The
+sole exception is `NF-BoT-IoT → NF-CSE-CIC-IDS2018`, which holds AUC 0.9656 while losing
+0.4217 to a stale operating point — the one case recalibration alone would rescue.
+
+---
+
+## F2 — The cause is not a semantic feature class. The pre-registered hypothesis failed.
+
+`results/feature_ablation.json`
+
+Hypothesis: capacity-bound features (rate, duration, volume) encode testbed properties,
+inflate in-domain accuracy and destroy transfer. Removing them should recover external
+performance. It does not.
+
+| feature set | k | ext macro-F1 | Δ vs all |
+|---|---:|---:|---:|
+| `semantic_only` | 18 | 0.3896 | +0.0148 |
+| `no_capacity` | 19 | 0.3881 | +0.0132 |
+| **`all`** | **39** | **0.3748** | — |
+| `drop_rate_throughput` | 35 | 0.3739 | −0.0010 |
+| `capacity_only` | 20 | 0.3738 | −0.0011 |
+
+Stripping every capacity feature buys 0.013 macro-F1. Capacity features *alone* transfer
+as well as the full set. The effect is not located in the semantic class of the features.
+
+## F3 — It is a feature-set *size* effect. One protocol bit beats the standard set.
+
+| feature set | k | in-domain | ext macro-F1 | ext AUC |
+|---|---:|---:|---:|---:|
+| `only_identifier` | **1** | 0.6711 | **0.6512** | **0.7327** |
+| `only_duration_timing` | 3 | 0.7474 | 0.5407 | 0.5983 |
+| `only_rate_throughput` | 4 | 0.9593 | 0.4688 | 0.6248 |
+| `only_flags_behaviour` | 7 | 0.8380 | 0.4288 | 0.3759 |
+| `all` | 39 | 0.9821 | 0.3748 | 0.4931 |
+
+The best external performers are the smallest sets. The 38 features beyond the single
+best one buy **+0.311 in-domain** and cost **−0.276 external**. The standard NetFlow v2
+feature set is actively harmful for cross-network deployment.
+
+### Correction: `DNS_QUERY_ID` is not a null control
+
+It entered the taxonomy as a null control on the assumption that a 16-bit DNS
+transaction ID is noise. Measurement refuted that and the code comment asserting it has
+been corrected.
+
+| dataset | P(attack \| id = 0) | P(attack \| id ≠ 0) |
+|---|---:|---:|
+| NF-CSE-CIC-IDS2018 | 0.741 | 0.000 |
+| NF-BoT-IoT | 0.785 | 0.000 |
+| NF-UNSW-NB15 | 0.051 | 0.001 |
+| NF-ToN-IoT | 0.528 | 0.427 |
+
+The field is zero for every non-DNS flow, making it a one-bit "this flow is DNS"
+indicator; DNS traffic is essentially never attack-labelled in three of four datasets.
+The ID *value* carries nothing: AUC on the raw value equals AUC on the zero/nonzero bit
+to four decimals in every dataset, and conditioning on nonzero leaves AUC at 0.48–0.49.
+
+The claim is therefore "one crude protocol bit out-generalises the standard 39-feature
+set", which is both true and sharper than the original framing.
+
+---
+
+## F4 — Distribution divergence does not predict the gap. Model confidence partially does.
+
+`results/divergence.json`, `results/gap_forecast.json`
+36 pair-seed observations, 12 ordered pairs, leave-one-pair-out (all seeds of a held-out
+pair excluded together). Baseline = predict the mean gap, LOPO MAE 0.0827.
+
+| predictor | Spearman vs gap | 95% CI | LOPO MAE | vs baseline |
+|---|---:|---|---:|---:|
+| **ATC estimated accuracy** | **−0.726** | [−0.836, −0.532] | **0.0629** | **−24%** |
+| mean confidence drop | +0.503 | [+0.168, +0.738] | 0.0671 | −19% |
+| max per-feature Wasserstein | +0.433 | [+0.103, +0.720] | 0.0678 | −18% |
+| summed Wasserstein | +0.149 | [−0.197, +0.491] | 0.0930 | +12% (worse) |
+| proxy A-distance | −0.119 | [−0.442, +0.242] | 0.0849 | +3% (worse) |
+| RBF-MMD | +0.031 | [−0.306, +0.385] | 0.0910 | +10% (worse) |
+
+The three standard domain-adaptation divergence measures all have confidence intervals
+spanning zero and all three are **worse than the mean baseline** out-of-sample. How far
+apart two feature distributions sit says almost nothing about how much a detector will
+lose. What the model says about its own predictions does: ATC (Garg et al., 2022)
+reaches ρ = −0.726 and cuts LOPO error by 24%.
+
+Stated with its limits: twelve ordered pairs is a small sample and a 24% error reduction
+is useful, not decisive.
+
+---
+
+## F5 — Dataset quality bounds every in-domain number in this literature.
+
+`results/dataset_summary.json`
+
+Exact duplicates **in the feature space the model actually sees**:
+
+| dataset | raw rows | after dedup | dup rate | contradictory groups |
+|---|---:|---:|---:|---:|
+| NF-BoT-IoT | 30,420,086 | 101,369 | **99.7%** | — |
+| NF-UNSW-NB15 | 1,986,745 | 236,999 | **88.1%** | 858 |
+| NF-ToN-IoT | 13,135,881 | 2,477,944 | **81.1%** | — |
+| NF-CSE-CIC-IDS2018 | 17,129,715 | 8,981,062 | 47.6% | 1,940 |
+| CIC-DDoS2019 | 431,371 | 418,884 | 2.9% | — |
+| CICIDS2017 | 2,313,810 | 2,231,536 | 3.6% | — |
+
+Studies that split these without de-duplicating are testing partly on rows they trained
+on. Contradictory groups — identical feature vectors carrying opposite labels — put a
+hard ceiling on any achievable in-domain score.
+
+Attack base rates span 1.3% (NF-UNSW-NB15) to 77.4% (CIC-DDoS2019), so raw F1 is not
+comparable across these datasets and must be read at matched operating points.
+
+### Rate-feature overflow
+
+The per-second rate features carry finite but physically impossible magnitudes:
+`SRC_TO_DST_SECOND_BYTES` reaches **8.9 × 10³⁰⁴** in NF-ToN-IoT and
+`DST_TO_SRC_SECOND_BYTES` reaches 2.3 × 10²⁵², produced by dividing byte counts by
+near-zero flow durations (Engelen et al., 2021). 213 such cells in NF-CSE-CIC-IDS2018
+and 216 in NF-ToN-IoT. They exceed float32 entirely and describe the extractor rather
+than the traffic.
+
+---
+
+## Still open
+
+- B3: calibration curves, ECE/Brier, benign-quantile recalibration under no target labels
+- B4: label-budget curve, with CORAL/DANN as baselines
+- A3: label-noise isolation via DistriNet-corrected CICIDS2017
+- Secondary CICFlowMeter study (CIC-DDoS2019 ↔ CICIDS2017, both directions)
+- Full-data confirmation run for the headline pair
