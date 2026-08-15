@@ -112,8 +112,11 @@ DATASETS = {d.key: d for d in (*NETFLOW_V2, *CICFLOWMETER)}
 FAMILY_PATTERNS: dict[str, tuple[str, ...]] = {
     "volumetric": ("dos", "ddos", "syn", "udp", "udplag", "udp-lag", "tftp",
                    "loic", "hoic", "dos hulk", "hulk", "goldeneye", "flood"),
-    "reflection_amplification": ("dns", "ldap", "mssql", "netbios", "ntp", "snmp",
-                                 "ssdp", "portmap", "chargen", "memcached"),
+    # "drdos" is listed explicitly: CIC-DDoS2019's DrDoS_* labels are *reflection* attacks
+    # (Distributed Reflection DoS). Without it, "DrDoS_UDP" matches only "udp" and "dos",
+    # both volumetric, and a reflection attack is filed as a flood.
+    "reflection_amplification": ("drdos", "dns", "ldap", "mssql", "netbios", "ntp",
+                                 "snmp", "ssdp", "portmap", "chargen", "memcached"),
     "low_rate_application": ("slowloris", "slowhttptest", "slowhttp", "rudy",
                              "slow", "hulk-slow"),
 }

@@ -1,0 +1,224 @@
+{
+  "nf_cse_cic_ids2018": {
+    "class": {
+      "Benign": 0,
+      "Bot": -1,
+      "Brute Force -Web": -1,
+      "Brute Force -XSS": -1,
+      "DDOS attack-HOIC": 1,
+      "DDOS attack-LOIC-UDP": 1,
+      "DDoS attacks-LOIC-HTTP": 1,
+      "DoS attacks-GoldenEye": 1,
+      "DoS attacks-Hulk": 1,
+      "DoS attacks-SlowHTTPTest": 1,
+      "DoS attacks-Slowloris": 1,
+      "FTP-BruteForce": -1,
+      "Infilteration": -1,
+      "SQL Injection": -1,
+      "SSH-Bruteforce": -1
+    },
+    "family": {
+      "Benign": "benign",
+      "Bot": "other",
+      "Brute Force -Web": "other",
+      "Brute Force -XSS": "other",
+      "DDOS attack-HOIC": "volumetric",
+      "DDOS attack-LOIC-UDP": "volumetric",
+      "DDoS attacks-LOIC-HTTP": "volumetric",
+      "DoS attacks-GoldenEye": "volumetric",
+      "DoS attacks-Hulk": "volumetric",
+      "DoS attacks-SlowHTTPTest": "low_rate_application",
+      "DoS attacks-Slowloris": "low_rate_application",
+      "FTP-BruteForce": "other",
+      "Infilteration": "other",
+      "SQL Injection": "other",
+      "SSH-Bruteforce": "other"
+    }
+  },
+  "nf_bot_iot": {
+    "class": {
+      "Benign": 0,
+      "DDoS": 1,
+      "DoS": 1,
+      "Reconnaissance": -1,
+      "Theft": -1
+    },
+    "family": {
+      "Benign": "benign",
+      "DDoS": "volumetric",
+      "DoS": "volumetric",
+      "Reconnaissance": "other",
+      "Theft": "other"
+    }
+  },
+  "nf_ton_iot": {
+    "class": {
+      "Benign": 0,
+      "backdoor": -1,
+      "ddos": 1,
+      "dos": 1,
+      "injection": -1,
+      "mitm": -1,
+      "password": -1,
+      "ransomware": -1,
+      "scanning": -1,
+      "xss": -1
+    },
+    "family": {
+      "Benign": "benign",
+      "backdoor": "other",
+      "ddos": "volumetric",
+      "dos": "volumetric",
+      "injection": "other",
+      "mitm": "other",
+      "password": "other",
+      "ransomware": "other",
+      "scanning": "other",
+      "xss": "other"
+    }
+  },
+  "nf_unsw_nb15": {
+    "class": {
+      "Analysis": -1,
+      "Backdoor": -1,
+      "Benign": 0,
+      "DoS": 1,
+      "Exploits": -1,
+      "Fuzzers": -1,
+      "Generic": -1,
+      "Reconnaissance": -1,
+      "Shellcode": -1,
+      "Worms": -1
+    },
+    "family": {
+      "Analysis": "other",
+      "Backdoor": "other",
+      "Benign": "benign",
+      "DoS": "volumetric",
+      "Exploits": "other",
+      "Fuzzers": "other",
+      "Generic": "other",
+      "Reconnaissance": "other",
+      "Shellcode": "other",
+      "Worms": "other"
+    }
+  },
+  "cic_ddos2019": {
+    "class": {
+      "Benign": 0,
+      "DrDoS_DNS": 1,
+      "DrDoS_LDAP": 1,
+      "DrDoS_MSSQL": 1,
+      "DrDoS_NTP": 1,
+      "DrDoS_NetBIOS": 1,
+      "DrDoS_SNMP": 1,
+      "DrDoS_UDP": 1,
+      "LDAP": 1,
+      "MSSQL": 1,
+      "NetBIOS": 1,
+      "Portmap": 1,
+      "Syn": 1,
+      "TFTP": 1,
+      "UDP": 1,
+      "UDP-lag": 1,
+      "UDPLag": 1,
+      "WebDDoS": 1
+    },
+    "family": {
+      "Benign": "benign",
+      "DrDoS_DNS": "reflection_amplification",
+      "DrDoS_LDAP": "reflection_amplification",
+      "DrDoS_MSSQL": "reflection_amplification",
+      "DrDoS_NTP": "reflection_amplification",
+      "DrDoS_NetBIOS": "reflection_amplification",
+      "DrDoS_SNMP": "reflection_amplification",
+      "DrDoS_UDP": "reflection_amplification",
+      "LDAP": "reflection_amplification",
+      "MSSQL": "reflection_amplification",
+      "NetBIOS": "reflection_amplification",
+      "Portmap": "reflection_amplification",
+      "Syn": "volumetric",
+      "TFTP": "volumetric",
+      "UDP": "volumetric",
+      "UDP-lag": "volumetric",
+      "UDPLag": "volumetric",
+      "WebDDoS": "volumetric"
+    }
+  },
+  "cic_ids2017": {
+    "class": {
+      "Benign": 0,
+      "Bot": -1,
+      "DDoS": 1,
+      "DoS GoldenEye": 1,
+      "DoS Hulk": 1,
+      "DoS Slowhttptest": 1,
+      "DoS slowloris": 1,
+      "FTP-Patator": -1,
+      "Heartbleed": -1,
+      "Infiltration": -1,
+      "PortScan": -1,
+      "SSH-Patator": -1,
+      "Web Attack \ufffd Brute Force": -1,
+      "Web Attack \ufffd Sql Injection": -1,
+      "Web Attack \ufffd XSS": -1
+    },
+    "family": {
+      "Benign": "benign",
+      "Bot": "other",
+      "DDoS": "volumetric",
+      "DoS GoldenEye": "volumetric",
+      "DoS Hulk": "volumetric",
+      "DoS Slowhttptest": "low_rate_application",
+      "DoS slowloris": "low_rate_application",
+      "FTP-Patator": "other",
+      "Heartbleed": "other",
+      "Infiltration": "other",
+      "PortScan": "other",
+      "SSH-Patator": "other",
+      "Web Attack \ufffd Brute Force": "other",
+      "Web Attack \ufffd Sql Injection": "other",
+      "Web Attack \ufffd XSS": "other"
+    }
+  },
+  "cic_ids2017_fixed": {
+    "class": {
+      "Attempted-relabel-as-Benign": -1,
+      "Benign": 0,
+      "Botnet": -1,
+      "DDoS": 1,
+      "DoS GoldenEye": 1,
+      "DoS Hulk": 1,
+      "DoS Slowhttptest": 1,
+      "DoS Slowloris": 1,
+      "FTP-Patator": -1,
+      "Heartbleed": -1,
+      "Infiltration": -1,
+      "Infiltration - Portscan": -1,
+      "Portscan": -1,
+      "SSH-Patator": -1,
+      "Web Attack - Brute Force": -1,
+      "Web Attack - SQL Injection": -1,
+      "Web Attack - XSS": -1
+    },
+    "family": {
+      "Attempted-relabel-as-Benign": "other",
+      "Benign": "benign",
+      "Botnet": "other",
+      "DDoS": "volumetric",
+      "DoS GoldenEye": "volumetric",
+      "DoS Hulk": "volumetric",
+      "DoS Slowhttptest": "low_rate_application",
+      "DoS Slowloris": "low_rate_application",
+      "FTP-Patator": "other",
+      "Heartbleed": "other",
+      "Infiltration": "other",
+      "Infiltration - Portscan": "other",
+      "Portscan": "other",
+      "SSH-Patator": "other",
+      "Web Attack - Brute Force": "other",
+      "Web Attack - SQL Injection": "other",
+      "Web Attack - XSS": "other"
+    }
+  }
+}

@@ -21,6 +21,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# CICIDS2017 ships labels containing a U+FFFD replacement character (the well-known
+# "Web Attack <?> Brute Force" mojibake). The Windows console defaults to cp1252 and
+# raises on it, so force UTF-8 rather than lose the label.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 from src.config import CICFLOWMETER, NETFLOW_V2, RESULTS
 from src.data import load, netflow_common_features
 
