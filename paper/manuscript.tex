@@ -1,0 +1,548 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.15}
+\title{Confidently Wrong: Cross-Network DDoS Detectors Invert Rather Than Degrade}
+\author{Rajveer Singh Pall}
+\date{}
+\begin{document}
+\maketitle
+
+
+
+\section*{Abstract}
+
+Flow-based DDoS detectors report accuracies above 99\% and lose most of that skill when applied to a different network. The loss is well documented; its character is not, and the difference decides which remedies can work. Training four model families on each of four independently constructed testbeds under a published common feature set, and evaluating every ordered pair, we find that cross-network transfer does not decay toward chance. It passes through it. Mean external ROC-AUC is 0.5054, 108 of 240 external evaluations score below 0.5, and one pair reaches 0.0697. That detector ranks attack flows below benign flows almost perfectly, and its predictions would be 93\% accurate if negated. A model at chance has lost its signal; a model at 0.07 has kept it and reversed it. Three consequences follow. Feature engineering along the obvious semantic axis does not help: we pre-specified the hypothesis that capacity-bound features carry testbed identity, and removing all twenty of them changes external macro-F1 by +0.0132 [-0.0084, +0.0320], an interval spanning zero, so the hypothesis is not supported at the power this study affords. What the data does support is a size effect: a single protocol bit reaches external macro-F1 0.6512 against 0.3748 for all 39 features, a paired difference of +0.2763 [+0.2230, +0.3366]. Distribution-divergence monitoring does not work: proxy A-distance, RBF-MMD and summed Wasserstein distance all predict the observed loss worse than assuming the average drop, while the model's own confidence (ATC) reaches Spearman $-$0.726 and cuts leave-one-pair-out error by 24\%. Recalibration works for one pair in twelve, the only one whose ranking survived, where a threshold read from target benign traffic recovers 97.0\% of the available headroom using no attack labels, while ten labelled target flows lift mean external macro-F1 from 0.3776 to 0.7099. Finally, the pairing chosen governs the conclusion: datasets sharing an institution fail at the threshold and look recoverable, independently built ones fail at the ranking and do not. All code, seeds and result files are released; every number reported here is regenerated from them.
+
+\textbf{Keywords:} network intrusion detection, DDoS, cross-dataset generalisation, distribution shift, calibration, evaluation methodology
+
+
+\section{Introduction}
+
+Published flow-based DDoS detectors report accuracies above 99\%. Deployed ones do not behave that way. The gap between those two facts has been measured repeatedly: models trained on one intrusion-detection dataset and tested on another lose most of their apparent skill [D'hooge 2020; Cantone 2024]. That finding is established. What it \emph{means} is not, and the ambiguity is expensive, because the two available readings prescribe opposite engineering.
+
+The default reading is quantitative. The model is somewhat overfitted to its training network and performance degrades, so the remedies are the familiar three: engineer features that describe the attack rather than the capture, monitor the distance between training and deployment distributions, and recalibrate the decision threshold on arrival. This paper tests all three and finds the reading wrong in a way that matters.
+
+Running every ordered pair among four independently captured testbeds, on the NetFlow v2 common feature set, with exact de-duplication and source-only preprocessing, we find that transfer does not decay toward chance. It passes through chance. Mean external ROC-AUC is 0.5054; 108 of 240 external evaluations fall \emph{below} 0.5; one pair reaches \textbf{0.0697}.
+
+That last number is the paper. An AUC of 0.07 is not weak evidence. It is strong evidence with the wrong sign. The detector ranks attack flows below benign flows with high consistency, and negating its output would score 0.93. A model at chance has lost its signal. A model at 0.07 has kept it and applied it backwards.
+
+The mechanism is not mysterious once stated. If high throughput marks attack traffic in one testbed and marks the busiest legitimate hosts in another, a decision surface fitted to the first is close to optimal-but-negated on the second. Inversion is what you should expect when a model has learned a real property of the wrong network.
+
+Three consequences follow, each of which narrows a standard remedy:
+
+\textbf{Feature engineering along the obvious axis does not help.} We pre-specified the expectation that capacity-bound features (throughput, duration, volume) carry testbed identity and cause the collapse, and committed it to the public repository before the experiment ran. Removing all twenty of them moves external macro-F1 by +0.0132 [-0.0084, +0.0320], an interval spanning zero, and capacity features alone transfer as well as the full set. The hypothesis is not supported. What the data does support is a size effect: a \emph{single} protocol bit reaches external macro-F1 0.6512 where all 39 features reach 0.3748, a paired difference of +0.2763 [+0.2230, +0.3366].
+
+\textbf{Distribution-divergence monitoring does not work.} Proxy A-distance, RBF-MMD and summed Wasserstein distance, the quantities motivating much of the domain-adaptation literature, all have correlations whose confidence intervals span zero, and all three predict the observed loss \emph{worse} than assuming the average drop. What does carry signal is the model's own confidence: Average Thresholded Confidence reaches Spearman $-$0.726 and cuts leave-one-pair-out error by 24\%.
+
+\textbf{Recalibration works for one pair in twelve.} Decomposing each failure into ranking loss and threshold loss shows eleven of twelve fail representationally. For the single ranking-preserving pair, a threshold read from target benign traffic, which requires no attack labels, recovers 97.0\% of the available headroom. On three others it is actively harmful. Ten labelled target flows do more than every zero-label method combined, lifting mean external macro-F1 from 0.3776 to 0.7099.
+
+A fourth result conditions all of the above. In the feature space a model actually sees, these datasets are up to 99.7\% exact duplicates: NF-BoT-IoT's 30,420,086 rows reduce to 101,369. Studies that split them without de-duplicating are testing, in part, on rows they trained on.
+
+\subsection{Contributions}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item Evidence that cross-network failure in flow-based DDoS detection is \textbf{sign inversion} rather than degradation, across 240 external evaluations with paired-bootstrap intervals on the gap itself.
+\item A pre-specified hypothesis about capacity features that the data does not support, reported with its interval and the effect size this design could detect, alongside the size effect the data does support.
+\item A negative result on distribution-divergence measures as deployment-risk predictors, with a confidence-based alternative that beats a mean baseline.
+\item A decomposition separating recoverable threshold failures from representational ones, and the demonstration that the dataset pairing chosen governs which is observed.
+\item Duplicate and label-contradiction accounting that bounds every in-domain figure this literature reports.
+\end{enumerate}
+
+
+\section{Related work}
+
+\subsection{The cross-dataset gap}
+
+That flow-based intrusion detectors transfer badly is not in dispute. D'Hooge et al. [2020] established reference scores on CIC-IDS2017 and CSE-CIC-IDS2018 across twelve supervised algorithms and concluded that the classifiers could not operate reliably on traffic from a network unseen at training time. Cantone et al. [2024] extended the design to four datasets and four classifiers, reported cross-dataset accuracy largely commensurate with random chance, and traced part of it to anomalies in the data itself.
+
+Our study shares their protocol and departs on the question. Prior work establishes \emph{that} the gap exists and how large it is. We ask what kind of failure it is. That distinction is not rhetorical: an aggregate accuracy near chance is compatible with a detector that has lost its signal and with one that has reversed it, and only the second is visible once ROC-AUC is reported per ordered pair. The remedies implied by the two readings differ completely, which is why sections 4.4 to 4.6 test three of them rather than proposing a fourth.
+
+\subsection{Feature standardisation and dataset quality}
+
+Sarhan et al. [2021] identified the absence of a common feature set as a structural obstacle to cross-dataset claims, and released NetFlow v2 conversions of four datasets sharing 43 fields. We adopt that feature set precisely so our transfer results cannot be attributed to ad-hoc harmonisation, and verify the shared space by assertion rather than assumption. The four source datasets themselves are CSE-CIC-IDS2018 [Sharafaldin et al. 2018], BoT-IoT [Koroniotis et al. 2019], ToN-IoT [Alsaedi et al. 2020] and UNSW-NB15 [Moustafa and Slay 2015]; the secondary study uses CIC-DDoS2019 [Sharafaldin et al. 2019] and CICIDS2017 [Sharafaldin et al. 2018].
+
+Dataset quality has its own literature. Engelen et al. [2021] documented labelling and traffic-generation defects in CICIDS2017 and released a corrected version; Lanvin et al. [2022] extended the analysis and quantified the effect of the corrections on measured performance. Both studies examine in-domain consequences. We use the corrected release differently, as an instrument: applying one identical source model to the original and corrected targets isolates label error from domain shift, and the result runs opposite to the intuitive direction (§4.9).
+
+Our duplicate accounting (§3.3) is adjacent to this work but, to our knowledge, has not been reported at this scale for the NetFlow v2 datasets. That three of four are more than 80\% duplicate in the model's own feature space bounds every in-domain number computed on them.
+
+\subsection{Methodology and evaluation norms}
+
+Arp et al. [2022] catalogue ten recurring pitfalls in machine learning for security, of which sampling bias, data snooping, spurious correlations and the base-rate fallacy bear directly on cross-dataset evaluation. We map the protocol against all ten in Table 2 rather than asserting compliance in prose. Axelsson [2000] established that intrusion detection is dominated by the base rate; the datasets here span base rates from 1.3\% to 77.4\%, so balanced-test-set F1 is not comparable across them and operating-point metrics are reported alongside.
+
+\subsection{Predicting performance without labels}
+
+Estimating target accuracy from unlabelled data is an active area outside security. Garg et al. [2022] introduced Average Thresholded Confidence, which learns a confidence threshold on source data and predicts accuracy as the fraction of unlabelled target points above it. The competing family of approaches measures distance between source and target feature distributions directly, which is also the theoretical motivation for domain-adversarial training. Section 4.5 evaluates both families on the same twelve ordered pairs and finds their ordering reversed relative to the assumption embedded in most of that work: the distribution-distance measures lose to a mean baseline, and the confidence-based estimator does not.
+
+\subsection{Domain adaptation for intrusion detection}
+
+Adapting a detector to a new network is a well-populated area, including covariance alignment [Sun et al. 2016] and domain-invariant representation learning for NIDS specifically. We make no methodological contribution here and do not claim one. CORAL appears in §4.6 as the standard zero-label baseline, and the contribution is the measurement: what the available zero-label methods actually recover in this setting, which is close to nothing, against what a handful of labelled target flows recovers, which is most of the gap.
+
+\section{Data and experimental protocol}
+
+The design in one paragraph. Four intrusion-detection datasets, each captured on a different testbed, are reduced to a single shared 39-feature space. For each dataset in turn, four model families are trained on 80\% of it and evaluated twice: on its own held-out 20\%, which we call \textbf{in-domain}, and on each of the other three datasets entire, which we call \textbf{external}. Nothing about the target is used in fitting: not its labels, not its feature statistics, not its threshold. The quantity of interest is the difference between those two evaluations, and every design decision below exists to ensure that difference measures domain change rather than an artefact of preparation.
+
+\subsection{A published feature space, verified}
+
+Cross-dataset claims in this area usually rest on intersecting the column names of two CICFlowMeter exports. The resulting space is undocumented, varies between studies, and is itself a confound: a transfer result obtained this way cannot be separated from the harmonisation that produced it.
+
+We use the NetFlow v2 feature set of Sarhan et al. [2021], built for this purpose. Its four datasets ship an identical 43-column schema. We verify rather than assume this: the loader asserts that the numeric feature sets of all four are equal, not merely overlapping, and fails otherwise. From the 43 columns we drop the two label columns and \texttt{L4\_SRC\_PORT} and \texttt{L4\_DST\_PORT}, leaving \textbf{39 features}. Ports are dropped because in these testbeds a destination port frequently identifies the attack script rather than the service. That is the spurious-correlation failure Arp et al. describe.
+
+The conventional CICFlowMeter pairing (CIC-DDoS2019 ↔ CICIDS2017) is retained as a secondary study, so the primary conclusions can be checked in the feature space the literature actually uses.
+
+\subsection{Labels}
+
+The positive class is any DoS or DDoS flow; the negative class is benign. Attacks that are neither, such as exploits, fuzzers, port scans and brute-force, are not silently discarded: the policy is an explicit parameter and every run records how many rows it moved, because discarding them changes the base rate and the base rate drives precision.
+
+Labels also map to attack families (volumetric, reflection/amplification, low-rate application-layer) so transfer can be reported per family. Family assignment resolves the longest matching pattern across all families rather than the first family that matches: \texttt{DoS slowloris} contains both \texttt{dos} and \texttt{slowloris}, and a first-match rule files a low-rate attack as a flood. Ties break on a declared precedence, which places CIC-DDoS2019's \texttt{DrDoS\_*} labels in reflection/amplification. The complete label $\rightarrow$ class $\rightarrow$ family map for all seven datasets is released.
+
+\subsection{De-duplication, and why it changes the picture}
+
+Exact duplicates are removed \textbf{in the feature space the model actually sees}, after socket columns are dropped. Two flows differing only in source port are one example to a model that never observes the port, and letting such a pair straddle a train/test split is leakage.
+
+\begin{table}[htbp]\centering\small
+\caption{Datasets after preparation.}
+\begin{tabular}{lrrrrr}
+\toprule
+dataset & raw rows & after de-duplication & duplicate rate & DDoS/DoS flows & base rate \\
+\midrule
+NF-CSE-CIC-IDS2018 & 17,129,715 & 8,981,062 & 47.6\% & 453,237 & 0.0505 \\
+NF-BoT-IoT & 30,420,086 & 101,369 & \textbf{99.7\%} & 53,005 & 0.5229 \\
+NF-ToN-IoT & 13,135,881 & 2,477,944 & 81.1\% & 529,884 & 0.2138 \\
+NF-UNSW-NB15 & 1,986,745 & 236,999 & 88.1\% & 3,075 & 0.0130 \\
+CIC-DDoS2019 & 431,371 & 418,884 & 2.9\% & 324,197 & 0.7740 \\
+CICIDS2017 & 2,313,810 & 2,231,536 & 3.6\% & 321,706 & 0.1442 \\
+CICIDS2017 (corrected) & 1,787,358 & 1,747,255 & 2.2\% & 266,899 & 0.1528 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three of the four NetFlow datasets are more than 80\% duplicate. We additionally count \emph{contradictory groups}, identical feature vectors carrying opposite labels, at 1,940 in NF-CSE-CIC-IDS2018 and 858 in NF-UNSW-NB15. These place a hard ceiling on any achievable in-domain score.
+
+\subsection{Non-finite and impossible values}
+
+The per-second rate features carry finite but physically impossible magnitudes: \texttt{SRC\_TO\_DST\_SECOND\_BYTES} reaches 8.9 $\times$ 10$^{304}$ in NF-ToN-IoT and \texttt{DST\_TO\_SRC\_SECOND\_BYTES} reaches 2.3 $\times$ 10$^{252}$, produced by dividing byte counts by near-zero flow durations. This is the extraction artefact Engelen et al. document. Such cells describe the extractor, not the traffic. They are set to missing and counted (213 in NF-CSE-CIC-IDS2018, 216 in NF-ToN-IoT) rather than allowed to become silent infinities under a numeric cast.
+
+\subsection{Training}
+
+The order of operations is the substance of the protocol:
+
+\begin{quote}de-duplicate $\rightarrow$ split $\rightarrow$ fit scaler on \textbf{source-train only} $\rightarrow$ transform everything else\end{quote}
+
+Splits are stratified 80/20 and seeded. Scaler and median imputer are fitted on source-train alone and applied unchanged to the source test split and to every target. Target features are clipped to the range the scaler observed; the clipping is ablated, not assumed. Imbalance is handled with balanced sample weights, never resampling, since SMOTE applied before a split leaks synthetic neighbours across it. Models are LightGBM (primary), XGBoost, RandomForest and LogisticRegression at fixed hyperparameters, with no tuning against any target. Five seeds are used for the transfer matrix and three for the ablations and remedy experiments, which are correspondingly more expensive; the asymmetry is a cost decision and every reported interval states the number of pairs it rests on. A stratified cap of 50,000 rows per class bounds cost.
+
+The leakage guarantee is asserted rather than documented. The pipeline self-check verifies that a scaler fitted on train maps train exactly into [0, 1] \textbf{and} lets some unseen test rows fall outside it; a scaler that had seen the test set fails this check.
+
+\subsection{Choosing the operating threshold}
+
+The decision threshold is tuned on the source test split, never on target data, and taken as the midpoint of the widest tied-optimal plateau, over candidates placed between consecutive score levels.
+
+This is not a detail. In-domain AUC here routinely reaches 1.0000, so a wide interval of thresholds is exactly optimal. Selecting by \texttt{argmax} returns whichever endpoint the grid visited first, and that endpoint sits flush against the score distribution, maximally fragile under any shift. In our own runs the naive choice inflated apparent threshold loss on one pair from +0.0128 to +0.1948, an artefact of the tie-break with no relation to domain shift.
+
+\subsection{Metrics}
+
+To quantify the gap itself rather than its endpoints, we resample both test sets jointly and report a \textbf{paired bootstrap} interval and p-value on the difference (2,000 resamples). Reporting one interval for the in-domain score and another for the external score says nothing about the interval of their difference.
+
+To separate a representation that stopped working from an operating point that went stale, we decompose each gap into \textbf{ranking loss} ($\Delta$ ROC-AUC) and \textbf{threshold loss} (external macro-F1 at the target-optimal threshold minus at the source threshold). The two have different remedies, and aggregating them hides which failure occurred.
+
+To ask whether a detector's probabilities remain usable, we report \textbf{ECE} (15 equal-width bins) and \textbf{Brier score} in both domains, because a detector deploys a threshold rather than a ranking.
+
+To keep the base rate visible, we report \textbf{FPR at 95\% TPR} and expected alerts per hour, since balanced-test-set F1 flatters every detector in this literature.
+
+\begin{table}[htbp]\centering\small
+\caption{Arp et al. [2022] pitfalls and how this protocol addresses each.}
+\begin{tabularx}{\linewidth}{lX}
+\toprule
+Pitfall & Addressed by \\
+\midrule
+Sampling bias & Four independently collected testbeds; every ordered pair in both directions; per-dataset base rates reported, not normalised away \\
+Label inaccuracy & Full label$\rightarrow$class map released; contradictory groups counted; label error isolated against the corrected CICIDS2017 \\
+Data snooping & Scaler, imputer and threshold fitted on source-train only, asserted by the pipeline self-check \\
+Spurious correlations & Socket columns dropped; feature classes ablated; \texttt{DNS\_QUERY\_ID} examined directly rather than trusted as noise \\
+Biased parameter selection & Fixed hyperparameters across all domains; no tuning against any target \\
+Inappropriate baseline & Four model families including logistic regression; a one-feature set as minimal reference \\
+Inappropriate performance measures & macro-F1, MCC, AUC, PR-AUC, ECE, Brier, FPR@95\%TPR reported together \\
+Base rate fallacy & Base rates span 1.3\%--77.4\% and are stated; alert volumes given at realistic rates \\
+Lab-only evaluation & Acknowledged in §6; all four datasets are testbed captures, which is part of the finding \\
+Inappropriate threat model & Scope stated as DoS/DDoS detection under network change, not adversarial evasion \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+\section{Results}
+
+\subsection{In-domain, the problem looks solved}
+
+On its own held-out split every source reaches what this literature routinely reports. LightGBM averages 0.9817 macro-F1 across the four sources (0.9546--1.0000) at ROC-AUC 0.9977--1.0000. The other three model families agree within a few points, and seed-to-seed standard deviations reach at most 0.0023. Nothing here suggests an unsolved problem.
+
+Two features of these numbers matter for what follows. First, they are obtained \emph{after} de-duplication, so they are not inflated by the train/test contamination described in §3.3; the uncorrected figures would be higher still. Second, ROC-AUC reaches 1.0000 on NF-CSE-CIC-IDS2018 to four decimal places, meaning the classes are perfectly separable in the source domain. Perfect in-domain separability is what makes the threshold plateau of §3.6 wide, and it is the first hint that the model is fitting something more specific than attack behaviour.
+
+\subsection{Out-of-domain, the failure has a sign}
+
+Applying the identical fitted model to another testbed across all 12 ordered pairs and 5 seeds, LightGBM averages 0.3788 external macro-F1 (0.1935--0.5957). The mean paired gap is 0.6029 and the paired bootstrap rejects a zero gap in \textbf{60 of 60} pair-seeds at p < 0.05 (Figure 1).
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{D:/Projects/ddos_xdomain_paper/figures/fig1_generalization_gap.png}
+\caption{In-domain versus external macro-F1 for all 12 ordered pairs, LightGBM, mean over 5 seeds.}
+\label{fig:1}
+\end{figure}
+
+
+The informative statistic is external ROC-AUC. It averages 0.5054, which is chance. A mean at chance could describe a detector that has merely lost its signal. That is not what happened:
+
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+\item \textbf{108 of 240} external runs score below 0.5;
+\item \textbf{149 of 240} have negative MCC;
+\item NF-UNSW-NB15 $\rightarrow$ NF-CSE-CIC-IDS2018 reaches \textbf{0.0697}.
+\end{itemize}
+
+Figure 2 shows the matrix. The entire NF-UNSW-NB15 source row is inverted against every target. This is the paper's central claim: cross-network failure in flow-based DDoS detection is the reversal of a learned relationship, not its loss.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{D:/Projects/ddos_xdomain_paper/figures/fig2_auc_matrix.png}
+\caption{External ROC-AUC per ordered pair. Values below 0.5 indicate the ranking inverts in the target domain.}
+\label{fig:2}
+\end{figure}
+
+
+\subsection{Representation or operating point?}
+
+A collapsed macro-F1 admits two explanations with opposite remedies. The model may no longer separate the classes (a \textbf{ranking} failure, requiring retraining), or it may separate them well while the in-domain threshold has become meaningless (a \textbf{threshold} failure, requiring only recalibration).
+
+Eleven of twelve pairs are ranking-dominated (Figure 3). The lone exception, NF-BoT-IoT $\rightarrow$ NF-CSE-CIC-IDS2018, retains ROC-AUC 0.9656, a ranking that transferred nearly intact, while losing 0.4217 macro-F1 to a stale operating point.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{D:/Projects/ddos_xdomain_paper/figures/fig3_failure_decomposition.png}
+\caption{Ranking loss versus threshold loss per ordered pair. Points below the diagonal fail representationally; only one pair lies above it.}
+\label{fig:3}
+\end{figure}
+
+
+The optimistic reading available in the literature, that cross-domain collapse is largely a calibration artefact, is therefore true here for exactly one pair in twelve. §4.6 measures what that is worth.
+
+The decomposition also gives an operator a decision rule, though not a free one. Ranking loss requires target labels to compute, so it cannot be measured before deployment. What §4.5 shows is that a label-free proxy for the same quantity exists and is moderately informative, which is why the two sections are ordered as they are: the decomposition establishes that the distinction matters, and the prediction section asks whether it can be made without labels.
+
+\subsection{Which features cause it? A pre-specified hypothesis the data does not support}
+
+Flow features divide into those describing \emph{how much traffic moved and how fast} (throughput, duration, byte and packet volumes) and those describing \emph{what the endpoints did} (protocol, TCP flags, TTLs, retransmissions). The first group's values are set partly by the capturing testbed's link capacity and generator configuration. The hypothesis this study was designed around is that these \textbf{capacity features} inflate in-domain accuracy while carrying testbed identity, so removing them should recover external performance. It was committed to the project's public repository before the experiment ran; the commit that records it precedes the commit carrying the result by two hours and seventeen minutes.
+
+We assigned all 39 features to one of five semantic classes (20 capacity, 18 semantic, 1 held out) and trained under 17 feature sets. Each set is evaluated on the same (source, seed) combinations as the full-feature baseline, so differences are paired and the bootstrap resamples pairs.
+
+\begin{table}[htbp]\centering\small
+\caption{Capacity ablation, paired differences against the full 39-feature set.}
+\begin{tabular}{lrrrlr}
+\toprule
+feature set & k & external macro-F1 & $\Delta$ vs \texttt{all} & 95\% CI & p \\
+\midrule
+\texttt{semantic\_only} & 18 & 0.3896 & +0.0148 & [$-$0.0077, +0.0341] & 0.174 \\
+\texttt{no\_capacity} & 19 & 0.3881 & +0.0132 & [$-$0.0084, +0.0320] & 0.209 \\
+\textbf{\texttt{all}} & \textbf{39} & \textbf{0.3748} & 0 & n/a & n/a \\
+\texttt{drop\_rate\_throughput} & 35 & 0.3739 & $-$0.0010 & [$-$0.0033, +0.0013] & 0.406 \\
+\texttt{capacity\_only} & 20 & 0.3738 & $-$0.0011 & [$-$0.0293, +0.0314] & 0.915 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Removing every capacity feature moves external macro-F1 by +0.0132, and the interval spans zero. The hypothesis is not supported. We state that carefully: this is a failure to detect an effect, not a demonstration that none exists. With 12 source-seed pairs the design has 80\% power for a true difference of 0.0301, so effects smaller than roughly three points of macro-F1 remain possible and unmeasured here.
+
+\textbf{The coarse grouping does, however, hide one real sub-effect.} Dropping the 13 size and volume features alone yields +0.0615 [+0.0278, +0.0991], p < 0.001, and dropping the three duration features yields +0.0114 [+0.0009, +0.0277], p = 0.021. Byte and packet counts do carry testbed identity in the way the hypothesis anticipated. What fails is the aggregation: bundling them with the throughput features, which contribute nothing ($-$0.0010 [$-$0.0033, +0.0013]), dilutes the effect to non-significance. A semantic partition chosen a priori was the wrong instrument, and we report that rather than re-cutting the classes until something reached significance.
+
+\textbf{What the data does support is a size effect.} Ordering the same 17 sets by external performance puts the smallest on top (Figure 4).
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{D:/Projects/ddos_xdomain_paper/figures/fig4_feature_set_size.png}
+\caption{Feature-set size against in-domain and external macro-F1. The single-feature set attains the best external score of any subset tested.}
+\label{fig:4}
+\end{figure}
+
+
+\begin{table}[htbp]\centering\small
+\caption{External performance by feature-set size.}
+\begin{tabular}{lrrrrlr}
+\toprule
+feature set & k & in-domain & external macro-F1 & $\Delta$ vs \texttt{all} & 95\% CI & external AUC \\
+\midrule
+\texttt{only\_identifier} & \textbf{1} & 0.6711 & \textbf{0.6512} & \textbf{+0.2763} & [+0.2230, +0.3366] & \textbf{0.7327} \\
+\texttt{only\_duration\_timing} & 3 & 0.7474 & 0.5407 & +0.1659 & [+0.0944, +0.2340] & 0.5983 \\
+\texttt{only\_rate\_throughput} & 4 & 0.9593 & 0.4688 & +0.0939 & [+0.0493, +0.1405] & 0.6248 \\
+\texttt{only\_flags\_behaviour} & 7 & 0.8380 & 0.4288 & +0.0539 & [+0.0371, +0.0705] & 0.3759 \\
+\texttt{all} & 39 & 0.9821 & 0.3748 & 0 & n/a & 0.4931 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Every one of these differences is significant at p < 0.001. One feature out-generalises the entire standard set by 0.2763 macro-F1 [+0.2230, +0.3366] and 0.2396 AUC, and the 38 features added on top of it purchase 0.3110 in-domain at a cost of 0.2764 externally.
+
+We read this as follows. A gradient-boosted ensemble given 39 correlated flow statistics finds high-order conjunctions that separate its own testbed's attack traffic essentially perfectly, and those conjunctions encode the testbed. Restricted to one or three features the model cannot express them, fits a coarser and more transferable rule, and pays for it only at home. On this reading the semantic class of a feature matters less than how many features the model is given to combine, which is consistent with size and volume mattering individually while the 20-feature capacity bundle does not.
+
+\textbf{A correction, stated where the claim depends on it.} \texttt{DNS\_QUERY\_ID} was placed in its own class as a null control, on the assumption that a 16-bit DNS transaction ID is random and any accuracy from it would be memorisation by construction. That assumption is wrong.
+
+\begin{table}[htbp]\centering\small
+\caption{\texttt{DNS\_QUERY\_ID} is a protocol indicator, not an identifier.}
+\begin{tabular}{lrr}
+\toprule
+dataset & P(attack | id = 0) & P(attack | id ≠ 0) \\
+\midrule
+NF-CSE-CIC-IDS2018 & 0.741 & 0.000 \\
+NF-BoT-IoT & 0.785 & 0.000 \\
+NF-UNSW-NB15 & 0.051 & 0.001 \\
+NF-ToN-IoT & 0.528 & 0.427 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The field is zero for every non-DNS flow, making it a one-bit "this flow is DNS" indicator; in three of four datasets DNS traffic is essentially never attack-labelled. The ID value itself carries nothing: AUC on the raw value equals AUC on the zero/nonzero bit to four decimal places in all four datasets, and conditioning on nonzero leaves AUC at 0.48--0.49. The correct statement is therefore that \textbf{one crude protocol bit out-generalises the 39-feature standard set}. That is a sharper claim than the one we set out to test, and one that depends on no feature being noise.
+
+\subsection{Can an operator predict the loss without labels?}
+
+An operator deploying a detector on their own network has traffic but no attack labels. We ask whether any label-free quantity predicts the loss, evaluated leave-one-pair-out, with all seeds of a held-out pair excluded together, against the baseline of predicting the mean gap (LOPO MAE 0.0827). A predictor that cannot beat "assume the average drop" is not useful whatever its in-sample correlation.
+
+\begin{table}[htbp]\centering\small
+\caption{Label-free predictors of the observed gap.}
+\begin{tabular}{llrlrr}
+\toprule
+predictor & inspects & Spearman & 95\% CI & LOPO MAE & vs baseline \\
+\midrule
+ATC estimated accuracy & model outputs & \textbf{$-$0.726} & [$-$0.836, $-$0.532] & \textbf{0.0629} & \textbf{$-$24\%} \\
+mean confidence drop & model outputs & +0.503 & [+0.168, +0.738] & 0.0671 & $-$19\% \\
+max per-feature Wasserstein & features & +0.433 & [+0.103, +0.720] & 0.0678 & $-$18\% \\
+summed Wasserstein & features & +0.149 & [$-$0.197, +0.491] & 0.0930 & +12\% \\
+proxy A-distance & features & $-$0.119 & [$-$0.442, +0.242] & 0.0849 & +3\% \\
+RBF-MMD & features & +0.031 & [$-$0.306, +0.385] & 0.0910 & +10\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The result splits by what the measure inspects (Figure 5). Measures of distance between feature distributions fail: proxy A-distance, RBF-MMD and summed Wasserstein all have intervals spanning zero and all three are worse than the mean baseline out-of-sample. This deserves stating plainly, because proxy A-distance in particular is the theoretical motivation behind a large body of domain-adaptation work. In this setting, how far apart two flow-feature distributions sit carries almost no information about how much a detector will lose.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{D:/Projects/ddos_xdomain_paper/figures/fig5_gap_forecast.png}
+\caption{Observed generalization gap against three label-free predictors, with Spearman correlation and bootstrap CI.}
+\label{fig:5}
+\end{figure}
+
+
+Measures of the model's own behaviour work, moderately. ATC reaches $\rho$ = $-$0.726 against the gap and +0.756 [+0.585, +0.861] against external macro-F1, reducing leave-one-pair-out error by 24\%. Twelve ordered pairs is a small sample, and a 24\% error reduction supports triage, a decision about which deployments need labelled validation first, rather than a guarantee.
+
+\subsection{What actually fixes it}
+
+\textbf{Calibration collapses by two orders of magnitude.} Mean ECE is 0.0043 in-domain and 0.4372 externally. These detectors do not become hesitant on an unfamiliar network; they stay confident and become wrong, which is the worse failure for an operator setting an alert threshold.
+
+\textbf{Zero-label recalibration fixes the diagnosable minority, and harms others.} A threshold read from the target's benign-traffic quantiles requires no attack labels. Its recovery, as a fraction of the headroom between the deployed threshold and the all-labels oracle, tracks external AUC almost exactly (Figure 6).
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{D:/Projects/ddos_xdomain_paper/figures/fig6_remedies.png}
+\caption{External macro-F1 under the deployed threshold, zero-label benign-quantile recalibration, and the all-labels oracle, ordered by external AUC.}
+\label{fig:6}
+\end{figure}
+
+
+\begin{table}[htbp]\centering\small
+\caption{Zero-label recalibration by pair.}
+\begin{tabular}{lrrrrr}
+\toprule
+pair & ext AUC & source thr & benign-quantile & oracle & headroom recovered \\
+\midrule
+BoT-IoT$\rightarrow$IDS2018 & 0.967 & 0.5399 & \textbf{0.9558} & 0.9688 & \textbf{97.0\%} \\
+IDS2018$\rightarrow$UNSW & 0.792 & 0.4918 & 0.5268 & 0.6280 & 25.7\% \\
+BoT-IoT$\rightarrow$UNSW & 0.829 & 0.4820 & 0.5138 & 0.6386 & 20.3\% \\
+IDS2018$\rightarrow$ToN-IoT & 0.535 & 0.3690 & 0.3474 & 0.5890 & $-$9.8\% \\
+BoT-IoT$\rightarrow$ToN-IoT & 0.583 & 0.3773 & 0.3465 & 0.6421 & $-$11.7\% \\
+ToN-IoT$\rightarrow$BoT-IoT & 0.642 & 0.3469 & 0.2480 & 0.7220 & \textbf{$-$26.4\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+It closes 97.0\% of the one ranking-preserving pair and is actively harmful on three. CORAL, the standard zero-label covariance alignment, recovers 0.0029 macro-F1 averaged over all pairs, which is indistinguishable from doing nothing.
+
+\textbf{Ten labelled flows beat every zero-label method.}
+
+\begin{table}[htbp]\centering\small
+\caption{Label budget.}
+\begin{tabular}{rrr}
+\toprule
+k labelled target flows & re-tune threshold & retrain on source + k \\
+\midrule
+0 & 0.3776 & 0.3776 \\
+\textbf{10} & 0.4909 & \textbf{0.7099} \\
+50 & 0.5500 & 0.8727 \\
+100 & 0.5636 & 0.9082 \\
+500 & 0.5662 & 0.9419 \\
+1000 & 0.5623 & 0.9512 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Ten labelled target flows lift mean external macro-F1 by 0.3323; one hundred reach 0.9082 against an in-domain ceiling near 0.98 (Figure 7). Re-tuning the threshold on the same labels plateaus at 0.5662, because no threshold repairs an inverted ranking. The operational conclusion is blunt: unsupervised domain adaptation is not worth the effort here, and labelling a few dozen flows from the target network is.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{D:/Projects/ddos_xdomain_paper/figures/fig7_label_budget.png}
+\caption{External macro-F1 against the number of labelled target flows, averaged over all ordered pairs and seeds.}
+\label{fig:7}
+\end{figure}
+
+
+\subsection{Which attacks stop being detected}
+
+\begin{table}[htbp]\centering\small
+\caption{Per-family recall under transfer.}
+\begin{tabular}{lrrr}
+\toprule
+attack family & in-domain & external & drop \\
+\midrule
+volumetric & 0.9834 & \textbf{0.0535} & 0.9299 \\
+low-rate application-layer & 1.0000 & 0.2358 & 0.7642 \\
+benign (false-positive rate) & 0.0118 & 0.0753 & +0.0634 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Volumetric floods, the largest and most conspicuous attacks and the class a detector is least expected to miss, transfer worst, retaining 5.35\% recall. This follows directly from §4.2: a flood is defined by rates being high, and "high" is a property of the capturing testbed. Low-rate application-layer attacks, defined by request patterns rather than volume, survive four times better.
+
+\subsection{The pairing chosen governs the conclusion}
+
+Repeating the study on the conventional CIC-DDoS2019 ↔ CICIDS2017 pairing over 76 shared CICFlowMeter features reproduces the gap: in-domain 0.9675--0.9995, external 0.3368--0.4986, mean paired gap 0.5848, significant in 10 of 10 pair-seeds. Neither the gap nor its size depends on the NetFlow v2 choice.
+
+The decomposition does differ. Where the NetFlow quartet is ranking-dominated in 11 of 12 pairs, the CIC pairing is \textbf{threshold}-dominated in most configurations, and RandomForest retains ROC-AUC 0.9348 across it with ranking loss 0.0651 against threshold loss 0.5643.
+
+CIC-DDoS2019 and CICIDS2017 share an institution, a testbed lineage and an extractor. Ranking largely survives that move, leaving an operating-point failure that recalibration can address. Moving between independently constructed testbeds destroys the ranking instead. The dataset pair chosen therefore determines which failure mode is observed, and hence which remedy appears to work. A study confined to one institution's dataset family will systematically overstate how recoverable the problem is.
+
+\subsection{Correcting label errors makes transfer look worse}
+
+\begin{table}[htbp]\centering\small
+\caption{Original versus corrected CICIDS2017, identical source model.}
+\begin{tabular}{lrrr}
+\toprule
+model & original & corrected & $\Delta$ macro-F1 \\
+\midrule
+LightGBM & 0.4827 & 0.3375 & $-$0.1453 \\
+XGBoost & 0.4986 & 0.3391 & $-$0.1595 \\
+RandomForest & 0.4824 & 0.3381 & $-$0.1443 \\
+LogisticRegression & 0.4543 & 0.3287 & $-$0.1256 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Mean |$\Delta$| is 0.1437, consistent across all four model families. Label error was not concealing good transfer; it was manufacturing the appearance of it. Roughly a quarter of the external macro-F1 measured against the original labels does not survive correction, so any cross-dataset result using uncorrected CICIDS2017 as a target is optimistic by about this margin.
+
+
+\section{Discussion}
+
+The practical reading of these results is narrow and, we think, useful.
+
+A detector validated on one network carries no evidence about its behaviour on another, and the failure it will exhibit is not conservatism. It will keep issuing confident verdicts while its ranking is wrong or reversed, at an external ECE two orders of magnitude above its in-domain value. Monitoring for drift by comparing feature distributions will not raise the alarm, because that distance does not track the loss. Monitoring the model's own confidence will, imperfectly.
+
+The remedy hierarchy inverts the usual order of effort. Elaborate zero-label adaptation recovers 0.0029 macro-F1; a benign-quantile threshold helps substantially in the one regime where ranking survived and hurts in three others; ten labelled flows recover 0.3323. For an operator, the cheapest useful action is also the most effective one: label a few dozen flows from the network you actually run.
+
+The finding that a single protocol bit out-generalises a 39-feature standard set should not be read as an endorsement of one-feature detectors, since its in-domain score of 0.6711 is unusable. It is a statement about what the other 38 features are doing, which is encoding a testbed at a 0.2764 external cost.
+
+Finally, §4.8 has a methodological consequence beyond this paper. Because the failure mode depends on whether the source and target share a lineage, the community's habit of evaluating transfer within a single institution's dataset family produces optimistic and qualitatively different conclusions from evaluation across families. Cross-institution evaluation should be the default.
+
+
+\section{Threats to validity}
+
+\textbf{All four datasets are testbed captures.} None is production traffic. This limits external validity in the usual way, but it sharpens the finding rather than weakening it: if detectors cannot transfer between four carefully constructed research testbeds, the case for transfer to a live network is not stronger.
+
+\textbf{De-duplication is a consequential choice.} Removing exact duplicates in the post-socket-drop feature space reduces NF-BoT-IoT by 99.7\%. A reader who considers those rows independent observations would obtain higher in-domain scores and a different gap. We report the counts so either position can be evaluated, and consider the alternative untenable: rows a model cannot distinguish cannot be independent test evidence for it.
+
+\textbf{The stratified cap alters base rates.} Capping at 50,000 rows per class bounds cost but changes class balance, which moves precision-sensitive metrics. Base rates are reported throughout and operating-point metrics accompany F1 for this reason.
+
+\textbf{Non-DoS attacks are excluded from the primary analysis.} Retaining them would change the base rate again; the policy is explicit and the counts moved are recorded, but the primary numbers describe a DoS/DDoS-versus-benign task.
+
+\textbf{Twelve ordered pairs is a small sample for §4.5.} Leave-one-pair-out is the right protocol for the question, but a 24\% error reduction estimated from twelve pairs supports triage, not a service-level guarantee.
+
+\textbf{NF-UNSW-NB15 is a weak source.} After de-duplication it retains 3,075 DoS flows at a 1.30\% base rate. Its behaviour as a source, the most strongly inverted row in the matrix, may partly reflect that scarcity rather than domain distance alone.
+
+\textbf{Low-rate attacks are underpowered in the NetFlow quartet.} After de-duplication, NF-CSE-CIC-IDS2018 retains only 203 low-rate application-layer flows, so §4.7 rests partly on the CICFlowMeter secondary study.
+
+\textbf{Label error is bounded, not eliminated.} CICIDS2017's defects are addressed against the corrected release; the NetFlow quartet has no comparably corrected counterpart, so residual label noise there is unmeasured.
+
+\textbf{The mechanism proposed for the inversion is not directly isolated.} We argue that a gradient-boosted ensemble over 39 correlated flow statistics encodes testbed-specific conjunctions whose sign is arbitrary across networks. The size effect in §4.4 is consistent with this and the capacity ablation rules out one competing explanation, but we have not identified the responsible conjunctions.
+
+
+\section{Conclusion}
+
+A flow-based DDoS detector moved to an independently constructed network does not become uncertain. It becomes confidently inverted: mean external ROC-AUC 0.5054, 108 of 240 external evaluations below chance, and one pair at 0.0697 whose predictions would be 93\% accurate if negated.
+
+That distinction governs what can be done about it. Feature engineering along the obvious semantic axis does not help: the pre-specified capacity hypothesis is not supported (+0.0132 [$-$0.0084, +0.0320]), although size and volume features do matter individually (+0.0615 [+0.0278, +0.0991]). Feature-set \emph{size} is the effect that survives, to the point that one protocol bit out-generalises the 39-feature standard by +0.2763 [+0.2230, +0.3366]. Distribution-divergence monitoring does not predict the loss; model confidence partially does. Recalibration recovers almost everything in the one regime where ranking survived and nothing elsewhere, and ten labelled target flows outperform every zero-label method available.
+
+Underneath all of it, these benchmarks are up to 99.7\% duplicate, and correcting known label errors moves measured transfer \emph{down} by 0.1437 macro-F1. The in-domain numbers this field reports, and a measurable share of the cross-dataset numbers, are bounded by dataset quality before any model is chosen.
+
+
+\section*{Data and code availability}
+
+All code, fixed seeds, configuration and result files are released. Every number in this paper is regenerated from \texttt{results/*.json} by the scripts that produced them; a verification script checks that each numeric literal in the manuscript traces to a stored result.
+
+\section*{References}
+
+Entries marked (v) were verified against the publisher or arXiv record on 2026-08-15. Entries marked (c) are standard dataset citations reproduced from common usage; confirm the volume and page fields against the publisher before submission.
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) Arp, D., Quiring, E., Pendlebury, F., Warnecke, A., Pierazzi, F., Wressnegger, C., Cavallaro, L., and Rieck, K. "Dos and Don'ts of Machine Learning in Computer Security." \emph{31st USENIX Security Symposium}, 2022.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) Axelsson, S. "The base-rate fallacy and the difficulty of intrusion detection." \emph{ACM Transactions on Information and System Security} 3(3), 186--205, 2000.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) Cantone, M., Marrocco, C., and Bria, A. "On the Cross-Dataset Generalization of Machine Learning for Network Intrusion Detection." arXiv:2402.10974, 2024.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) D'Hooge, L., Wauters, T., Volckaert, B., and De Turck, F. "Inter-dataset generalization strength of supervised machine learning methods for intrusion detection." \emph{Journal of Information Security and Applications} 54, 102564, 2020.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) Engelen, G., Rimmer, V., and Joosen, W. "Troubleshooting an Intrusion Detection Dataset: the CICIDS2017 Case Study." \emph{IEEE Security and Privacy Workshops (WTMC)}, 2021.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) Garg, S., Balakrishnan, S., Lipton, Z. C., Neyshabur, B., and Sedghi, H. "Leveraging Unlabeled Data to Predict Out-of-Distribution Performance." *International Conference on Learning Representations (ICLR)*, 2022. arXiv:2201.04234.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) Lanvin, M., Gimenez, P.-F., Han, Y., Majorczyk, F., Mé, L., and Totel, E. "Errors in the CICIDS2017 dataset and the resulting fair evaluation of machine learning." \emph{International Conference on Risks and Security of Internet and Systems (CRiSIS)}, 2022.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) Sarhan, M., Layeghy, S., Moustafa, N., and Portmann, M. "Towards a Standard Feature Set for Network Intrusion Detection System Datasets." arXiv:2101.11315, 2021.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (v) Sun, B., Feng, J., and Saenko, K. "Return of Frustratingly Easy Domain Adaptation." \emph{AAAI Conference on Artificial Intelligence}, 2016.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (c) Sharafaldin, I., Lashkari, A. H., and Ghorbani, A. A. "Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization." *International Conference on Information Systems Security and Privacy (ICISSP)*, 2018. (CICIDS2017)
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (c) Sharafaldin, I., Lashkari, A. H., Hakak, S., and Ghorbani, A. A. "Developing Realistic Distributed Denial of Service (DDoS) Attack Dataset and Taxonomy." \emph{International Carnahan Conference on Security Technology (ICCST)}, 2019. (CIC-DDoS2019)
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (c) Moustafa, N., and Slay, J. "UNSW-NB15: a comprehensive data set for network intrusion detection systems." *Military Communications and Information Systems Conference (MilCIS)*, 2015.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (c) Koroniotis, N., Moustafa, N., Sitnikova, E., and Turnbull, B. "Towards the development of realistic botnet dataset in the Internet of Things for network forensic analytics: Bot-IoT dataset." \emph{Future Generation Computer Systems} 100, 779--796, 2019.
+\end{enumerate}
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item (c) Alsaedi, A., Moustafa, N., Tari, Z., Mahmood, A., and Anwar, A. "TON\_IoT telemetry dataset: A new generation dataset of IoT and IIoT for data-driven intrusion detection systems." \emph{IEEE Access} 8, 165130--165150, 2020.
+\end{enumerate}
+
+\end{document}
