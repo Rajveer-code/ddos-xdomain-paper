@@ -100,16 +100,31 @@ DATASETS = {d.key: d for d in (*NETFLOW_V2, *CICFLOWMETER)}
 # ------------------------------------------------------------------ ATTACK TAXONOMY
 
 #: Attack-family taxonomy. Dataset-level transfer numbers hide the mechanism; the paper
-#: reports transfer per family. Matching is done on lowercased label substrings, longest
-#: match first, and every unmatched label is reported rather than silently bucketed.
+#: reports transfer per family.
+#:
+#: Matching runs over lowercased label substrings and the **longest matching pattern
+#: across all families wins**, not the first family checked. That matters: "DoS
+#: slowloris" contains both "dos" (volumetric) and "slowloris" (low-rate), and a
+#: first-match rule would file a low-rate attack as volumetric. Ties are broken by
+#: FAMILY_PRECEDENCE, so "DrDoS_DNS" — where "dos" and "dns" both match at length 3 —
+#: lands in reflection/amplification. Every unmatched label is reported, never bucketed
+#: by accident.
 FAMILY_PATTERNS: dict[str, tuple[str, ...]] = {
-    "volumetric": ("syn", "udp", "udplag", "udp-lag", "tftp", "loic", "hoic",
-                   "ddos", "dos hulk", "hulk", "goldeneye"),
+    "volumetric": ("dos", "ddos", "syn", "udp", "udplag", "udp-lag", "tftp",
+                   "loic", "hoic", "dos hulk", "hulk", "goldeneye", "flood"),
     "reflection_amplification": ("dns", "ldap", "mssql", "netbios", "ntp", "snmp",
                                  "ssdp", "portmap", "chargen", "memcached"),
     "low_rate_application": ("slowloris", "slowhttptest", "slowhttp", "rudy",
-                             "slow", "http flood"),
+                             "slow", "hulk-slow"),
 }
+
+#: Tie-break order when two families match at the same pattern length. More specific
+#: mechanisms win over the generic volumetric bucket.
+FAMILY_PRECEDENCE: tuple[str, ...] = (
+    "low_rate_application",
+    "reflection_amplification",
+    "volumetric",
+)
 
 BENIGN_LABELS = {"benign", "normal", "background", "0"}
 
