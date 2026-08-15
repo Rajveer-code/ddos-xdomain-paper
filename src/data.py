@@ -67,6 +67,7 @@ class LoadReport:
     duplicate_fraction: float = 0.0
     n_contradictory_groups: int = 0
     n_inf_coerced: int = 0
+    n_float32_overflow: int = 0
 
     def to_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
@@ -197,16 +198,34 @@ def load(
     X = df.select_dtypes(include=[np.number])
     del df
 
-    # Count infinities column by column. Materialising the whole frame as float64 to call
-    # np.isinf once needs ~5.9 GB on the 18.9M-row datasets and sends the machine to swap;
-    # integer columns cannot hold an infinity at all, so they are skipped outright.
+    # Sanitise non-finite and physically impossible values, column by column.
+    #
+    # Materialising the whole frame as float64 to call np.isinf once needs ~5.9 GB on the
+    # 18.9M-row datasets and sends the machine to swap; integer columns cannot hold an
+    # infinity, so they are skipped outright.
+    #
+    # Beyond true infinities, the per-second rate features carry finite but absurd
+    # magnitudes -- SRC_TO_DST_SECOND_BYTES reaches 8.9e304 in NF-ToN-IoT -- because
+    # CICFlowMeter-style extractors divide byte counts by near-zero flow durations
+    # (Engelen et al., 2021). Those values exceed float32 entirely and describe the
+    # extractor, not the traffic. They are set to NaN and counted, rather than being
+    # allowed to silently become inf on a float32 cast.
+    f32_max = float(np.finfo(np.float32).max)
     n_inf = 0
+    n_overflow = 0
     for col in X.columns:
-        if X[col].dtype.kind == "f":
-            n_inf += int(np.isinf(X[col].to_numpy(dtype=np.float64, na_value=np.nan)).sum())
+        if X[col].dtype.kind != "f":
+            continue
+        arr = X[col].to_numpy(dtype=np.float64, na_value=np.nan)
+        inf_mask = np.isinf(arr)
+        over_mask = np.abs(arr) > f32_max
+        bad = inf_mask | over_mask
+        if bad.any():
+            n_inf += int(inf_mask.sum())
+            n_overflow += int((over_mask & ~inf_mask).sum())
+            X.loc[bad, col] = np.nan
     rep.n_inf_coerced = n_inf
-    if n_inf:
-        X = X.replace([np.inf, -np.inf], np.nan)
+    rep.n_float32_overflow = n_overflow
 
     # codes == -1 marks a NaN label; fam_lut is offset by one so that maps to "other".
     y = pd.Series(np.where(codes >= 0, class_lut[codes], OTHER_ATTACK), name="y")

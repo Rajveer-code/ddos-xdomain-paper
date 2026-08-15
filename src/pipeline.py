@@ -87,13 +87,35 @@ class Domain:
 
 _CACHE: dict[tuple[str, str], Domain] = {}
 
+#: Ceiling on rows held per class in the in-memory cache.
+#:
+#: The transfer matrix needs all four domains resident at once. Caching them at full
+#: size needs more than this machine's 15.6 GB, and Windows pages the process out rather
+#: than failing, so a run appears alive while crawling at 23% CPU. The ceiling is 5x the
+#: largest per-class sample any experiment draws, so it never binds on the experiments
+#: themselves; the reservoir below is stratified and seeded, so it is reproducible.
+#: Full-data confirmation runs pass cache_cap=None explicitly.
+CACHE_CAP_PER_CLASS = 1_000_000
 
-def get_domain(key: str, other_policy: str = "drop") -> Domain:
+
+def get_domain(key: str, other_policy: str = "drop",
+               cache_cap: int | None = CACHE_CAP_PER_CLASS) -> Domain:
     """Load and cache a dataset. Loading NF-CSE-CIC-IDS2018 costs ~50s; do it once."""
     ck = (key, other_policy)
     if ck not in _CACHE:
-        X, y, fam, rep = load(key, other_policy=other_policy, dedup=True)
-        _CACHE[ck] = Domain(key, X, y.to_numpy(), fam.to_numpy(), rep.to_dict())
+        X, y, fam, report = load(key, other_policy=other_policy, dedup=True)
+        y_arr, fam_arr = y.to_numpy(), fam.to_numpy()
+        rep = report.to_dict()
+
+        if cache_cap is not None:
+            X, y_arr, fam_arr = stratified_cap(X, y_arr, fam_arr, cache_cap, seed=0)
+            rep["cache_cap_per_class"] = cache_cap
+            rep["rows_cached"] = len(X)
+
+        # float32 throughout: several NetFlow columns arrive as int64, and the cache must
+        # hold four domains at once.
+        X = X.astype(np.float32).reset_index(drop=True)
+        _CACHE[ck] = Domain(key, X, y_arr, fam_arr, rep)
     return _CACHE[ck]
 
 
