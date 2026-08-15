@@ -1,0 +1,37 @@
+[
+  {
+    "n": 1,
+    "file": "fig1_generalization_gap.png",
+    "caption": "In-domain versus external macro-F1 for all 12 ordered pairs, LightGBM, mean over 5 seeds."
+  },
+  {
+    "n": 2,
+    "file": "fig2_auc_matrix.png",
+    "caption": "External ROC-AUC per ordered pair. Values below 0.5 indicate the ranking inverts in the target domain."
+  },
+  {
+    "n": 3,
+    "file": "fig3_failure_decomposition.png",
+    "caption": "Ranking loss versus threshold loss per ordered pair. Points below the diagonal fail representationally; only one pair lies above it."
+  },
+  {
+    "n": 4,
+    "file": "fig4_feature_set_size.png",
+    "caption": "Feature-set size against in-domain and external macro-F1. The single-feature set attains the best external score of any subset tested."
+  },
+  {
+    "n": 5,
+    "file": "fig5_gap_forecast.png",
+    "caption": "Observed generalization gap against three label-free predictors, with Spearman correlation and bootstrap CI."
+  },
+  {
+    "n": 6,
+    "file": "fig6_remedies.png",
+    "caption": "External macro-F1 under the deployed threshold, zero-label benign-quantile recalibration, and the all-labels oracle, ordered by external AUC."
+  },
+  {
+    "n": 7,
+    "file": "fig7_label_budget.png",
+    "caption": "External macro-F1 against the number of labelled target flows, averaged over all ordered pairs and seeds."
+  }
+]

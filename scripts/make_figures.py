@@ -175,26 +175,53 @@ def fig_feature_sets(abl):
     ii = np.array([mean(agg[n]["i"]) for n in names])
     ee = np.array([mean(agg[n]["e"]) for n in names])
 
-    fig, axes = plt.subplots(1, 2, figsize=(10.4, 4.3))
+    fig, axes = plt.subplots(1, 2, figsize=(11.6, 4.6))
+    fig.subplots_adjust(wspace=0.28)
+
+    # Left: the trade-off. Label only the points that carry the argument, with explicit
+    # offsets, since the dense cluster near (0.98, 0.38) cannot take inline labels.
     ax = axes[0]
-    ax.scatter(ii, ee, s=44, c=ks, cmap="viridis", zorder=3)
-    for n, a, b in zip(names, ii, ee):
-        if n in {"all", "only_identifier", "only_duration_timing",
-                 "only_rate_throughput", "no_capacity", "semantic_only"}:
-            ax.annotate(f"{n} (k={agg[n]['k']})", (a, b), fontsize=7,
-                        xytext=(4, 4), textcoords="offset points")
-    ax.set_xlabel("in-domain macro-F1"); ax.set_ylabel("external macro-F1")
+    sc = ax.scatter(ii, ee, s=52, c=ks, cmap="viridis", zorder=3,
+                    edgecolor="white", linewidth=0.5)
+    callouts = {
+        "only_identifier": (14, -4),
+        "only_duration_timing": (14, -4),
+        "only_rate_throughput": (-10, 12),
+        "all": (-16, 14),
+    }
+    for n, (dx, dy) in callouts.items():
+        if n not in agg:
+            continue
+        a, b = mean(agg[n]["i"]), mean(agg[n]["e"])
+        ax.annotate(f"{n}\n(k={agg[n]['k']})", (a, b), fontsize=7.5,
+                    xytext=(dx, dy), textcoords="offset points",
+                    ha="left" if dx > 0 else "right",
+                    arrowprops=dict(arrowstyle="-", lw=0.7, color="0.45"))
+    ax.set_xlabel("in-domain macro-F1")
+    ax.set_ylabel("external macro-F1")
+    ax.set_xlim(0.63, 1.03)
+    ax.set_ylim(0.33, 0.68)
     ax.set_title("In-domain gain is bought with external loss")
     ax.grid(alpha=0.3)
+    fig.colorbar(sc, ax=ax, fraction=0.046, label="features in set (k)")
 
+    # Right: k is not single-valued -- several sets share a k -- so this is a scatter
+    # with a fitted trend, not a line joining arbitrary neighbours.
     ax = axes[1]
-    o = np.argsort(ks)
-    ax.plot(ks[o], ee[o], "o-", color=OKABE[3], label="external", zorder=3)
-    ax.plot(ks[o], ii[o], "s-", color=OKABE[0], label="in-domain", zorder=3)
+    ax.scatter(ks, ee, s=46, color=OKABE[3], label="external", zorder=3)
+    ax.scatter(ks, ii, s=46, marker="s", color=OKABE[0], label="in-domain", zorder=3)
+    lk = np.log10(ks)
+    for vals, col in ((ee, OKABE[3]), (ii, OKABE[0])):
+        b, a = np.polyfit(lk, vals, 1)
+        xs = np.linspace(lk.min(), lk.max(), 50)
+        ax.plot(10 ** xs, a + b * xs, color=col, lw=1.4, ls="--", alpha=0.8, zorder=2)
     ax.set_xscale("log")
-    ax.set_xlabel("number of features (log)"); ax.set_ylabel("macro-F1")
+    ax.set_xlabel("number of features in set, k (log scale)")
+    ax.set_ylabel("macro-F1")
+    ax.set_ylim(0.3, 1.05)
     ax.set_title("Smaller feature sets transfer better")
-    ax.legend(fontsize=8); ax.grid(alpha=0.3)
+    ax.legend(fontsize=8, loc="lower left", framealpha=0.95)
+    ax.grid(alpha=0.3)
     save(fig, "feature_set_size",
          "Feature-set size against in-domain and external macro-F1. The single-feature "
          "set attains the best external score of any subset tested.")
