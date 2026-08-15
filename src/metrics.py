@@ -71,15 +71,44 @@ def binary_metrics(y_true, y_pred, proba) -> dict[str, float]:
 # ------------------------------------------------------------------------ thresholds
 
 
-def best_threshold(y_true, proba, metric: str = "macro_f1") -> float:
-    """Threshold maximising `metric` on labelled data. The oracle a deployment lacks."""
+def best_threshold(y_true, proba, metric: str = "macro_f1", tol: float = 1e-9) -> float:
+    """
+    Threshold maximising `metric` on labelled data. The oracle a deployment lacks.
+
+    Takes the midpoint of the **widest tied plateau** rather than argmax. When a model
+    separates its own test set perfectly -- routine in-domain here, where AUC reaches
+    1.0000 -- every threshold across a wide interval scores identically and argmax
+    returns whichever endpoint the candidate grid happened to visit first. That endpoint
+    sits flush against the score distribution, so it is maximally fragile under any
+    shift, and choosing it would manufacture threshold loss that reflects an arbitrary
+    tie-break rather than the domain gap.
+    """
     y_true = np.asarray(y_true)
     proba = np.asarray(proba, dtype=float)
-    cands = np.unique(np.quantile(proba, np.linspace(0.001, 0.999, 400)))
+
+    # Candidates are midpoints *between* consecutive observed score levels. A grid drawn
+    # from the observed scores themselves can only ever propose a value some sample
+    # already takes, so with two well-separated clusters at 0.1 and 0.9 it can never
+    # offer 0.5 -- it must pick one cluster's own value and sit flush against it.
+    levels = np.unique(np.quantile(proba, np.linspace(0.0, 1.0, 401)))
+    cands = (levels[:-1] + levels[1:]) / 2.0 if len(levels) > 1 else levels
+
     fn = (lambda t: f1_score(y_true, proba >= t, average="macro", zero_division=0)) \
         if metric == "macro_f1" else (lambda t: matthews_corrcoef(y_true, proba >= t))
-    scores = [fn(t) for t in cands]
-    return float(cands[int(np.argmax(scores))])
+    scores = np.array([fn(t) for t in cands], dtype=float)
+
+    at_max = scores >= scores.max() - tol
+    # Longest run of consecutive tied-optimal candidates.
+    best_run, run_start, best_start, best_len = 0, 0, 0, 0
+    for i, ok in enumerate(at_max):
+        if ok:
+            if i == 0 or not at_max[i - 1]:
+                run_start = i
+            run_len = i - run_start + 1
+            if run_len > best_len:
+                best_len, best_start = run_len, run_start
+    best_run = best_start + best_len - 1
+    return float((cands[best_start] + cands[best_run]) / 2.0)
 
 
 def benign_quantile_threshold(proba_benign, target_fpr: float = 0.01) -> float:
@@ -221,6 +250,14 @@ def _self_check() -> None:
     assert d["threshold_loss"] > 0.1, "a stale threshold must show threshold loss"
 
     assert alerts_per_hour(0.01, 1.0, 1_000_000, 0.001) > 9000
+
+    # Perfectly separable scores: every threshold in the gap is optimal, and the chosen
+    # one must sit in the middle of that gap rather than flush against either class.
+    ysep = np.r_[np.zeros(500, int), np.ones(500, int)]
+    psep = np.r_[np.full(500, 0.10), np.full(500, 0.90)]
+    t = best_threshold(ysep, psep)
+    assert 0.3 < t < 0.7, f"plateau midpoint expected near 0.5, got {t}"
+    assert f1_score(ysep, psep >= t, average="macro") == 1.0
     print("metrics self-check passed")
 
 
