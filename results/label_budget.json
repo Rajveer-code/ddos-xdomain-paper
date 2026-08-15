@@ -1,0 +1,2173 @@
+{
+ "config": {
+  "n_per_class": 50000,
+  "seeds": [
+   42,
+   43,
+   44
+  ],
+  "model": "LightGBM"
+ },
+ "rows": [
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.26344183589091946,
+   "f1_finetune": 0.26344183589091946,
+   "f1_benign_quantile": 0.3642929572288162,
+   "f1_coral": 0.3274683157372353
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.6591400281371729,
+   "f1_finetune": 0.8174251572235863,
+   "f1_benign_quantile": 0.3642929572288162,
+   "f1_coral": 0.3274683157372353
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.5193790833289389,
+   "f1_finetune": 0.9495203333239681,
+   "f1_benign_quantile": 0.3642929572288162,
+   "f1_coral": 0.3274683157372353
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.661273656761961,
+   "f1_finetune": 0.9742707081649136,
+   "f1_benign_quantile": 0.3642929572288162,
+   "f1_coral": 0.3274683157372353
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.661273656761961,
+   "f1_finetune": 0.9711805502868196,
+   "f1_benign_quantile": 0.3642929572288162,
+   "f1_coral": 0.3274683157372353
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.6613096124885968,
+   "f1_finetune": 0.9776785357744604,
+   "f1_benign_quantile": 0.3642929572288162,
+   "f1_coral": 0.3274683157372353
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.4044675922857056,
+   "f1_finetune": 0.4044675922857056,
+   "f1_benign_quantile": 0.34850097273888403,
+   "f1_coral": 0.4382109246418824
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.5366042446227444,
+   "f1_finetune": 0.6491856642402041,
+   "f1_benign_quantile": 0.34850097273888403,
+   "f1_coral": 0.4382109246418824
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.5211829906232825,
+   "f1_finetune": 0.8106186560374371,
+   "f1_benign_quantile": 0.34850097273888403,
+   "f1_coral": 0.4382109246418824
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.5479430015267159,
+   "f1_finetune": 0.8538020304994574,
+   "f1_benign_quantile": 0.34850097273888403,
+   "f1_coral": 0.4382109246418824
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.5654156211909962,
+   "f1_finetune": 0.8878633406423131,
+   "f1_benign_quantile": 0.34850097273888403,
+   "f1_coral": 0.4382109246418824
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.5479312424049692,
+   "f1_finetune": 0.9166205051170814,
+   "f1_benign_quantile": 0.34850097273888403,
+   "f1_coral": 0.4382109246418824
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.5096276199793651,
+   "f1_finetune": 0.5096276199793651,
+   "f1_benign_quantile": 0.6108134586800975,
+   "f1_coral": 0.559608614347389
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.5283693032725556,
+   "f1_finetune": 0.7301511488348802,
+   "f1_benign_quantile": 0.6108134586800975,
+   "f1_coral": 0.559608614347389
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.54433475191559,
+   "f1_finetune": 0.8543959105277021,
+   "f1_benign_quantile": 0.6108134586800975,
+   "f1_coral": 0.559608614347389
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.544348094690509,
+   "f1_finetune": 0.8904919787174508,
+   "f1_benign_quantile": 0.6108134586800975,
+   "f1_coral": 0.559608614347389
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.544348094690509,
+   "f1_finetune": 0.8883968333165274,
+   "f1_benign_quantile": 0.6108134586800975,
+   "f1_coral": 0.559608614347389
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.54433475191559,
+   "f1_finetune": 0.8898816770046143,
+   "f1_benign_quantile": 0.6108134586800975,
+   "f1_coral": 0.559608614347389
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.5156777507744421,
+   "f1_finetune": 0.5156777507744421,
+   "f1_benign_quantile": 0.9627573889084251,
+   "f1_coral": 0.4845565598483216
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.966917791867918,
+   "f1_finetune": 0.9439398626350239,
+   "f1_benign_quantile": 0.9627573889084251,
+   "f1_coral": 0.4845565598483216
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.9198798529134643,
+   "f1_finetune": 0.9720894871099394,
+   "f1_benign_quantile": 0.9627573889084251,
+   "f1_coral": 0.4845565598483216
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.9661120256309785,
+   "f1_finetune": 0.992019599971276,
+   "f1_benign_quantile": 0.9627573889084251,
+   "f1_coral": 0.4845565598483216
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.9662319290393309,
+   "f1_finetune": 0.9962699779745929,
+   "f1_benign_quantile": 0.9627573889084251,
+   "f1_coral": 0.4845565598483216
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.9662159817642038,
+   "f1_finetune": 0.998869999917623,
+   "f1_benign_quantile": 0.9627573889084251,
+   "f1_coral": 0.4845565598483216
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.35498988739005105,
+   "f1_finetune": 0.35498988739005105,
+   "f1_benign_quantile": 0.3442658442025606,
+   "f1_coral": 0.4356140930378315
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.4272824724150164,
+   "f1_finetune": 0.5037605073140041,
+   "f1_benign_quantile": 0.3442658442025606,
+   "f1_coral": 0.4356140930378315
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.5764069562999543,
+   "f1_finetune": 0.8034679912733729,
+   "f1_benign_quantile": 0.3442658442025606,
+   "f1_coral": 0.4356140930378315
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.5455012991579982,
+   "f1_finetune": 0.848084015567701,
+   "f1_benign_quantile": 0.3442658442025606,
+   "f1_coral": 0.4356140930378315
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.585120367665893,
+   "f1_finetune": 0.9427643040490509,
+   "f1_benign_quantile": 0.3442658442025606,
+   "f1_coral": 0.4356140930378315
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.5829596360977192,
+   "f1_finetune": 0.9440485264565517,
+   "f1_benign_quantile": 0.3442658442025606,
+   "f1_coral": 0.4356140930378315
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.4821249951409679,
+   "f1_finetune": 0.4821249951409679,
+   "f1_benign_quantile": 0.4792524844140677,
+   "f1_coral": 0.5034243648130943
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.5291477533640971,
+   "f1_finetune": 0.7327157248155087,
+   "f1_benign_quantile": 0.4792524844140677,
+   "f1_coral": 0.5034243648130943
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.5311562269604615,
+   "f1_finetune": 0.8237758320467152,
+   "f1_benign_quantile": 0.4792524844140677,
+   "f1_coral": 0.5034243648130943
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.5369495130842923,
+   "f1_finetune": 0.8462631874914672,
+   "f1_benign_quantile": 0.4792524844140677,
+   "f1_coral": 0.5034243648130943
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.5359108469725098,
+   "f1_finetune": 0.8861251603719986,
+   "f1_benign_quantile": 0.4792524844140677,
+   "f1_coral": 0.5034243648130943
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.5368732425131192,
+   "f1_finetune": 0.8898753064674599,
+   "f1_benign_quantile": 0.4792524844140677,
+   "f1_coral": 0.5034243648130943
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.27632031876113927,
+   "f1_finetune": 0.27632031876113927,
+   "f1_benign_quantile": 0.3310947303642858,
+   "f1_coral": 0.32715945153243703
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.5898028557808215,
+   "f1_finetune": 0.798872862309081,
+   "f1_benign_quantile": 0.3310947303642858,
+   "f1_coral": 0.32715945153243703
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.5920787159526343,
+   "f1_finetune": 0.8917144041408374,
+   "f1_benign_quantile": 0.3310947303642858,
+   "f1_coral": 0.32715945153243703
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.59506922064351,
+   "f1_finetune": 0.9139460325592798,
+   "f1_benign_quantile": 0.3310947303642858,
+   "f1_coral": 0.32715945153243703
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.5954181572834221,
+   "f1_finetune": 0.9781898815950482,
+   "f1_benign_quantile": 0.3310947303642858,
+   "f1_coral": 0.32715945153243703
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.5947797456439297,
+   "f1_finetune": 0.9870490883581327,
+   "f1_benign_quantile": 0.3310947303642858,
+   "f1_coral": 0.32715945153243703
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.3521194710190766,
+   "f1_finetune": 0.3521194710190766,
+   "f1_benign_quantile": 0.24069038899557493,
+   "f1_coral": 0.226879449960616
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.7136870436833016,
+   "f1_finetune": 0.5139582004098645,
+   "f1_benign_quantile": 0.24069038899557493,
+   "f1_coral": 0.226879449960616
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.7625686516504382,
+   "f1_finetune": 0.877444272447144,
+   "f1_benign_quantile": 0.24069038899557493,
+   "f1_coral": 0.226879449960616
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.7621491140027381,
+   "f1_finetune": 0.8535542216919225,
+   "f1_benign_quantile": 0.24069038899557493,
+   "f1_coral": 0.226879449960616
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.7581447154048996,
+   "f1_finetune": 0.9514294742017955,
+   "f1_benign_quantile": 0.24069038899557493,
+   "f1_coral": 0.226879449960616
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.7486831648619016,
+   "f1_finetune": 0.9596073199631812,
+   "f1_benign_quantile": 0.24069038899557493,
+   "f1_coral": 0.226879449960616
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.48258543998670667,
+   "f1_finetune": 0.48258543998670667,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48091256439626057
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.36132540625012793,
+   "f1_finetune": 0.6543414063257126,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48091256439626057
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.3613187689575152,
+   "f1_finetune": 0.7357988906500004,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48091256439626057
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.3618512456662907,
+   "f1_finetune": 0.7838172396292769,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48091256439626057
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.3546626008568155,
+   "f1_finetune": 0.8701329810702461,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48091256439626057
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.35080288389159836,
+   "f1_finetune": 0.8912803531862097,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48091256439626057
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.32282224224400424,
+   "f1_finetune": 0.32282224224400424,
+   "f1_benign_quantile": 0.33141183908708843,
+   "f1_coral": 0.3644609112092886
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.33578093112088825,
+   "f1_finetune": 0.924416093080782,
+   "f1_benign_quantile": 0.33141183908708843,
+   "f1_coral": 0.3644609112092886
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.32098863946551776,
+   "f1_finetune": 0.996449981056744,
+   "f1_benign_quantile": 0.33141183908708843,
+   "f1_coral": 0.3644609112092886
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.3576527160085415,
+   "f1_finetune": 0.9960999978643589,
+   "f1_benign_quantile": 0.33141183908708843,
+   "f1_coral": 0.3644609112092886
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.3474631623063522,
+   "f1_finetune": 0.9979199955662625,
+   "f1_benign_quantile": 0.33141183908708843,
+   "f1_coral": 0.3644609112092886
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.3581725456737543,
+   "f1_finetune": 0.999109999819775,
+   "f1_benign_quantile": 0.33141183908708843,
+   "f1_coral": 0.3644609112092886
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.22249081732195455,
+   "f1_finetune": 0.22249081732195455,
+   "f1_benign_quantile": 0.22593237651388434,
+   "f1_coral": 0.21888761780428578
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.4516436352649506,
+   "f1_finetune": 0.7352451887627214,
+   "f1_benign_quantile": 0.22593237651388434,
+   "f1_coral": 0.21888761780428578
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.44459614639907863,
+   "f1_finetune": 0.9316007821939893,
+   "f1_benign_quantile": 0.22593237651388434,
+   "f1_coral": 0.21888761780428578
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.4435830928286998,
+   "f1_finetune": 0.9568078301139615,
+   "f1_benign_quantile": 0.22593237651388434,
+   "f1_coral": 0.21888761780428578
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.44424358348154175,
+   "f1_finetune": 0.9691684579070114,
+   "f1_benign_quantile": 0.22593237651388434,
+   "f1_coral": 0.21888761780428578
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.4550954988980347,
+   "f1_finetune": 0.9780807506323506,
+   "f1_benign_quantile": 0.22593237651388434,
+   "f1_coral": 0.21888761780428578
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 0,
+   "f1_rethreshold": 0.315388780361533,
+   "f1_finetune": 0.315388780361533,
+   "f1_benign_quantile": 0.32523161424840924,
+   "f1_coral": 0.3180706988757997
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 10,
+   "f1_rethreshold": 0.26494703493190447,
+   "f1_finetune": 0.5546022263223898,
+   "f1_benign_quantile": 0.32523161424840924,
+   "f1_coral": 0.3180706988757997
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 50,
+   "f1_rethreshold": 0.351359945406558,
+   "f1_finetune": 0.8428983790768572,
+   "f1_benign_quantile": 0.32523161424840924,
+   "f1_coral": 0.3180706988757997
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 100,
+   "f1_rethreshold": 0.35118448356017423,
+   "f1_finetune": 0.9160813804974037,
+   "f1_benign_quantile": 0.32523161424840924,
+   "f1_coral": 0.3180706988757997
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 500,
+   "f1_rethreshold": 0.3509327738779462,
+   "f1_finetune": 0.9367538523974285,
+   "f1_benign_quantile": 0.32523161424840924,
+   "f1_coral": 0.3180706988757997
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 42,
+   "k": 1000,
+   "f1_rethreshold": 0.35091228295408783,
+   "f1_finetune": 0.9597099928647237,
+   "f1_benign_quantile": 0.32523161424840924,
+   "f1_coral": 0.3180706988757997
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.35534199455331833,
+   "f1_finetune": 0.35534199455331833,
+   "f1_benign_quantile": 0.35434987041530536,
+   "f1_coral": 0.3244863928536178
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.6570097733363339,
+   "f1_finetune": 0.7776086726767886,
+   "f1_benign_quantile": 0.35434987041530536,
+   "f1_coral": 0.3244863928536178
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.670442410660685,
+   "f1_finetune": 0.9648768512427297,
+   "f1_benign_quantile": 0.35434987041530536,
+   "f1_coral": 0.3244863928536178
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.6704554553738294,
+   "f1_finetune": 0.9720073644327164,
+   "f1_benign_quantile": 0.35434987041530536,
+   "f1_coral": 0.3244863928536178
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.6705182743878477,
+   "f1_finetune": 0.9752422541225032,
+   "f1_benign_quantile": 0.35434987041530536,
+   "f1_coral": 0.3244863928536178
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.6637581372563721,
+   "f1_finetune": 0.9715392373490765,
+   "f1_benign_quantile": 0.35434987041530536,
+   "f1_coral": 0.3244863928536178
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.3539623391457405,
+   "f1_finetune": 0.3539623391457405,
+   "f1_benign_quantile": 0.3463976616161398,
+   "f1_coral": 0.34667361028847754
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.5865849603221054,
+   "f1_finetune": 0.6701318136856056,
+   "f1_benign_quantile": 0.3463976616161398,
+   "f1_coral": 0.34667361028847754
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.6378712667508415,
+   "f1_finetune": 0.8000553939232091,
+   "f1_benign_quantile": 0.3463976616161398,
+   "f1_coral": 0.34667361028847754
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.6378712667508415,
+   "f1_finetune": 0.812149205413502,
+   "f1_benign_quantile": 0.3463976616161398,
+   "f1_coral": 0.34667361028847754
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.6378832003320374,
+   "f1_finetune": 0.883479689296808,
+   "f1_benign_quantile": 0.3463976616161398,
+   "f1_coral": 0.34667361028847754
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.6379085249040592,
+   "f1_finetune": 0.9120682520438304,
+   "f1_benign_quantile": 0.3463976616161398,
+   "f1_coral": 0.34667361028847754
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.48644586538706835,
+   "f1_finetune": 0.48644586538706835,
+   "f1_benign_quantile": 0.4899635295977277,
+   "f1_coral": 0.48937752936981094
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.5326424420334086,
+   "f1_finetune": 0.7790926107628114,
+   "f1_benign_quantile": 0.4899635295977277,
+   "f1_coral": 0.48937752936981094
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.5346426129538046,
+   "f1_finetune": 0.8609917278098238,
+   "f1_benign_quantile": 0.4899635295977277,
+   "f1_coral": 0.48937752936981094
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.5413237031786895,
+   "f1_finetune": 0.8726597907515745,
+   "f1_benign_quantile": 0.4899635295977277,
+   "f1_coral": 0.48937752936981094
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.5412583319474032,
+   "f1_finetune": 0.9000470334067434,
+   "f1_benign_quantile": 0.4899635295977277,
+   "f1_coral": 0.48937752936981094
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.5346426129538046,
+   "f1_finetune": 0.8948843421227646,
+   "f1_benign_quantile": 0.4899635295977277,
+   "f1_coral": 0.48937752936981094
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.546133827959258,
+   "f1_finetune": 0.546133827959258,
+   "f1_benign_quantile": 0.9343279322421698,
+   "f1_coral": 0.4988883248410159
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.9683398671079816,
+   "f1_finetune": 0.9481144629345519,
+   "f1_benign_quantile": 0.9343279322421698,
+   "f1_coral": 0.4988883248410159
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.9689388222966366,
+   "f1_finetune": 0.9931597618913115,
+   "f1_benign_quantile": 0.9343279322421698,
+   "f1_coral": 0.4988883248410159
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.9680768318176252,
+   "f1_finetune": 0.989649091222297,
+   "f1_benign_quantile": 0.9343279322421698,
+   "f1_coral": 0.4988883248410159
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.9683598508494733,
+   "f1_finetune": 0.9978799966342826,
+   "f1_benign_quantile": 0.9343279322421698,
+   "f1_coral": 0.4988883248410159
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.9680201949885855,
+   "f1_finetune": 0.9979299947668198,
+   "f1_benign_quantile": 0.9343279322421698,
+   "f1_coral": 0.4988883248410159
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.39349245266386546,
+   "f1_finetune": 0.39349245266386546,
+   "f1_benign_quantile": 0.3467534986554389,
+   "f1_coral": 0.39536431119826054
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.7033403318732764,
+   "f1_finetune": 0.6191979002509278,
+   "f1_benign_quantile": 0.3467534986554389,
+   "f1_coral": 0.39536431119826054
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.6766484917580335,
+   "f1_finetune": 0.7878771294685647,
+   "f1_benign_quantile": 0.3467534986554389,
+   "f1_coral": 0.39536431119826054
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.7018420978658357,
+   "f1_finetune": 0.8742989166715107,
+   "f1_benign_quantile": 0.3467534986554389,
+   "f1_coral": 0.39536431119826054
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.7033771057512477,
+   "f1_finetune": 0.9262651023437605,
+   "f1_benign_quantile": 0.3467534986554389,
+   "f1_coral": 0.39536431119826054
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.7033771057512477,
+   "f1_finetune": 0.9418847105414808,
+   "f1_benign_quantile": 0.3467534986554389,
+   "f1_coral": 0.39536431119826054
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.48199500362711745,
+   "f1_finetune": 0.48199500362711745,
+   "f1_benign_quantile": 0.5332881299318952,
+   "f1_coral": 0.523199779385284
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.5361311176502965,
+   "f1_finetune": 0.7282469652842067,
+   "f1_benign_quantile": 0.5332881299318952,
+   "f1_coral": 0.523199779385284
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.5377155549212862,
+   "f1_finetune": 0.7977659144367594,
+   "f1_benign_quantile": 0.5332881299318952,
+   "f1_coral": 0.523199779385284
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.5355766073866085,
+   "f1_finetune": 0.8562536433175485,
+   "f1_benign_quantile": 0.5332881299318952,
+   "f1_coral": 0.523199779385284
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.5369159743796437,
+   "f1_finetune": 0.9028036886977759,
+   "f1_benign_quantile": 0.5332881299318952,
+   "f1_coral": 0.523199779385284
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.537639451654251,
+   "f1_finetune": 0.8956109525308986,
+   "f1_benign_quantile": 0.5332881299318952,
+   "f1_coral": 0.523199779385284
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.28136138898470736,
+   "f1_finetune": 0.28136138898470736,
+   "f1_benign_quantile": 0.33109920467695436,
+   "f1_coral": 0.33325776921384426
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.45918287621547804,
+   "f1_finetune": 0.7306407028546454,
+   "f1_benign_quantile": 0.33109920467695436,
+   "f1_coral": 0.33325776921384426
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.4851084567117324,
+   "f1_finetune": 0.8983959614239319,
+   "f1_benign_quantile": 0.33109920467695436,
+   "f1_coral": 0.33325776921384426
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.5114290881097527,
+   "f1_finetune": 0.9296746656264768,
+   "f1_benign_quantile": 0.33109920467695436,
+   "f1_coral": 0.33325776921384426
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.5112970484724423,
+   "f1_finetune": 0.9775351587727998,
+   "f1_benign_quantile": 0.33109920467695436,
+   "f1_coral": 0.33325776921384426
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.5107842339416343,
+   "f1_finetune": 0.9888298960901083,
+   "f1_benign_quantile": 0.33109920467695436,
+   "f1_coral": 0.33325776921384426
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.34360070485432065,
+   "f1_finetune": 0.34360070485432065,
+   "f1_benign_quantile": 0.24488202089420147,
+   "f1_coral": 0.22636571567213334
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.38362131540584377,
+   "f1_finetune": 0.5807323109918316,
+   "f1_benign_quantile": 0.24488202089420147,
+   "f1_coral": 0.22636571567213334
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.6346312815828216,
+   "f1_finetune": 0.9239493632458473,
+   "f1_benign_quantile": 0.24488202089420147,
+   "f1_coral": 0.22636571567213334
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.7006891613604488,
+   "f1_finetune": 0.9044640590670763,
+   "f1_benign_quantile": 0.24488202089420147,
+   "f1_coral": 0.22636571567213334
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.6839560775798225,
+   "f1_finetune": 0.9448317071814136,
+   "f1_benign_quantile": 0.24488202089420147,
+   "f1_coral": 0.22636571567213334
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.6864523749102436,
+   "f1_finetune": 0.9595144225300716,
+   "f1_benign_quantile": 0.24488202089420147,
+   "f1_coral": 0.22636571567213334
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.4792609547726037,
+   "f1_finetune": 0.4792609547726037,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48116682738669236
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.49942723704618686,
+   "f1_finetune": 0.5323122759217142,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48116682738669236
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.5195245778961627,
+   "f1_finetune": 0.7917117348578371,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48116682738669236
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.5076918878212657,
+   "f1_finetune": 0.8329974627571359,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48116682738669236
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.5088113407273525,
+   "f1_finetune": 0.8951970118139626,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48116682738669236
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.5084634941077284,
+   "f1_finetune": 0.8990191969035869,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48116682738669236
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.3360737335133676,
+   "f1_finetune": 0.3360737335133676,
+   "f1_benign_quantile": 0.3351201512709917,
+   "f1_coral": 0.32526168407359296
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.09876492918259769,
+   "f1_finetune": 0.9023257839022296,
+   "f1_benign_quantile": 0.3351201512709917,
+   "f1_coral": 0.32526168407359296
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.31376336756873413,
+   "f1_finetune": 0.9967299984431522,
+   "f1_benign_quantile": 0.3351201512709917,
+   "f1_coral": 0.32526168407359296
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.3266950859535146,
+   "f1_finetune": 0.9973099903910168,
+   "f1_benign_quantile": 0.3351201512709917,
+   "f1_coral": 0.32526168407359296
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.3364164995273275,
+   "f1_finetune": 0.9986399986938548,
+   "f1_benign_quantile": 0.3351201512709917,
+   "f1_coral": 0.32526168407359296
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.3364555225082766,
+   "f1_finetune": 0.9990099994130286,
+   "f1_benign_quantile": 0.3351201512709917,
+   "f1_coral": 0.32526168407359296
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.21849159459067946,
+   "f1_finetune": 0.21849159459067946,
+   "f1_benign_quantile": 0.2259239246417967,
+   "f1_coral": 0.21004093209271119
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.40723709922815127,
+   "f1_finetune": 0.7661765125914567,
+   "f1_benign_quantile": 0.2259239246417967,
+   "f1_coral": 0.21004093209271119
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.436449904945776,
+   "f1_finetune": 0.9295303699094346,
+   "f1_benign_quantile": 0.2259239246417967,
+   "f1_coral": 0.21004093209271119
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.4363480891351745,
+   "f1_finetune": 0.9429320180533166,
+   "f1_benign_quantile": 0.2259239246417967,
+   "f1_coral": 0.21004093209271119
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.4362927391779625,
+   "f1_finetune": 0.9729697113000066,
+   "f1_benign_quantile": 0.2259239246417967,
+   "f1_coral": 0.21004093209271119
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.2741737094386494,
+   "f1_finetune": 0.9745445412733746,
+   "f1_benign_quantile": 0.2259239246417967,
+   "f1_coral": 0.21004093209271119
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 0,
+   "f1_rethreshold": 0.33085819521265936,
+   "f1_finetune": 0.33085819521265936,
+   "f1_benign_quantile": 0.33095725509666774,
+   "f1_coral": 0.328023433992069
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 10,
+   "f1_rethreshold": 0.3603319449272641,
+   "f1_finetune": 0.5563573361470475,
+   "f1_benign_quantile": 0.33095725509666774,
+   "f1_coral": 0.328023433992069
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 50,
+   "f1_rethreshold": 0.3049594412367693,
+   "f1_finetune": 0.7828590192693095,
+   "f1_benign_quantile": 0.33095725509666774,
+   "f1_coral": 0.328023433992069
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 100,
+   "f1_rethreshold": 0.37182728984893076,
+   "f1_finetune": 0.8812888764828197,
+   "f1_benign_quantile": 0.33095725509666774,
+   "f1_coral": 0.328023433992069
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 500,
+   "f1_rethreshold": 0.3656850116760171,
+   "f1_finetune": 0.9345986684662622,
+   "f1_benign_quantile": 0.33095725509666774,
+   "f1_coral": 0.328023433992069
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 43,
+   "k": 1000,
+   "f1_rethreshold": 0.3738865558188071,
+   "f1_finetune": 0.9524896407029078,
+   "f1_benign_quantile": 0.33095725509666774,
+   "f1_coral": 0.328023433992069
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.3126654626431974,
+   "f1_finetune": 0.3126654626431974,
+   "f1_benign_quantile": 0.3629007232690574,
+   "f1_coral": 0.3790068434221088
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.3137541372561169,
+   "f1_finetune": 0.8453019680066615,
+   "f1_benign_quantile": 0.3629007232690574,
+   "f1_coral": 0.3790068434221088
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.5754219953690731,
+   "f1_finetune": 0.9725455350111434,
+   "f1_benign_quantile": 0.3629007232690574,
+   "f1_coral": 0.3790068434221088
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.5755901947846539,
+   "f1_finetune": 0.9720707475551098,
+   "f1_benign_quantile": 0.3629007232690574,
+   "f1_coral": 0.3790068434221088
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.6499147041539894,
+   "f1_finetune": 0.9751845788668749,
+   "f1_benign_quantile": 0.3629007232690574,
+   "f1_coral": 0.3790068434221088
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.6476760969006317,
+   "f1_finetune": 0.9785286233578352,
+   "f1_benign_quantile": 0.3629007232690574,
+   "f1_coral": 0.3790068434221088
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.34848917970121274,
+   "f1_finetune": 0.34848917970121274,
+   "f1_benign_quantile": 0.3472140523819213,
+   "f1_coral": 0.3830900664542461
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.5213647338385796,
+   "f1_finetune": 0.6254971058690264,
+   "f1_benign_quantile": 0.3472140523819213,
+   "f1_coral": 0.3830900664542461
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.5551735571685464,
+   "f1_finetune": 0.8747676563382667,
+   "f1_benign_quantile": 0.3472140523819213,
+   "f1_coral": 0.3830900664542461
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.5625015082613036,
+   "f1_finetune": 0.8835817378194866,
+   "f1_benign_quantile": 0.3472140523819213,
+   "f1_coral": 0.3830900664542461
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.5627408239727021,
+   "f1_finetune": 0.9153532697309865,
+   "f1_benign_quantile": 0.3472140523819213,
+   "f1_coral": 0.3830900664542461
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.5624308338787859,
+   "f1_finetune": 0.94062768076878,
+   "f1_benign_quantile": 0.3472140523819213,
+   "f1_coral": 0.3830900664542461
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.47945676498553663,
+   "f1_finetune": 0.47945676498553663,
+   "f1_benign_quantile": 0.47963647236794443,
+   "f1_coral": 0.4751728845517037
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.5445503605403019,
+   "f1_finetune": 0.7945377205391765,
+   "f1_benign_quantile": 0.47963647236794443,
+   "f1_coral": 0.4751728845517037
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.5463707497061334,
+   "f1_finetune": 0.8796540275900219,
+   "f1_benign_quantile": 0.47963647236794443,
+   "f1_coral": 0.4751728845517037
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.5445362110720797,
+   "f1_finetune": 0.8790802274451317,
+   "f1_benign_quantile": 0.47963647236794443,
+   "f1_coral": 0.4751728845517037
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.5466426699091073,
+   "f1_finetune": 0.8903479446371274,
+   "f1_benign_quantile": 0.47963647236794443,
+   "f1_coral": 0.4751728845517037
+  },
+  {
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.5466426699091073,
+   "f1_finetune": 0.905515210856981,
+   "f1_benign_quantile": 0.47963647236794443,
+   "f1_coral": 0.4751728845517037
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.557920450616652,
+   "f1_finetune": 0.557920450616652,
+   "f1_benign_quantile": 0.9702083676307249,
+   "f1_coral": 0.4928553123239454
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.9064617450575221,
+   "f1_finetune": 0.8813757175322017,
+   "f1_benign_quantile": 0.9702083676307249,
+   "f1_coral": 0.4928553123239454
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.9694201466295644,
+   "f1_finetune": 0.981214021069144,
+   "f1_benign_quantile": 0.9702083676307249,
+   "f1_coral": 0.4928553123239454
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.9707545694996385,
+   "f1_finetune": 0.9783902877309179,
+   "f1_benign_quantile": 0.9702083676307249,
+   "f1_coral": 0.4928553123239454
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.9624973789568163,
+   "f1_finetune": 0.9982299993838628,
+   "f1_benign_quantile": 0.9702083676307249,
+   "f1_coral": 0.4928553123239454
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.9712639951947637,
+   "f1_finetune": 0.9969999784526452,
+   "f1_benign_quantile": 0.9702083676307249,
+   "f1_coral": 0.4928553123239454
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.3835360655120844,
+   "f1_finetune": 0.3835360655120844,
+   "f1_benign_quantile": 0.34834138929575903,
+   "f1_coral": 0.37987767435983677
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.522294235185053,
+   "f1_finetune": 0.6701485493137159,
+   "f1_benign_quantile": 0.34834138929575903,
+   "f1_coral": 0.37987767435983677
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.6371136949579964,
+   "f1_finetune": 0.8634971166671217,
+   "f1_benign_quantile": 0.34834138929575903,
+   "f1_coral": 0.37987767435983677
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.6385848929005344,
+   "f1_finetune": 0.8916006668694565,
+   "f1_benign_quantile": 0.34834138929575903,
+   "f1_coral": 0.37987767435983677
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.6379397927672774,
+   "f1_finetune": 0.927184179481434,
+   "f1_benign_quantile": 0.34834138929575903,
+   "f1_coral": 0.37987767435983677
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.6387445011009668,
+   "f1_finetune": 0.9433538153011229,
+   "f1_benign_quantile": 0.34834138929575903,
+   "f1_coral": 0.37987767435983677
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.4819820497572769,
+   "f1_finetune": 0.4819820497572769,
+   "f1_benign_quantile": 0.5287447705894813,
+   "f1_coral": 0.5004351672152914
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.5317139603898206,
+   "f1_finetune": 0.714258516612478,
+   "f1_benign_quantile": 0.5287447705894813,
+   "f1_coral": 0.5004351672152914
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.5374608088199695,
+   "f1_finetune": 0.8335607937390854,
+   "f1_benign_quantile": 0.5287447705894813,
+   "f1_coral": 0.5004351672152914
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.5368891153685308,
+   "f1_finetune": 0.8440827042541208,
+   "f1_benign_quantile": 0.5287447705894813,
+   "f1_coral": 0.5004351672152914
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.5378408578794532,
+   "f1_finetune": 0.8936224174206415,
+   "f1_benign_quantile": 0.5287447705894813,
+   "f1_coral": 0.5004351672152914
+  },
+  {
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.5378047002582124,
+   "f1_finetune": 0.9100826356063552,
+   "f1_benign_quantile": 0.5287447705894813,
+   "f1_coral": 0.5004351672152914
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.27341640725031524,
+   "f1_finetune": 0.27341640725031524,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.36193475373759687
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.3493227525519637,
+   "f1_finetune": 0.6028071060796084,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.36193475373759687
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.5802645168526942,
+   "f1_finetune": 0.8708008586824774,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.36193475373759687
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.5797821411208972,
+   "f1_finetune": 0.9085099613454586,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.36193475373759687
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.5668580666587171,
+   "f1_finetune": 0.9714568170469134,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.36193475373759687
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.5870080451928732,
+   "f1_finetune": 0.988609999907741,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.36193475373759687
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.3448537192174871,
+   "f1_finetune": 0.3448537192174871,
+   "f1_benign_quantile": 0.25837453681290873,
+   "f1_coral": 0.22989299597699614
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.5449105080729674,
+   "f1_finetune": 0.4634907722083108,
+   "f1_benign_quantile": 0.25837453681290873,
+   "f1_coral": 0.22989299597699614
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.6260675090118064,
+   "f1_finetune": 0.7095638189166765,
+   "f1_benign_quantile": 0.25837453681290873,
+   "f1_coral": 0.22989299597699614
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.6901612532108766,
+   "f1_finetune": 0.9483741974658351,
+   "f1_benign_quantile": 0.25837453681290873,
+   "f1_coral": 0.22989299597699614
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.6874979996203376,
+   "f1_finetune": 0.9554904858257334,
+   "f1_benign_quantile": 0.25837453681290873,
+   "f1_coral": 0.22989299597699614
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.7010659826159025,
+   "f1_finetune": 0.9617785971010389,
+   "f1_benign_quantile": 0.25837453681290873,
+   "f1_coral": 0.22989299597699614
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.46915276561236,
+   "f1_finetune": 0.46915276561236,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48036220846164884
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.07559009642942163,
+   "f1_finetune": 0.5901742295551324,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48036220846164884
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.4781600217193443,
+   "f1_finetune": 0.7137133445086331,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48036220846164884
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.49410735477550427,
+   "f1_finetune": 0.8573401378264611,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48036220846164884
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.4913087656548536,
+   "f1_finetune": 0.8861381846017792,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48036220846164884
+  },
+  {
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.4732518441500223,
+   "f1_finetune": 0.9074715494427161,
+   "f1_benign_quantile": 0.4791729185018828,
+   "f1_coral": 0.48036220846164884
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.320052913181283,
+   "f1_finetune": 0.320052913181283,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.3329173728638939
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.1881822615452609,
+   "f1_finetune": 0.9266617781405826,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.3329173728638939
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.3191135381036668,
+   "f1_finetune": 0.9743455901745451,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.3329173728638939
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.32302012451972867,
+   "f1_finetune": 0.9798340618249157,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.3329173728638939
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.322647906097217,
+   "f1_finetune": 0.9970699849019251,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.3329173728638939
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.3326832139506272,
+   "f1_finetune": 0.9987099998419751,
+   "f1_benign_quantile": 0.3311036789297659,
+   "f1_coral": 0.3329173728638939
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.1994775117390717,
+   "f1_finetune": 0.1994775117390717,
+   "f1_benign_quantile": 0.2259015426943107,
+   "f1_coral": 0.20676036102188522
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.23621112532973282,
+   "f1_finetune": 0.7207151119805137,
+   "f1_benign_quantile": 0.2259015426943107,
+   "f1_coral": 0.20676036102188522
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.42624821655881845,
+   "f1_finetune": 0.8981611542631311,
+   "f1_benign_quantile": 0.2259015426943107,
+   "f1_coral": 0.20676036102188522
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.4247719421485733,
+   "f1_finetune": 0.9484509904295385,
+   "f1_benign_quantile": 0.2259015426943107,
+   "f1_coral": 0.20676036102188522
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.42903035989679655,
+   "f1_finetune": 0.9748007887531779,
+   "f1_benign_quantile": 0.2259015426943107,
+   "f1_coral": 0.20676036102188522
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.4248151929457116,
+   "f1_finetune": 0.9784155345981416,
+   "f1_benign_quantile": 0.2259015426943107,
+   "f1_coral": 0.20676036102188522
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 0,
+   "f1_rethreshold": 0.3148828710642604,
+   "f1_finetune": 0.3148828710642604,
+   "f1_benign_quantile": 0.32616710812577787,
+   "f1_coral": 0.30779357702641735
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 10,
+   "f1_rethreshold": 0.38211650814071824,
+   "f1_finetune": 0.5714297046490506,
+   "f1_benign_quantile": 0.32616710812577787,
+   "f1_coral": 0.30779357702641735
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 50,
+   "f1_rethreshold": 0.3835501509932186,
+   "f1_finetune": 0.8262052487043007,
+   "f1_benign_quantile": 0.32616710812577787,
+   "f1_coral": 0.30779357702641735
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 100,
+   "f1_rethreshold": 0.3652878333430985,
+   "f1_finetune": 0.9135680713195172,
+   "f1_benign_quantile": 0.32616710812577787,
+   "f1_coral": 0.30779357702641735
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 500,
+   "f1_rethreshold": 0.3767661212367933,
+   "f1_finetune": 0.9395693850520193,
+   "f1_benign_quantile": 0.32616710812577787,
+   "f1_coral": 0.30779357702641735
+  },
+  {
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "seed": 44,
+   "k": 1000,
+   "f1_rethreshold": 0.38578512330228365,
+   "f1_finetune": 0.9543403337345024,
+   "f1_benign_quantile": 0.32616710812577787,
+   "f1_coral": 0.30779357702641735
+  }
+ ]
+}
