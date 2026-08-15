@@ -182,9 +182,17 @@ def load(
                           if c in df.columns], errors="ignore")
 
     X = df.select_dtypes(include=[np.number]).copy()
-    inf_mask = np.isinf(X.to_numpy(dtype=np.float64, na_value=np.nan))
-    rep.n_inf_coerced = int(inf_mask.sum())
-    X = X.replace([np.inf, -np.inf], np.nan)
+
+    # Count infinities column by column. Materialising the whole frame as float64 to call
+    # np.isinf once needs ~5.9 GB on the 18.9M-row datasets and sends the machine to swap;
+    # integer columns cannot hold an infinity at all, so they are skipped outright.
+    n_inf = 0
+    for col in X.columns:
+        if X[col].dtype.kind == "f":
+            n_inf += int(np.isinf(X[col].to_numpy(dtype=np.float64, na_value=np.nan)).sum())
+    rep.n_inf_coerced = n_inf
+    if n_inf:
+        X = X.replace([np.inf, -np.inf], np.nan)
 
     y = labels.map(lambda s: label_of(s)).astype(int)
     fam = labels.map(lambda s: family_of(s)).astype(str)
