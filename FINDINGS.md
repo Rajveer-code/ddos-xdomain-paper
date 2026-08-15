@@ -153,10 +153,61 @@ than the traffic.
 
 ---
 
+## F6 — Calibration collapses by two orders of magnitude, and zero-label fixes mostly fail.
+
+`results/calibration.json` · 12 pairs × 3 seeds
+
+Mean **ECE 0.0043 in-domain → 0.4372 external**. These detectors are not merely wrong on
+a new network; they are confidently wrong, which is the worse failure for an operator
+choosing an alert threshold.
+
+Benign-quantile recalibration — a threshold taken from target benign-traffic quantiles,
+needing no attack labels — recovers this fraction of the headroom between the deployed
+threshold and the all-labels oracle:
+
+| pair | external AUC | source thr | benign-quantile | oracle | headroom recovered |
+|---|---:|---:|---:|---:|---:|
+| BoT-IoT→IDS2018 | 0.967 | 0.5399 | **0.9558** | 0.9688 | **97.0%** |
+| UNSW→IDS2018 | 0.079 | 0.3263 | 0.3325 | 0.3432 | 36.9% |
+| IDS2018→UNSW | 0.792 | 0.4918 | 0.5268 | 0.6280 | 25.7% |
+| BoT-IoT→UNSW | 0.829 | 0.4820 | 0.5138 | 0.6386 | 20.3% |
+| IDS2018→ToN-IoT | 0.535 | 0.3690 | 0.3474 | 0.5890 | −9.8% |
+| BoT-IoT→ToN-IoT | 0.583 | 0.3773 | 0.3465 | 0.6421 | −11.7% |
+| ToN-IoT→BoT-IoT | 0.642 | 0.3469 | 0.2480 | 0.7220 | **−26.4%** |
+
+It nearly closes the one ranking-preserving pair and is **actively harmful on three**.
+It is a fix for a diagnosable minority, not a general remedy.
+
+**CORAL recovers 0.0029 macro-F1** averaged over all pairs (0.3805 vs 0.3776). Nothing.
+
+## F7 — Ten labelled target flows beat every zero-label method combined.
+
+`results/label_budget.json` · mean over 12 pairs × 3 seeds
+
+| k labelled target flows | re-tune threshold | retrain on source + k |
+|---:|---:|---:|
+| 0 | 0.3776 | 0.3776 |
+| 10 | 0.4909 | **0.7099** |
+| 50 | 0.5500 | 0.8727 |
+| 100 | 0.5636 | 0.9082 |
+| 500 | 0.5662 | 0.9419 |
+| 1000 | 0.5623 | 0.9512 |
+
+Zero-label reference points: benign-quantile 0.4162, CORAL 0.3805.
+
+Ten labelled flows lift external macro-F1 by **+0.332**; one hundred reach 0.9082 against
+an in-domain ceiling of ~0.98. Re-thresholding on the same labels plateaus near 0.566,
+because no threshold repairs an inverted ranking.
+
+**The operational recommendation is concrete:** unsupervised domain adaptation is not
+worth the effort in this setting; labelling a few dozen flows from the target network is.
+
+---
+
 ## Still open
 
-- B3: calibration curves, ECE/Brier, benign-quantile recalibration under no target labels
-- B4: label-budget curve, with CORAL/DANN as baselines
-- A3: label-noise isolation via DistriNet-corrected CICIDS2017
-- Secondary CICFlowMeter study (CIC-DDoS2019 ↔ CICIDS2017, both directions)
+- A3: label-noise isolation via DistriNet-corrected CICIDS2017 `[running]`
+- Secondary CICFlowMeter study, both directions `[running — early: in 0.9995,
+  ext 0.4801, AUC 0.7114, 76 shared features; pattern replicates]`
 - Full-data confirmation run for the headline pair
+- Per-attack-family transfer table (data collected, not yet summarised)

@@ -287,14 +287,26 @@ def fig_remedies(cal, budget):
             by_k[r["k"]]["re"].append(r["f1_rethreshold"])
             by_k[r["k"]]["ft"].append(r["f1_finetune"])
         ks = sorted(by_k)
-        fig, ax = plt.subplots(figsize=(6.0, 4.0))
-        ax.plot(ks, [mean(by_k[k]["re"]) for k in ks], "o-", color=OKABE[1],
-                label="re-tune threshold on k labels")
-        ax.plot(ks, [mean(by_k[k]["ft"]) for k in ks], "s-", color=OKABE[4],
-                label="retrain on source + k labels")
+        # Evenly spaced positions: a linear k-axis crushes the informative 10-100 region
+        # into the left margin, and k=0 rules out a log axis.
+        xpos = np.arange(len(ks))
+        zero_bq = mean([r["f1_benign_quantile"] for r in budget["rows"]])
+        zero_co = mean([r["f1_coral"] for r in budget["rows"]])
+
+        fig, ax = plt.subplots(figsize=(6.6, 4.3))
+        ax.axhline(zero_bq, color=OKABE[2], ls="--", lw=1.2,
+                   label=f"benign-quantile recalibration, 0 labels ({zero_bq:.3f})")
+        ax.axhline(zero_co, color="0.45", ls=":", lw=1.2,
+                   label=f"CORAL, 0 labels ({zero_co:.3f})")
+        ax.plot(xpos, [mean(by_k[k]["re"]) for k in ks], "o-", color=OKABE[1],
+                label="re-tune threshold on k labels", zorder=3)
+        ax.plot(xpos, [mean(by_k[k]["ft"]) for k in ks], "s-", color=OKABE[4],
+                label="retrain on source + k labels", zorder=3)
+        ax.set_xticks(xpos, [str(k) for k in ks])
         ax.set_xlabel("labelled target flows (k)"); ax.set_ylabel("external macro-F1")
-        ax.set_title("How many target labels buy the gap back")
-        ax.legend(fontsize=8); ax.grid(alpha=0.3)
+        ax.set_ylim(0.3, 1.0)
+        ax.set_title("Ten labelled flows beat every zero-label remedy")
+        ax.legend(fontsize=7.5, loc="lower right"); ax.grid(alpha=0.3)
         save(fig, "label_budget",
              "External macro-F1 against the number of labelled target flows, averaged "
              "over all ordered pairs and seeds.")
