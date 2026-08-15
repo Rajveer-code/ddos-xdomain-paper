@@ -11,9 +11,23 @@ differently under domain shift:
   TTLs, retransmissions. These should survive a change of network.
 
 Every one of the 39 shared NetFlow v2 features is assigned exactly one class, asserted at
-import. `DNS_QUERY_ID` gets its own `identifier` class and acts as a control: it is a
-random 16-bit transaction ID carrying no legitimate attack signal, so any in-domain
-accuracy attributable to it is memorisation by definition.
+import.
+
+`DNS_QUERY_ID` is held out in its own class. It was originally included as a null
+control on the assumption that a 16-bit DNS transaction ID is random noise, so any
+accuracy from it would be memorisation by definition. Measurement refuted that:
+
+    dataset              P(attack | id == 0)   P(attack | id != 0)
+    NF-CSE-CIC-IDS2018          0.741                 0.000
+    NF-BoT-IoT                  0.785                 0.000
+    NF-UNSW-NB15                0.051                 0.001
+    NF-ToN-IoT                  0.528                 0.427
+
+The field is zero for every non-DNS flow, so it is not an identifier at all -- it is a
+one-bit "this flow is DNS" indicator, and in three of four datasets DNS traffic is
+essentially never labelled as attack. It is kept separate precisely because it is the
+crudest possible protocol signal, which makes it the natural yardstick: any feature set
+that cannot beat one protocol bit out-of-domain is not carrying transferable knowledge.
 """
 
 from __future__ import annotations
