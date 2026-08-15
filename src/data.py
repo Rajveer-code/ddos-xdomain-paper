@@ -202,14 +202,18 @@ def load(
         # socket columns are dropped. Two flows differing only in source port are one
         # example to a model that never sees the port, and letting such a pair straddle a
         # train/test split is leakage.
-        dup_mask = X.duplicated(keep="first")
+        # Hash rows once and work on 64-bit keys. drop_duplicates over an 18.9M x 39 frame
+        # is minutes; hashing is seconds and gives the same counts.
+        row_hash = pd.util.hash_pandas_object(X, index=False)
+        dup_mask = row_hash.duplicated(keep="first")
 
         # Feature vectors that appear with more than one label are a data-quality defect,
         # not a nuisance: the Bayes error on those rows is nonzero by construction. Count
         # them, because this bounds every in-domain score reported later.
-        grp = pd.concat([X, y.rename("_y")], axis=1)
-        n_groups = len(X.drop_duplicates())
-        n_groups_with_label = len(grp.drop_duplicates())
+        n_groups = row_hash.nunique()
+        n_groups_with_label = len(
+            pd.DataFrame({"h": row_hash.to_numpy(), "y": y.to_numpy()}).drop_duplicates()
+        )
         rep.n_contradictory_groups = int(n_groups_with_label - n_groups)
 
         X, y, fam = X[~dup_mask], y[~dup_mask], fam[~dup_mask]
