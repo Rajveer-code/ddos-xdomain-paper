@@ -57,6 +57,7 @@ def main() -> int:
             a["external_auc"].append(r["external_mean_auc"])
         base_i = m(agg["all"]["indomain_macro_f1"])
         base_e = m(agg["all"]["external_macro_f1"])
+        base_a = m(agg["all"]["external_auc"])
         out["feature_ablation"] = {
             name: {
                 "k": a["k"],
@@ -67,6 +68,7 @@ def main() -> int:
                 "external_auc": m(a["external_auc"]),
                 "delta_indomain_vs_all": m(a["indomain_macro_f1"]) - base_i,
                 "delta_external_vs_all": m(a["external_macro_f1"]) - base_e,
+                "delta_external_auc_vs_all": m(a["external_auc"]) - base_a,
             }
             for name, a in agg.items()
         }
