@@ -174,8 +174,21 @@ def fit_source(
     scaler_kind: str = "minmax",
     n_per_class: int | None = SAMPLE_N_PER_CLASS,
     other_policy: str = "drop",
+    label_mode: str = "normal",
 ) -> SourceFit:
-    """Train one model on one source domain and score its held-out source test split."""
+    """
+    Train one model on one source domain and score its held-out source test split.
+
+    `label_mode` alters only the **training** labels, for the controls in §4.3:
+        ``normal``    as labelled
+        ``permuted``  training labels shuffled, destroying the relationship. A correct
+                      pipeline must then land at chance externally with no systematic sign;
+                      anything else would mean the pipeline itself manufactures below-chance
+                      results.
+        ``reversed``  training labels inverted. External AUC should mirror the normal run
+                      about 0.5, confirming the sign is carried by the learned relationship.
+    Test and target labels are never altered.
+    """
     dom = get_domain(source, other_policy)
     X, y, fam = stratified_cap(dom.X, dom.y, dom.fam, n_per_class, seed)
     if features is not None:
@@ -194,6 +207,13 @@ def fit_source(
     med = X_tr_s.median()
     X_tr_s = X_tr_s.fillna(med)
     X_te_s = X_te_s.fillna(med)
+
+    if label_mode == "permuted":
+        y_tr = np.random.default_rng(seed).permutation(y_tr)
+    elif label_mode == "reversed":
+        y_tr = 1 - y_tr
+    elif label_mode != "normal":
+        raise ValueError(f"label_mode must be normal|permuted|reversed, got {label_mode!r}")
 
     model = make_models(seed)[model_name]
     t0 = time.perf_counter()
