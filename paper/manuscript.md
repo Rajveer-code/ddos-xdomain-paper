@@ -21,7 +21,7 @@ external macro-F1 0.6512 against 0.3748 for all 39 features, a paired difference
 (ATC) reaches Spearman −0.726 and cuts leave-one-pair-out error by 24%. Recalibration
 works for one pair in twelve, the only one whose ranking survived, where a threshold
 read from target benign traffic recovers 97.0% of the available headroom using no attack
-labels. `[INVALIDATED-PENDING-RERUN: the few-shot adaptation result is withheld. The run that produced it included the k adaptation rows in the evaluation set; the corrected, leakage-free experiment is in progress.]`
+labels, but pooled over held-out evaluation sets that recalibration is net harmful. Ten labelled target flows, used to retrain, reach median macro-F1 0.7253 [0.5604, 0.9540] and exceed what the best achievable threshold reaches with unlimited target labels (0.6158).
 Finally, the failure mode depends strongly on the dataset pair: the same-lineage CIC pairing failed mainly at the threshold and looked recoverable, while the independently built transfers failed at the ranking. Cross-network evaluation therefore has to distinguish ranking failure from threshold failure, because the two admit different remedies.
 
 **Keywords:** network intrusion detection, DDoS, cross-dataset generalisation,
@@ -75,7 +75,7 @@ and threshold loss shows eleven of twelve fail representationally. For the singl
 ranking-preserving pair, a threshold read from target benign traffic, which requires no
 attack labels, recovers 97.0% of the available headroom. On three others it is actively
 harmful.
-`[INVALIDATED-PENDING-RERUN: the few-shot adaptation claim is withheld pending the leakage-free rerun; see §4.6.]`
+Ten labelled target flows, drawn from an adaptation pool disjoint from the evaluation set, lift median external macro-F1 from 0.3919 to 0.7253 and beat the best threshold obtainable with unlimited labels.
 
 A fourth result conditions all of the above. In the feature space a model actually sees,
 these datasets are up to 99.7% exact duplicates: NF-BoT-IoT's 30,420,086 rows reduce to
@@ -540,6 +540,13 @@ tracks external AUC almost exactly (Figure 6).
 | ToN-IoT→BoT-IoT | 0.642 | 0.3469 | 0.2480 | 0.7220 | **−26.4%** |
 
 It closes 97.0% of the one ranking-preserving pair and is actively harmful on three.
+
+Pooled, it does not pay for itself. Scored on the held-out evaluation sets of §4.6.3,
+benign-quantile recalibration reaches median macro-F1 0.3482 against 0.3919 for the
+deployed source threshold, so averaged over all twelve pairs the procedure loses ground.
+The per-pair table is the useful reading and the pooled number is the warning attached to
+it: recalibration is worth doing when the ranking survived, and worth avoiding otherwise,
+which means an operator needs the diagnosis of §4.3 before choosing it rather than after.
 CORAL, a standard zero-label covariance alignment, recovers 0.0029 macro-F1 averaged
 over all pairs, which is indistinguishable from doing nothing. This bounds CORAL
 specifically; stronger representation-learning approaches to domain-invariant intrusion
@@ -547,22 +554,36 @@ detection exist and are not evaluated here.
 
 **Ten labelled flows outperformed the zero-label baselines evaluated here.**
 
-**Table 8. Label budget.** `[INVALIDATED-PENDING-RERUN]`
+**Table 8. Label budget, leakage-free.** Median over 20 independent label draws per
+(pair, budget), 12 ordered pairs, 2 seeds; 5th and 95th percentiles in brackets.
 
-> **This experiment has been withdrawn and is being rerun.** The implementation that
-> produced the original table drew k labelled target flows, fine-tuned on them, and then
-> evaluated on a target set that still contained those same rows; the decision threshold
-> was likewise tuned on rows that were subsequently scored. At the largest budget this is
-> roughly one percent contamination, which is small but indefensible, and it inflates
-> precisely the quantity the section rests on. The corrected design splits each target into
-> a disjoint adaptation pool and evaluation set, draws labels only from the pool, scores
-> only on the evaluation set, and repeats over twenty independent draws per budget. The
-> table will be restored from `results/label_budget_v2.json` when that run completes.
->
-> The zero-label results in §4.6.1 and §4.6.2 are unaffected: they involve no target
-> labels and no fine-tuning.
+| k labelled target flows | re-tune threshold | retrain on source + k |
+|---:|---|---|
+| 0 | 0.3919 [0.2779, 0.5106] | 0.3919 [0.2779, 0.5106] |
+| **10** | 0.5600 [0.2851, 0.9383] | **0.7253 [0.5604, 0.9540]** |
+| 50 | 0.6090 [0.3336, 0.9592] | 0.8795 [0.7952, 0.9804] |
+| 100 | 0.6104 [0.3482, 0.9604] | 0.9116 [0.8393, 0.9932] |
+| 500 | 0.6135 [0.3503, 0.9600] | 0.9548 [0.8958, 0.9974] |
+| 1000 | 0.6142 [0.3620, 0.9609] | 0.9574 [0.9228, 0.9986] |
 
-`[INVALIDATED-PENDING-RERUN: the label-budget curve and its interpretation are withheld until the leakage-free rerun completes.]` The one conclusion that does not depend on the withdrawn numbers is structural: re-tuning a threshold cannot repair an inverted ranking, whatever the label budget, because no threshold applied to a reversed ordering recovers it. The
+Each target is split once per (pair, seed) into a disjoint adaptation pool and evaluation
+set. Labels are drawn only from the pool and every score is computed only on the
+evaluation set, including the zero-label baselines, so the comparison is like for like.
+Draws are balanced, k/2 per class: at a 1.3% base rate a prevalence-proportional draw of
+ten flows usually contains no attack at all, which would measure the base rate rather than
+the value of supervision.
+
+An earlier version of this experiment fine-tuned on k target rows and then scored a target
+set that still contained them, and tuned the threshold on rows it went on to score. We
+report the corrected design here. The direction of the error is worth stating: the
+contaminated run gave 0.7099 at k=10 against 0.7253 for the clean one, so the leak was
+depressing the estimate slightly rather than inflating it, and the conclusion is unchanged.
+
+Ten labelled flows lift median external macro-F1 from 0.3919 to 0.7253, a hundred reach 0.9116, and a thousand reach 0.9574 against an in-domain ceiling near 0.98 (Figure 7). Re-tuning the threshold on the same labels plateaus at roughly 0.61, and the reason is structural rather than empirical: no threshold applied to a reversed ordering recovers it, whatever the label budget.
+
+The sharpest comparison is against the oracle. The best threshold obtainable on the evaluation set with unlimited target labels reaches 0.6158. Retraining on **ten** labelled flows reaches 0.7253 and so exceeds it. Recalibration and supervision are not two points on one scale; beyond a certain point recalibration cannot buy what a few labels buy immediately.
+
+Recovery is uneven across pairs, and unevenly in an informative direction. NF-UNSW-NB15 to NF-CSE-CIC-IDS2018, the most strongly inverted transfer in the study at ROC-AUC 0.070, reaches 0.9076 [0.8174, 0.9566] with ten labels. That is what inversion predicts: the ordering still carries the information, with the sign reversed, and a small labelled sample is enough to supply the sign. The
 operational reading, at the scope the evidence supports, is that in this benchmark a small
 labelled target sample was substantially more effective than the zero-label baselines
 tested. We evaluated one covariance-alignment method and one threshold heuristic, not the
