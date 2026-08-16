@@ -241,14 +241,22 @@ def main() -> int:
         print(f"{k:40s} {len(rs):3d} {e['indomain_macro_f1']:13.4f} "
               f"{e['external_macro_f1']:12.4f} {e['external_auc']:13.4f}")
 
+    # Stored, not just printed: the manuscript quotes these differences, and every number
+    # it quotes has to trace back to a result file rather than to arithmetic done by hand.
+    deltas: dict[str, dict] = {}
+
     def delta(a: str, b: str, label: str) -> None:
         x, z = summary.get(a), summary.get(b)
         if not x or not z:
             return
+        deltas[label] = {m: round(z[m] - x[m], 6) for m in
+                         ("indomain_macro_f1", "indomain_auc",
+                          "external_macro_f1", "external_auc")}
+        deltas[label].update({"baseline": a, "variant": b})
         print(f"\n{label}: in-domain macro-F1 "
-              f"{z['indomain_macro_f1'] - x['indomain_macro_f1']:+.4f}, external macro-F1 "
-              f"{z['external_macro_f1'] - x['external_macro_f1']:+.4f}, external AUC "
-              f"{z['external_auc'] - x['external_auc']:+.4f}.")
+              f"{deltas[label]['indomain_macro_f1']:+.4f}, external macro-F1 "
+              f"{deltas[label]['external_macro_f1']:+.4f}, external AUC "
+              f"{deltas[label]['external_auc']:+.4f}.")
 
     delta("dedup|dedup", "dedup|no_dedup", "Skipping de-duplication")
     delta("dedup|dedup", "dedup|no_contradictions", "Dropping contradictory groups")
@@ -264,8 +272,23 @@ def main() -> int:
             print(f"  {src:20s} {r['n_contradictory_groups']:>9,d} / "
                   f"{r['n_groups']:>11,d} groups  ({r['contradictory_fraction']:.4%})")
 
+    # Per-source seed-averaged view, so the manuscript can quote a single source without
+    # recomputing the average outside the pipeline.
+    per_source: dict[str, dict] = {}
+    for r in rows:
+        k = (f"{r['axis']}|{r.get('model', '')}|{r['variant']}|{r['source']}"
+             .replace("||", "|"))
+        per_source.setdefault(k, []).append(r)
+    per_source = {
+        k: {m: float(np.mean([x[m] for x in v]))
+            for m in ("indomain_macro_f1", "indomain_auc",
+                      "external_macro_f1", "external_auc")}
+        | {"n_rows": int(np.mean([x["n_rows"] for x in v])) if "n_rows" in v[0] else None}
+        for k, v in per_source.items()}
+
     out_path.write_text(
-        json.dumps({"config": vars(args), "rows": rows, "summary": summary},
+        json.dumps({"config": vars(args), "rows": rows, "summary": summary,
+                    "deltas": deltas, "per_source": per_source},
                    indent=1, default=float), encoding="utf-8")
     print(f"\nwrote preprocessing_sensitivity.json ({len(rows)} rows) "
           f"in {(time.perf_counter()-t0)/60:.1f} min")

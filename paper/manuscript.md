@@ -231,10 +231,7 @@ leakage.
 | CICIDS2017 | 2,313,810 | 2,231,536 | 3.6% | 321,706 | 0.1442 |
 | CICIDS2017 (corrected) | 1,787,358 | 1,747,255 | 2.2% | 266,899 | 0.1528 |
 
-Three of the four NetFlow datasets are more than 80% duplicate. We additionally count
-*contradictory groups*, identical feature vectors carrying opposite labels, at 1,940 in
-NF-CSE-CIC-IDS2018 and 858 in NF-UNSW-NB15. These place a hard ceiling on any achievable
-in-domain score.
+Three of the four NetFlow datasets are more than 80% duplicate. We additionally count *contradictory groups*, identical feature vectors carrying opposite labels, at 1,940 in NF-CSE-CIC-IDS2018 and 858 in NF-UNSW-NB15. Those counts are taken over the full attack taxonomy. Under the DoS-only policy the primary analysis actually uses, both fall to zero: every contradictory group in these two datasets pairs a benign flow with a *non-DoS* attack, and those rows are removed before modelling. The ceiling is therefore real for a general intrusion detector on these captures and absent for the DoS detector studied here, which is verified rather than assumed in §4.4c.
 
 ### 3.4 Non-finite and impossible values
 
@@ -254,8 +251,7 @@ The order of operations is the substance of the protocol:
 
 Splits are stratified 80/20 and seeded. Scaler and median imputer are fitted on
 source-train alone and applied unchanged to the source test split and to every target.
-Target features are clipped to the range the scaler observed; the clipping is ablated, not
-assumed. Imbalance is handled with balanced sample weights, never resampling, since SMOTE
+Target features are clipped to the range the scaler observed; the clipping is ablated in §4.4c, not assumed. Imbalance is handled with balanced sample weights, never resampling, since SMOTE
 applied before a split leaks synthetic neighbours across it. Models are LightGBM
 (primary), XGBoost, RandomForest and LogisticRegression at fixed hyperparameters, with no
 tuning against any target. Five seeds are used for the transfer matrix and three for the ablations and remedy experiments, which are correspondingly more expensive; the asymmetry is a cost decision and every reported interval states the number of pairs it rests on.
@@ -515,6 +511,66 @@ count: capping at 3,075 balances it, whereas the ordinary cap leaves roughly eig
 flows per attack. A more balanced source therefore inverts less severely, which is
 consistent with the threshold reading in §4.4 but is a single observation and we do not
 build on it.
+
+### 4.4c Do the preprocessing choices manufacture the result?
+
+Three decisions in §3.3 and §3.4 could in principle produce the effect this paper reports
+rather than expose it. Each is ablated over four sources and two seeds, holding everything
+else fixed.
+
+**Table 6c. Preprocessing sensitivity.** Mean over four sources x two seeds. The primary
+configuration is marked.
+
+| axis | variant | in-domain macro-F1 | external macro-F1 | external ROC-AUC |
+|---|---|---:|---:|---:|
+| de-duplication | de-duplicated (primary) | 0.9857 | 0.3952 | 0.5229 |
+| de-duplication | duplicates retained | 0.9968 | 0.4345 | 0.5476 |
+| contradictions | contradictory groups excluded | 0.9857 | 0.3952 | 0.5229 |
+| clipping, LightGBM | clipped (primary) | 0.9857 | 0.3951 | 0.5245 |
+| clipping, LightGBM | unclipped | 0.9857 | 0.3951 | 0.5245 |
+| clipping, logistic regression | clipped (primary) | 0.9195 | 0.4834 | 0.5295 |
+| clipping, logistic regression | unclipped | 0.9195 | 0.5057 | 0.5460 |
+
+**De-duplication changes what the study would have concluded.** Retaining duplicates lifts
+in-domain macro-F1 by 0.0111 and external macro-F1 by 0.0392, which makes the argument in
+§3.3 concrete: a study that splits these captures without removing exact duplicates reports
+in-domain numbers it has not earned.
+
+The more consequential effect is on the external side, and it does not run in one direction.
+Retaining duplicates raises NF-UNSW-NB15's external ROC-AUC from 0.1872 to 0.4486, because
+its 1,915,838 raw rows collapse to 203,641 distinct ones and the surviving copies are not
+distributed evenly across the decision surface. Severe inversion would have been reported as
+ordinary near-chance failure. On NF-BoT-IoT the same choice moves external ROC-AUC the other
+way, from 0.7858 down to 0.6126. Duplicate contamination does not simply inflate results; it
+adds source-dependent noise to the very quantity this paper estimates, and on the strongest
+inversion in the study it would have hidden the finding.
+
+**Contradictory groups do not bind here.** Excluding them changes nothing at all: the two
+rows of Table 6c are identical because, under the DoS-only policy, there are no such groups
+to exclude. Zero of 8,889,592 distinct feature vectors in NF-CSE-CIC-IDS2018 and zero of
+203,641 in NF-UNSW-NB15 carry both labels. The 1,940 and 858 groups counted in §3.3 all pair
+a benign flow with a non-DoS attack and disappear with those rows. The arbitrary-survivor
+concern that motivates the check is therefore inapplicable to this analysis, which is worth
+stating precisely because the check was run expecting the opposite.
+
+**Clipping cannot matter for the tree ensembles, and slightly hurts the linear model.** For
+LightGBM the ablation is exactly zero on every metric, and this is a property of the model
+rather than a measurement: every split threshold is learned inside the source training
+range, so clamping an out-of-range value to that range cannot move a row across any split.
+We report it because a null that follows from the model class is evidence about the design,
+not about the data, and reporting it as though it were the latter would be misleading.
+
+Logistic regression is where the choice can bind, and there it is mildly harmful: not
+clipping improves external macro-F1 by 0.0223 and external ROC-AUC by 0.0165. Clipping
+touches between 4,014 and 51,468 target rows per source-seed, so the intervention is not
+negligible in scope. The direction matters for the paper's honesty rather than its
+conclusion. Clipping is a conservative choice that costs a little external performance; it
+does not manufacture the collapse. Unclipped logistic regression still transfers at 0.5460
+overall, and on NF-UNSW-NB15 it still inverts, at 0.4087.
+
+None of the three decisions creates the effect. One of them, de-duplication, would have
+materially changed the conclusion had it been skipped, in the direction of understating what
+we found.
 
 ### 4.5 Can an operator predict the loss without labels?
 
