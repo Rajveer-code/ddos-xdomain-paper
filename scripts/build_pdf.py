@@ -58,10 +58,21 @@ def esc(t: str) -> str:
 
 def inline(t: str) -> str:
     """Markdown inline formatting to LaTeX, applied after escaping."""
+    # Inline math is set aside before escaping and restored afterwards. Escaping it would
+    # turn $P(Y \mid X)$ into \$P(Y \mid X)\$, stranding \mid in text mode.
+    math: list[str] = []
+
+    def stash(m: re.Match) -> str:
+        math.append(m.group(0))
+        return f"\x00MATH{len(math) - 1}\x00"
+
+    t = re.sub(r"\$[^$\n]+\$", stash, t)
     t = esc(t)
     t = re.sub(r"`([^`]+)`", lambda m: r"\texttt{" + m.group(1) + "}", t)
     t = re.sub(r"\*\*([^*]+)\*\*", lambda m: r"\textbf{" + m.group(1) + "}", t)
     t = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", lambda m: r"\emph{" + m.group(1) + "}", t)
+    for i, expr in enumerate(math):
+        t = t.replace(f"\x00MATH{i}\x00", expr)
     return t
 
 
@@ -193,14 +204,25 @@ def convert(md: str) -> str:
             continue
 
         # ---- table caption line immediately preceding a pipe table
-        cap_m = re.match(r"^\*\*Table (\d+)\.\s*(.*?)\*\*$", st)
+        # Trailing prose after the bold title is part of the caption. Requiring the line
+        # to end at the closing ** silently dropped every caption written as
+        # "**Table N. Title.** Extra detail.", leaving the number as body text while
+        # LaTeX numbered only the tables that did convert.
+        cap_m = re.match(r"^\*\*Table (\d+)\.\s*(.*?)\*\*(.*)$", st)
         pending_caption = None
         if cap_m:
+            # The caption may wrap over following lines, as figure captions do; consume
+            # them until the table itself starts or a blank line ends the paragraph.
+            parts = [p for p in (cap_m.group(2).strip(), cap_m.group(3).strip()) if p]
             nxt = i + 1
+            while (nxt < len(lines) and lines[nxt].strip()
+                   and not lines[nxt].strip().startswith("|")):
+                parts.append(lines[nxt].strip())
+                nxt += 1
             while nxt < len(lines) and lines[nxt].strip() == "":
                 nxt += 1
             if nxt < len(lines) and lines[nxt].strip().startswith("|"):
-                pending_caption = cap_m.group(2)
+                pending_caption = " ".join(parts)
                 i = nxt
                 st = lines[i].strip()
 
