@@ -78,11 +78,35 @@ def main() -> int:
     args = ap.parse_args()
 
     sources = [d.key for d in NETFLOW_V2]
-    rows: list[dict] = []
+    out_path = RESULTS / args.out
     t0 = time.perf_counter()
+
+    # Resume support. This run takes hours and has already been lost once to a machine
+    # crash, so completed (seed, source, target) units are flushed to disk as they finish
+    # and skipped on restart. Deleting the output file forces a clean run.
+    rows: list[dict] = []
+    done: set[tuple] = set()
+    if out_path.exists():
+        try:
+            rows = json.loads(out_path.read_text(encoding="utf-8"))["rows"]
+            done = {(r["seed"], r["source"], r["target"]) for r in rows}
+            print(f"resuming: {len(done)} (seed, source, target) units already complete, "
+                  f"{len(rows)} rows on disk")
+        except (json.JSONDecodeError, KeyError):
+            print("existing output unreadable; starting clean")
+            rows, done = [], set()
+
+    def flush():
+        out_path.write_text(json.dumps(
+            {"config": {**vars(args), "adapt_fraction": ADAPT_FRACTION,
+                        "label_composition": "balanced, k/2 per class"},
+             "rows": rows}, indent=1, default=float), encoding="utf-8")
 
     for seed in args.seeds:
         for src in sources:
+            if all((seed, src, t) in done for t in sources if t != src):
+                print(f"  skip {src} seed {seed} (complete)", flush=True)
+                continue
             fit = fit_source(src, args.model, seed=seed, n_per_class=args.n_per_class)
             dom_s = get_domain(src)
             Xs_c, ys_c, _ = stratified_cap(dom_s.X, dom_s.y, dom_s.fam,
@@ -91,7 +115,7 @@ def main() -> int:
                                  columns=fit.features).clip(0, 1).fillna(fit._median)
 
             for tgt in sources:
-                if tgt == src:
+                if tgt == src or (seed, src, tgt) in done:
                     continue
                 r = apply_to(fit, tgt, n_per_class=args.n_per_class)
                 y_all, p_all = r["y"], r["proba"]
@@ -162,15 +186,13 @@ def main() -> int:
                             "n_labels_used": int(len(sel)),
                         })
 
+                done.add((seed, src, tgt))
+                flush()
                 print(f"{src:20s} -> {tgt:20s} s{seed} | eval n={len(y_eval):,} "
                       f"AUC {auc_eval:.3f} | src-thr {f1_src:.4f} benign-q {f1_bq:.4f} "
                       f"oracle {f1_oracle:.4f}", flush=True)
 
-    payload = {"config": {**vars(args), "adapt_fraction": ADAPT_FRACTION,
-                          "label_composition": "balanced, k/2 per class"},
-               "rows": rows}
-    (RESULTS / args.out).write_text(json.dumps(payload, indent=1, default=float),
-                                    encoding="utf-8")
+    flush()
 
     agg = defaultdict(lambda: defaultdict(list))
     for r in rows:
