@@ -120,7 +120,7 @@ def evaluate(X, yv, seed, sources, src) -> dict:
         if tgt == src:
             continue
         dom = get_domain(tgt, "drop")
-        ext.append(apply_raw(m, sc, med, cols, thr, dom.X, dom.y.to_numpy(), CAP, seed))
+        ext.append(apply_raw(m, sc, med, cols, thr, dom.X, dom.y, CAP, seed))
     return {
         "indomain_macro_f1": ind["macro_f1"], "indomain_auc": ind["roc_auc"],
         "external_macro_f1": float(np.mean([e["macro_f1"] for e in ext])),
