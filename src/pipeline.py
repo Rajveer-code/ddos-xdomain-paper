@@ -289,7 +289,8 @@ def apply_to(
     X = X[fit.features]
 
     Xs = pd.DataFrame(fit.scaler.transform(X), columns=fit.features)
-    n_out = int(((Xs < 0) | (Xs > 1)).to_numpy().any(axis=1).sum()) if clip else 0
+    # Counted either way: with clipping off this is what clipping would have touched.
+    n_out = int(((Xs < 0) | (Xs > 1)).to_numpy().any(axis=1).sum())
     if clip:
         Xs = Xs.clip(lower=0.0, upper=1.0)
     Xs = Xs.fillna(fit._median)  # type: ignore[attr-defined]

@@ -12,17 +12,24 @@ claims the paper makes.
     target clipping     Target features are clipped to the range the source scaler saw.
                         Since the paper is about distribution shift, a preprocessing step
                         that truncates shifted values could plausibly create or mask the
-                        effect being reported.
+                        effect being reported. This axis must include a linear model:
+                        for a tree ensemble every split threshold lies inside the source
+                        range, so clamping cannot move a row across a split and clipping
+                        is a no-op by construction rather than by measurement.
     contradictions      De-duplication keeps the first row of each duplicate group, so for
                         groups carrying both labels an arbitrary label survives. Excluding
                         contradictory groups entirely bounds what that choice is worth.
+                        The exclusion must happen BEFORE de-duplication: the loader hashes
+                        feature vectors alone, so after de-duplication every vector is
+                        unique and no contradiction can be observed.
 
-Writes results/preprocessing_sensitivity.json.
+Writes results/preprocessing_sensitivity.json. `--axes` reruns a subset in place.
 """
 
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import sys
 import time
@@ -43,19 +50,31 @@ from src.config import NETFLOW_V2, RESULTS
 from src.runlock import single_instance
 from src.data import load
 from src.metrics import best_threshold, binary_metrics
-from src.pipeline import apply_to, fit_source, make_models, stratified_cap
+from src.pipeline import apply_to, fit_source, get_domain, make_models, stratified_cap
 
 CAP = 25_000
 MODEL = "LightGBM"
+#: Clipping can only bind for a model whose decision surface extends past the training
+#: range. LightGBM is carried as the within-run reference; LogisticRegression is the test.
+CLIP_MODELS = ["LightGBM", "LogisticRegression"]
 
 
-def contradiction_free(X: pd.DataFrame, y: np.ndarray):
-    """Drop every feature vector that appears with more than one label."""
+def drop_contradictions_then_dedup(X: pd.DataFrame, y: np.ndarray):
+    """
+    Remove every feature vector carrying both labels, then de-duplicate.
+
+    Order matters. `src.data.load` hashes feature vectors alone, so it collapses a
+    contradictory group to whichever label happened to come first and leaves no trace
+    to test afterwards. Running on pre-de-duplication rows is the only way to see them.
+    """
     h = pd.util.hash_pandas_object(X, index=False).to_numpy()
-    df = pd.DataFrame({"h": h, "y": y})
-    bad = set(df.groupby("h")["y"].nunique().pipe(lambda s: s[s > 1]).index)
-    keep = ~np.isin(h, list(bad)) if bad else np.ones(len(X), bool)
-    return keep, len(bad)
+    lab = pd.DataFrame({"h": h, "y": y}).drop_duplicates()
+    n_groups = lab["h"].nunique()
+    bad = lab["h"].value_counts()
+    bad = bad[bad > 1].index.to_numpy()          # a hash seen with both labels
+    keep = ~np.isin(h, bad) if len(bad) else np.ones(len(X), bool)
+    keep &= ~pd.Series(h).duplicated(keep="first").to_numpy()
+    return keep, int(len(bad)), int(n_groups)
 
 
 def fit_raw(X, y, seed, cap):
@@ -86,88 +105,151 @@ def apply_raw(m, sc, med, cols, thr, X, y, cap, seed, clip=True):
     return binary_metrics(y, proba >= thr, proba)
 
 
+def evaluate(X, yv, seed, sources, src) -> dict:
+    """Fit on one source and average external metrics over the other three."""
+    m, sc, med, cols, thr, ind = fit_raw(X, yv, seed, CAP)
+    ext = []
+    for tgt in sources:
+        if tgt == src:
+            continue
+        dom = get_domain(tgt, "drop")
+        ext.append(apply_raw(m, sc, med, cols, thr, dom.X, dom.y.to_numpy(), CAP, seed))
+    return {
+        "indomain_macro_f1": ind["macro_f1"], "indomain_auc": ind["roc_auc"],
+        "external_macro_f1": float(np.mean([e["macro_f1"] for e in ext])),
+        "external_auc": float(np.nanmean([e["roc_auc"] for e in ext])),
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--seeds", type=int, nargs="*", default=[42, 43])
+    ap.add_argument("--axes", nargs="*", default=["dedup", "clipping"],
+                    choices=["dedup", "clipping"],
+                    help="rerun only these axes, merging into any existing result file")
     args = ap.parse_args()
     sources = [d.key for d in NETFLOW_V2]
-    rows: list[dict] = []
+    out_path = RESULTS / "preprocessing_sensitivity.json"
     t0 = time.perf_counter()
 
-    # ---- 1. de-duplication and contradiction handling --------------------------------
-    for seed in args.seeds:
-        for src in sources:
-            for variant in ("dedup", "no_dedup", "no_contradictions"):
-                if variant == "no_contradictions":
-                    X, y, _f, _r = load(src, other_policy="drop", dedup=True)
-                    keep, n_bad = contradiction_free(X, y.to_numpy())
-                    X, yv = X[keep].reset_index(drop=True), y.to_numpy()[keep]
-                else:
-                    X, y, _f, _r = load(src, other_policy="drop",
-                                        dedup=(variant == "dedup"))
-                    yv, n_bad = y.to_numpy(), 0
-                if len(np.unique(yv)) < 2:
-                    continue
-                m, sc, med, cols, thr, ind = fit_raw(X, yv, seed, CAP)
-                ext = []
-                for tgt in sources:
-                    if tgt == src:
-                        continue
-                    Xt, yt, _f2, _r2 = load(tgt, other_policy="drop", dedup=True)
-                    e = apply_raw(m, sc, med, cols, thr, Xt, yt.to_numpy(), CAP, seed)
-                    ext.append(e)
-                rows.append({
-                    "axis": "dedup", "variant": variant, "seed": seed, "source": src,
-                    "n_rows": int(len(X)), "n_contradictory_groups_removed": n_bad,
-                    "indomain_macro_f1": ind["macro_f1"], "indomain_auc": ind["roc_auc"],
-                    "external_macro_f1": float(np.mean([e["macro_f1"] for e in ext])),
-                    "external_auc": float(np.nanmean([e["roc_auc"] for e in ext])),
-                })
-                print(f"  dedup/{variant:18s} {src:20s} s{seed} | "
-                      f"in {ind['macro_f1']:.4f} ext {rows[-1]['external_macro_f1']:.4f}",
-                      flush=True)
+    # Keep rows from axes we are not rerunning so a partial rerun does not lose them.
+    rows: list[dict] = []
+    if out_path.exists():
+        try:
+            prev = json.loads(out_path.read_text(encoding="utf-8"))["rows"]
+            rows = [r for r in prev if r["axis"] not in args.axes]
+            if rows:
+                print(f"carrying {len(rows)} rows from axes not being rerun")
+        except (json.JSONDecodeError, KeyError):
+            rows = []
 
-    # ---- 2. target clipping ------------------------------------------------------------
-    for seed in args.seeds:
-        for src in sources:
-            fit = fit_source(src, MODEL, seed=seed, n_per_class=CAP)
-            for clip in (True, False):
-                ext = [apply_to(fit, t, n_per_class=CAP, clip=clip)["external"]
-                       for t in sources if t != src]
-                rows.append({
-                    "axis": "clipping", "variant": "clipped" if clip else "unclipped",
-                    "seed": seed, "source": src,
-                    "indomain_macro_f1": fit.indomain["macro_f1"],
-                    "indomain_auc": fit.indomain["roc_auc"],
-                    "external_macro_f1": float(np.mean([e["macro_f1"] for e in ext])),
-                    "external_auc": float(np.nanmean([e["roc_auc"] for e in ext])),
-                })
-            print(f"  clipping {src:20s} s{seed} done", flush=True)
+    # ---- 1. de-duplication and contradictory groups ------------------------------------
+    # All three variants are derived from a single pre-de-duplication load, so they differ
+    # only in which rows survive and share one evaluation protocol. Loading twice would
+    # cost an extra pass over 28M rows and produce two baselines that disagree for
+    # sampling reasons alone.
+    if "dedup" in args.axes:
+        for seed in args.seeds:
+            for src in sources:
+                X, y, _f, _r = load(src, other_policy="drop", dedup=False)
+                yv = y.to_numpy()
+                keep_nc, n_bad, n_groups = drop_contradictions_then_dedup(X, yv)
+                keep_plain = ~pd.Series(
+                    pd.util.hash_pandas_object(X, index=False).to_numpy()
+                ).duplicated(keep="first").to_numpy()
+                variants = (("no_dedup", np.ones(len(X), bool)),
+                            ("dedup", keep_plain),
+                            ("no_contradictions", keep_nc))
+                for variant, keep in variants:
+                    Xs, ys = X[keep].reset_index(drop=True), yv[keep]
+                    if len(np.unique(ys)) < 2:
+                        continue
+                    rows.append({
+                        "axis": "dedup", "variant": variant, "seed": seed,
+                        "source": src, "n_rows": int(len(Xs)),
+                        "n_contradictory_groups": n_bad, "n_groups": n_groups,
+                        "contradictory_fraction": round(n_bad / max(n_groups, 1), 6),
+                        **evaluate(Xs, ys, seed, sources, src)})
+                    del Xs, ys
+                    gc.collect()
+                    print(f"  dedup/{variant:18s} {src:20s} s{seed} | "
+                          f"in {rows[-1]['indomain_macro_f1']:.4f} "
+                          f"ext {rows[-1]['external_macro_f1']:.4f}", flush=True)
+                del X, y
+                gc.collect()
+
+    # ---- 3. target clipping ------------------------------------------------------------
+    # Run per model: for a tree ensemble clipping cannot change a prediction, because
+    # every split threshold was learned inside the source range. The linear model is
+    # where the choice can actually bind.
+    if "clipping" in args.axes:
+        for seed in args.seeds:
+            for src in sources:
+                for model in CLIP_MODELS:
+                    fit = fit_source(src, model, seed=seed, n_per_class=CAP)
+                    for clip in (True, False):
+                        res = [apply_to(fit, t, n_per_class=CAP, clip=clip)
+                               for t in sources if t != src]
+                        ext = [r["external"] for r in res]
+                        rows.append({
+                            "axis": "clipping",
+                            "variant": "clipped" if clip else "unclipped",
+                            "model": model, "seed": seed, "source": src,
+                            "rows_outside_train_range": int(sum(
+                                r["rows_outside_train_range"] for r in res)),
+                            "indomain_macro_f1": fit.indomain["macro_f1"],
+                            "indomain_auc": fit.indomain["roc_auc"],
+                            "external_macro_f1": float(
+                                np.mean([e["macro_f1"] for e in ext])),
+                            "external_auc": float(
+                                np.nanmean([e["roc_auc"] for e in ext])),
+                        })
+                    print(f"  clipping {model:20s} {src:20s} s{seed} done", flush=True)
 
     # ---- summary -----------------------------------------------------------------------
     summary = {}
     print("\n" + "=" * 74)
     print(f"{'axis':12s} {'variant':20s} {'n':>3s} {'in-domain F1':>13s} "
           f"{'external F1':>12s} {'external AUC':>13s}")
-    for axis in ("dedup", "clipping"):
-        for variant in sorted({r["variant"] for r in rows if r["axis"] == axis}):
-            rs = [r for r in rows if r["axis"] == axis and r["variant"] == variant]
-            e = {k: float(np.mean([r[k] for r in rs]))
-                 for k in ("indomain_macro_f1", "indomain_auc",
-                           "external_macro_f1", "external_auc")}
-            e["n"] = len(rs)
-            summary[f"{axis}|{variant}"] = e
-            print(f"{axis:12s} {variant:20s} {len(rs):3d} {e['indomain_macro_f1']:13.4f} "
-                  f"{e['external_macro_f1']:12.4f} {e['external_auc']:13.4f}")
+    # Clipping is keyed by model as well as variant; the other axes carry no model split.
+    def key_of(r: dict) -> str:
+        return (f"{r['axis']}|{r['variant']}" if r["axis"] != "clipping"
+                else f"clipping|{r['model']}|{r['variant']}")
 
-    d = summary.get("dedup|dedup", {})
-    nd = summary.get("dedup|no_dedup", {})
-    if d and nd:
-        print(f"\nSkipping de-duplication inflates in-domain macro-F1 by "
-              f"{nd['indomain_macro_f1'] - d['indomain_macro_f1']:+.4f} and external by "
-              f"{nd['external_macro_f1'] - d['external_macro_f1']:+.4f}.")
+    for k in sorted({key_of(r) for r in rows}):
+        rs = [r for r in rows if key_of(r) == k]
+        e = {m: float(np.mean([r[m] for r in rs]))
+             for m in ("indomain_macro_f1", "indomain_auc",
+                       "external_macro_f1", "external_auc")}
+        e["n"] = len(rs)
+        summary[k] = e
+        print(f"{k:40s} {len(rs):3d} {e['indomain_macro_f1']:13.4f} "
+              f"{e['external_macro_f1']:12.4f} {e['external_auc']:13.4f}")
 
-    (RESULTS / "preprocessing_sensitivity.json").write_text(
+    def delta(a: str, b: str, label: str) -> None:
+        x, z = summary.get(a), summary.get(b)
+        if not x or not z:
+            return
+        print(f"\n{label}: in-domain macro-F1 "
+              f"{z['indomain_macro_f1'] - x['indomain_macro_f1']:+.4f}, external macro-F1 "
+              f"{z['external_macro_f1'] - x['external_macro_f1']:+.4f}, external AUC "
+              f"{z['external_auc'] - x['external_auc']:+.4f}.")
+
+    delta("dedup|dedup", "dedup|no_dedup", "Skipping de-duplication")
+    delta("dedup|dedup", "dedup|no_contradictions", "Dropping contradictory groups")
+    for model in CLIP_MODELS:
+        delta(f"clipping|{model}|clipped", f"clipping|{model}|unclipped",
+              f"Not clipping ({model})")
+
+    contra = [r for r in rows if r["axis"] == "dedup" and "n_groups" in r]
+    if contra:
+        print("\ncontradictory feature-label groups per source:")
+        for src in sorted({r["source"] for r in contra}):
+            r = next(x for x in contra if x["source"] == src)
+            print(f"  {src:20s} {r['n_contradictory_groups']:>9,d} / "
+                  f"{r['n_groups']:>11,d} groups  ({r['contradictory_fraction']:.4%})")
+
+    out_path.write_text(
         json.dumps({"config": vars(args), "rows": rows, "summary": summary},
                    indent=1, default=float), encoding="utf-8")
     print(f"\nwrote preprocessing_sensitivity.json ({len(rows)} rows) "
