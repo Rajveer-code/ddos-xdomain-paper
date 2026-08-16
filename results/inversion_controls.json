@@ -1,0 +1,409 @@
+{
+ "config": {
+  "n_per_class": 15000,
+  "seeds": [
+   42
+  ],
+  "models": [
+   "LightGBM"
+  ]
+ },
+ "rows": [
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "external_auc": 0.5240821088888888,
+   "auc_if_negated": 0.47591789111111116,
+   "score_separation": -0.11657205845861665,
+   "below_chance": false
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "external_auc": 0.5402138866666668,
+   "auc_if_negated": 0.4597861133333332,
+   "score_separation": -0.013156686121111219,
+   "below_chance": false
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.817176588658077,
+   "auc_if_negated": 0.18282341134192304,
+   "score_separation": 0.061583424187227495,
+   "below_chance": false
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.9806530800000001,
+   "auc_if_negated": 0.019346919999999934,
+   "score_separation": 0.07819074829357138,
+   "below_chance": false
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "external_auc": 0.5717390044444446,
+   "auc_if_negated": 0.4282609955555554,
+   "score_separation": -0.004732381768186668,
+   "below_chance": false
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.7699220790603908,
+   "auc_if_negated": 0.23007792093960922,
+   "score_separation": -0.0029491347835422332,
+   "below_chance": false
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.5364922266666666,
+   "auc_if_negated": 0.4635077733333334,
+   "score_separation": -0.1294165253445257,
+   "below_chance": false
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "external_auc": 0.5296899911111111,
+   "auc_if_negated": 0.47031000888888885,
+   "score_separation": 0.031872433333657774,
+   "below_chance": false
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.4240073976685073,
+   "auc_if_negated": 0.5759926023314927,
+   "score_separation": -0.016782801545644516,
+   "below_chance": true
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.19445715111111112,
+   "auc_if_negated": 0.8055428488888889,
+   "score_separation": -0.23330650304386719,
+   "below_chance": true
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "external_auc": 0.28238131555555557,
+   "auc_if_negated": 0.7176186844444444,
+   "score_separation": -0.3198124422115961,
+   "below_chance": true
+  },
+  {
+   "mode": "normal",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "external_auc": 0.20787859555555557,
+   "auc_if_negated": 0.7921214044444445,
+   "score_separation": -0.24364634591387063,
+   "below_chance": true
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "external_auc": 0.5388374955555556,
+   "auc_if_negated": 0.4611625044444444,
+   "score_separation": 0.01133852809283964,
+   "below_chance": false
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "external_auc": 0.5753545288888889,
+   "auc_if_negated": 0.42464547111111106,
+   "score_separation": 0.03356079214536095,
+   "below_chance": false
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.569852090454904,
+   "auc_if_negated": 0.43014790954509596,
+   "score_separation": 0.030494001230417622,
+   "below_chance": false
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.3894546222222222,
+   "auc_if_negated": 0.6105453777777778,
+   "score_separation": -0.03242115922347033,
+   "below_chance": true
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "external_auc": 0.4742871355555556,
+   "auc_if_negated": 0.5257128644444444,
+   "score_separation": -0.010610899047250821,
+   "below_chance": true
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.46626660531159614,
+   "auc_if_negated": 0.5337333946884039,
+   "score_separation": 0.00017845140325301045,
+   "below_chance": true
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.31876049777777776,
+   "auc_if_negated": 0.6812395022222222,
+   "score_separation": -0.07446277088461717,
+   "below_chance": true
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "external_auc": 0.6188954111111111,
+   "auc_if_negated": 0.3811045888888889,
+   "score_separation": 0.060816071450225495,
+   "below_chance": false
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.6839188798317117,
+   "auc_if_negated": 0.31608112016828827,
+   "score_separation": 0.07428842680632303,
+   "below_chance": false
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.08227278222222222,
+   "auc_if_negated": 0.9177272177777778,
+   "score_separation": -0.19006556449218664,
+   "below_chance": true
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "external_auc": 0.7716541355555555,
+   "auc_if_negated": 0.2283458644444445,
+   "score_separation": 0.18641394969420622,
+   "below_chance": false
+  },
+  {
+   "mode": "permuted",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "external_auc": 0.4136066488888889,
+   "auc_if_negated": 0.5863933511111111,
+   "score_separation": -0.05180969230284571,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_bot_iot",
+   "external_auc": 0.47591789111111116,
+   "auc_if_negated": 0.5240821088888888,
+   "score_separation": 0.11657205845861673,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_ton_iot",
+   "external_auc": 0.45978917555555554,
+   "auc_if_negated": 0.5402108244444445,
+   "score_separation": 0.013156686121111316,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_cse_cic_ids2018",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.18282341134192304,
+   "auc_if_negated": 0.817176588658077,
+   "score_separation": -0.06158342418722751,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.019346920000000007,
+   "auc_if_negated": 0.98065308,
+   "score_separation": -0.0781907482935712,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_ton_iot",
+   "external_auc": 0.4282609955555555,
+   "auc_if_negated": 0.5717390044444445,
+   "score_separation": 0.004732381768186467,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_bot_iot",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.23007792093960905,
+   "auc_if_negated": 0.7699220790603909,
+   "score_separation": 0.0029491347835424175,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.4635077733333333,
+   "auc_if_negated": 0.5364922266666667,
+   "score_separation": 0.12941652534452575,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_bot_iot",
+   "external_auc": 0.4703100088888889,
+   "auc_if_negated": 0.529689991111111,
+   "score_separation": -0.031872433333657635,
+   "below_chance": true
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_ton_iot",
+   "target": "nf_unsw_nb15",
+   "external_auc": 0.5759926023314926,
+   "auc_if_negated": 0.42400739766850737,
+   "score_separation": 0.016782801545644488,
+   "below_chance": false
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_cse_cic_ids2018",
+   "external_auc": 0.8055428488888889,
+   "auc_if_negated": 0.19445715111111106,
+   "score_separation": 0.23330650304386735,
+   "below_chance": false
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_bot_iot",
+   "external_auc": 0.7176186844444444,
+   "auc_if_negated": 0.28238131555555557,
+   "score_separation": 0.3198124422115961,
+   "below_chance": false
+  },
+  {
+   "mode": "reversed",
+   "model": "LightGBM",
+   "seed": 42,
+   "source": "nf_unsw_nb15",
+   "target": "nf_ton_iot",
+   "external_auc": 0.7921214044444445,
+   "auc_if_negated": 0.20787859555555555,
+   "score_separation": 0.2436463459138708,
+   "below_chance": false
+  }
+ ]
+}
