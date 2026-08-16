@@ -1,0 +1,129 @@
+{
+  "per_model": {
+    "LightGBM": {
+      "n": 60,
+      "mean_auc": 0.5053518383258692,
+      "auc_ci_lo": 0.43906298373658736,
+      "auc_ci_hi": 0.5718428541824179,
+      "frac_below_chance": 0.4666666666666667,
+      "mean_macro_f1": 0.3787927593859272,
+      "mean_mcc": -0.04585713392392512,
+      "frac_negative_mcc": 0.65,
+      "min_auc": 0.042062442400000004,
+      "max_auc": 0.9682574015999998
+    },
+    "LogisticRegression": {
+      "n": 60,
+      "mean_auc": 0.5090648475356561,
+      "auc_ci_lo": 0.444756984141521,
+      "auc_ci_hi": 0.5734536488978138,
+      "frac_below_chance": 0.4166666666666667,
+      "mean_macro_f1": 0.47887620608730336,
+      "mean_mcc": 0.05900357562688201,
+      "frac_negative_mcc": 0.5666666666666667,
+      "min_auc": 0.06681749145411517,
+      "max_auc": 0.9836970552000001
+    },
+    "RandomForest": {
+      "n": 60,
+      "mean_auc": 0.5499008180459967,
+      "auc_ci_lo": 0.49254655537798253,
+      "auc_ci_hi": 0.6085362700886765,
+      "frac_below_chance": 0.4,
+      "mean_macro_f1": 0.3665261688365073,
+      "mean_mcc": -0.059560732213264383,
+      "frac_negative_mcc": 0.65,
+      "min_auc": 0.1359894914,
+      "max_auc": 0.9836521454
+    },
+    "XGBoost": {
+      "n": 60,
+      "mean_auc": 0.5183930715888511,
+      "auc_ci_lo": 0.45371109007240806,
+      "auc_ci_hi": 0.5839765463682162,
+      "frac_below_chance": 0.5166666666666667,
+      "mean_macro_f1": 0.39879350060011604,
+      "mean_mcc": -0.006272023313975886,
+      "frac_negative_mcc": 0.6166666666666667,
+      "min_auc": 0.0339113496,
+      "max_auc": 0.9859688235999999
+    }
+  },
+  "per_pair_auc": {
+    "nf_bot_iot|nf_cse_cic_ids2018": {
+      "LightGBM": 0.96564513544,
+      "LogisticRegression": 0.98251793536,
+      "RandomForest": 0.97420296248,
+      "XGBoost": 0.9811339966399999
+    },
+    "nf_bot_iot|nf_ton_iot": {
+      "LightGBM": 0.58325187564,
+      "LogisticRegression": 0.6389840921600001,
+      "RandomForest": 0.46417036848000004,
+      "XGBoost": 0.45693174012000004
+    },
+    "nf_bot_iot|nf_unsw_nb15": {
+      "LightGBM": 0.8256222308703653,
+      "LogisticRegression": 0.3887894025769129,
+      "RandomForest": 0.7361487031291086,
+      "XGBoost": 0.8190796197738626
+    },
+    "nf_cse_cic_ids2018|nf_bot_iot": {
+      "LightGBM": 0.5005628709214429,
+      "LogisticRegression": 0.6717112946129558,
+      "RandomForest": 0.6498848852741365,
+      "XGBoost": 0.4799870403789111
+    },
+    "nf_cse_cic_ids2018|nf_ton_iot": {
+      "LightGBM": 0.54974980308,
+      "LogisticRegression": 0.68835702776,
+      "RandomForest": 0.4966648201600001,
+      "XGBoost": 0.58048187468
+    },
+    "nf_cse_cic_ids2018|nf_unsw_nb15": {
+      "LightGBM": 0.7750274651590849,
+      "LogisticRegression": 0.6321357270575861,
+      "RandomForest": 0.779083578227715,
+      "XGBoost": 0.7703217212726795
+    },
+    "nf_ton_iot|nf_bot_iot": {
+      "LightGBM": 0.6279015024399579,
+      "LogisticRegression": 0.6405988336044398,
+      "RandomForest": 0.6063603511625683,
+      "XGBoost": 0.7255330294708641
+    },
+    "nf_ton_iot|nf_cse_cic_ids2018": {
+      "LightGBM": 0.41265608816000005,
+      "LogisticRegression": 0.62960544424,
+      "RandomForest": 0.684837687,
+      "XGBoost": 0.49038891387999994
+    },
+    "nf_ton_iot|nf_unsw_nb15": {
+      "LightGBM": 0.3240739931632921,
+      "LogisticRegression": 0.07260915803313175,
+      "RandomForest": 0.5326078637917434,
+      "XGBoost": 0.39078962713647125
+    },
+    "nf_unsw_nb15|nf_bot_iot": {
+      "LightGBM": 0.20449357879628746,
+      "LogisticRegression": 0.23335090326284566,
+      "RandomForest": 0.29643279408669027,
+      "XGBoost": 0.19102674471342454
+    },
+    "nf_unsw_nb15|nf_cse_cic_ids2018": {
+      "LightGBM": 0.06966151039999999,
+      "LogisticRegression": 0.31623596952,
+      "RandomForest": 0.17286145575999998,
+      "XGBoost": 0.0901174096
+    },
+    "nf_unsw_nb15|nf_ton_iot": {
+      "LightGBM": 0.22557600583999998,
+      "LogisticRegression": 0.21388238224,
+      "RandomForest": 0.205554347,
+      "XGBoost": 0.2449251414
+    }
+  },
+  "n_pairs_below_chance_all_families": 3,
+  "n_pairs_below_chance_any_family": 9,
+  "n_pairs": 12
+}

@@ -21,7 +21,7 @@ external macro-F1 0.6512 against 0.3748 for all 39 features, a paired difference
 (ATC) reaches Spearman −0.726 and cuts leave-one-pair-out error by 24%. Recalibration
 works for one pair in twelve, the only one whose ranking survived, where a threshold
 read from target benign traffic recovers 97.0% of the available headroom using no attack
-labels, while ten labelled target flows lift mean external macro-F1 from 0.3776 to 0.7099.
+labels. `[INVALIDATED-PENDING-RERUN: the few-shot adaptation result is withheld. The run that produced it included the k adaptation rows in the evaluation set; the corrected, leakage-free experiment is in progress.]`
 Finally, the failure mode depends strongly on the dataset pair: the same-lineage CIC pairing failed mainly at the threshold and looked recoverable, while the independently built transfers failed at the ranking. Cross-network evaluation therefore has to distinguish ranking failure from threshold failure, because the two admit different remedies.
 
 **Keywords:** network intrusion detection, DDoS, cross-dataset generalisation,
@@ -75,8 +75,7 @@ and threshold loss shows eleven of twelve fail representationally. For the singl
 ranking-preserving pair, a threshold read from target benign traffic, which requires no
 attack labels, recovers 97.0% of the available headroom. On three others it is actively
 harmful.
-Ten labelled target flows do more than every zero-label method combined, lifting mean
-external macro-F1 from 0.3776 to 0.7099.
+`[INVALIDATED-PENDING-RERUN: the few-shot adaptation claim is withheld pending the leakage-free rerun; see §4.6.]`
 
 A fourth result conditions all of the above. In the feature space a model actually sees,
 these datasets are up to 99.7% exact duplicates: NF-BoT-IoT's 30,420,086 rows reduce to
@@ -548,20 +547,22 @@ detection exist and are not evaluated here.
 
 **Ten labelled flows outperformed the zero-label baselines evaluated here.**
 
-**Table 8. Label budget.**
+**Table 8. Label budget.** `[INVALIDATED-PENDING-RERUN]`
 
-| k labelled target flows | re-tune threshold | retrain on source + k |
-|---:|---:|---:|
-| 0 | 0.3776 | 0.3776 |
-| **10** | 0.4909 | **0.7099** |
-| 50 | 0.5500 | 0.8727 |
-| 100 | 0.5636 | 0.9082 |
-| 500 | 0.5662 | 0.9419 |
-| 1000 | 0.5623 | 0.9512 |
+> **This experiment has been withdrawn and is being rerun.** The implementation that
+> produced the original table drew k labelled target flows, fine-tuned on them, and then
+> evaluated on a target set that still contained those same rows; the decision threshold
+> was likewise tuned on rows that were subsequently scored. At the largest budget this is
+> roughly one percent contamination, which is small but indefensible, and it inflates
+> precisely the quantity the section rests on. The corrected design splits each target into
+> a disjoint adaptation pool and evaluation set, draws labels only from the pool, scores
+> only on the evaluation set, and repeats over twenty independent draws per budget. The
+> table will be restored from `results/label_budget_v2.json` when that run completes.
+>
+> The zero-label results in §4.6.1 and §4.6.2 are unaffected: they involve no target
+> labels and no fine-tuning.
 
-Ten labelled target flows lift mean external macro-F1 by 0.3323; one hundred reach 0.9082
-against an in-domain ceiling near 0.98 (Figure 7). Re-tuning the threshold on the same
-labels plateaus at 0.5662, because no threshold repairs an inverted ranking. The
+`[INVALIDATED-PENDING-RERUN: the label-budget curve and its interpretation are withheld until the leakage-free rerun completes.]` The one conclusion that does not depend on the withdrawn numbers is structural: re-tuning a threshold cannot repair an inverted ranking, whatever the label budget, because no threshold applied to a reversed ordering recovers it. The
 operational reading, at the scope the evidence supports, is that in this benchmark a small
 labelled target sample was substantially more effective than the zero-label baselines
 tested. We evaluated one covariance-alignment method and one threshold heuristic, not the

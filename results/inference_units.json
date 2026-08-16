@@ -1,0 +1,13 @@
+{
+  "descriptive_unit": "model x ordered pair x seed",
+  "inferential_unit": "ordered pair (seeds averaged within pair)",
+  "n_runs_all_models": 240,
+  "n_runs_below_chance_all_models": 108,
+  "n_runs_primary": 60,
+  "n_runs_below_chance_primary": 28,
+  "n_pairs": 12,
+  "n_pairs_below_chance_primary": 5,
+  "pair_level_mean_auc_primary": 0.5053518383258692,
+  "pair_level_auc_ci_lo": 0.3589143343683537,
+  "pair_level_auc_ci_hi": 0.6529322575177605
+}
