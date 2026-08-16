@@ -98,10 +98,45 @@ _CACHE: dict[tuple[str, str], Domain] = {}
 CACHE_CAP_PER_CLASS = 1_000_000
 
 
+#: Free-memory floor, in GB. Below this the domain cache is evicted before loading
+#: anything further.
+#:
+#: This machine has 15.6 GB and has twice died mid-run with the cache resident and free
+#: memory around 2 GB. Evicting is safe rather than merely expedient: the cache is a speed
+#: optimisation, and reloading is deterministic because the reservoir is seeded, so an
+#: evicted domain reloads to exactly the same rows. The cost of being wrong is ~50s of
+#: reloading; the cost of not doing it is losing the run and the machine.
+MIN_FREE_GB = 3.0
+
+
+def _free_gb() -> float:
+    """Free physical memory in GB; returns inf if it cannot be determined."""
+    try:
+        import psutil
+
+        return psutil.virtual_memory().available / 1e9
+    except Exception:
+        return float("inf")
+
+
+def evict_domains() -> None:
+    """Drop every cached domain and collect."""
+    import gc
+
+    n = len(_CACHE)
+    _CACHE.clear()
+    gc.collect()
+    if n:
+        print(f"  [mem] evicted {n} cached domain(s), free now {_free_gb():.1f} GB",
+              flush=True)
+
+
 def get_domain(key: str, other_policy: str = "drop",
                cache_cap: int | None = CACHE_CAP_PER_CLASS) -> Domain:
     """Load and cache a dataset. Loading NF-CSE-CIC-IDS2018 costs ~50s; do it once."""
     ck = (key, other_policy)
+    if ck not in _CACHE and _free_gb() < MIN_FREE_GB:
+        evict_domains()
     if ck not in _CACHE:
         X, y, fam, report = load(key, other_policy=other_policy, dedup=True)
         y_arr, fam_arr = y.to_numpy(), fam.to_numpy()

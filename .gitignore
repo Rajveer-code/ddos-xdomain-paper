@@ -37,3 +37,6 @@ PLAN_*.md
 
 # transient run logs
 results/_*.log
+
+# run locks (machine-local)
+results/.locks/
