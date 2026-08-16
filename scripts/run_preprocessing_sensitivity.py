@@ -50,7 +50,8 @@ from src.config import NETFLOW_V2, RESULTS
 from src.runlock import single_instance
 from src.data import load
 from src.metrics import best_threshold, binary_metrics
-from src.pipeline import apply_to, fit_source, get_domain, make_models, stratified_cap
+from src.pipeline import (_free_gb, apply_to, evict_domains, fit_source, get_domain,
+                          make_models, stratified_cap)
 
 CAP = 25_000
 MODEL = "LightGBM"
@@ -59,22 +60,28 @@ MODEL = "LightGBM"
 CLIP_MODELS = ["LightGBM", "LogisticRegression"]
 
 
-def drop_contradictions_then_dedup(X: pd.DataFrame, y: np.ndarray):
+def dedup_masks(X: pd.DataFrame, y: np.ndarray):
     """
-    Remove every feature vector carrying both labels, then de-duplicate.
+    Build both row masks from one pass: plain de-duplication, and de-duplication with
+    contradictory groups removed first.
 
-    Order matters. `src.data.load` hashes feature vectors alone, so it collapses a
-    contradictory group to whichever label happened to come first and leaves no trace
-    to test afterwards. Running on pre-de-duplication rows is the only way to see them.
+    Order matters for the second one. `src.data.load` hashes feature vectors alone, so it
+    collapses a contradictory group to whichever label happened to come first and leaves
+    no trace to test afterwards. Running on pre-de-duplication rows is the only way to
+    see them, and hashing once keeps a 28M-row frame from being traversed twice.
     """
     h = pd.util.hash_pandas_object(X, index=False).to_numpy()
     lab = pd.DataFrame({"h": h, "y": y}).drop_duplicates()
-    n_groups = lab["h"].nunique()
-    bad = lab["h"].value_counts()
-    bad = bad[bad > 1].index.to_numpy()          # a hash seen with both labels
-    keep = ~np.isin(h, bad) if len(bad) else np.ones(len(X), bool)
-    keep &= ~pd.Series(h).duplicated(keep="first").to_numpy()
-    return keep, int(len(bad)), int(n_groups)
+    n_groups = int(lab["h"].nunique())
+    counts = lab["h"].value_counts()
+    bad = counts[counts > 1].index.to_numpy()    # a hash seen with both labels
+    del lab, counts
+
+    first = ~pd.Series(h).duplicated(keep="first").to_numpy()
+    keep_nc = first & ~np.isin(h, bad) if len(bad) else first.copy()
+    del h
+    gc.collect()
+    return first, keep_nc, int(len(bad)), n_groups
 
 
 def fit_raw(X, y, seed, cap):
@@ -151,17 +158,23 @@ def main() -> int:
     if "dedup" in args.axes:
         for seed in args.seeds:
             for src in sources:
+                # The pre-de-duplication frame reaches 28M rows. Drop the cached target
+                # domains first and hold it in float32, or the two together exhaust RAM.
+                evict_domains()
                 X, y, _f, _r = load(src, other_policy="drop", dedup=False)
+                X = X.astype(np.float32)
                 yv = y.to_numpy()
-                keep_nc, n_bad, n_groups = drop_contradictions_then_dedup(X, yv)
-                keep_plain = ~pd.Series(
-                    pd.util.hash_pandas_object(X, index=False).to_numpy()
-                ).duplicated(keep="first").to_numpy()
-                variants = (("no_dedup", np.ones(len(X), bool)),
+                del y
+                gc.collect()
+                keep_plain, keep_nc, n_bad, n_groups = dedup_masks(X, yv)
+                # `no_dedup` keeps every row, so it reuses the frame instead of taking a
+                # boolean-indexed copy of it; that copy is another 4.4 GB on NF-BoT-IoT.
+                variants = (("no_dedup", None),
                             ("dedup", keep_plain),
                             ("no_contradictions", keep_nc))
                 for variant, keep in variants:
-                    Xs, ys = X[keep].reset_index(drop=True), yv[keep]
+                    Xs = X if keep is None else X[keep].reset_index(drop=True)
+                    ys = yv if keep is None else yv[keep]
                     if len(np.unique(ys)) < 2:
                         continue
                     rows.append({
@@ -173,9 +186,11 @@ def main() -> int:
                     del Xs, ys
                     gc.collect()
                     print(f"  dedup/{variant:18s} {src:20s} s{seed} | "
+                          f"n={rows[-1]['n_rows']:,} "
                           f"in {rows[-1]['indomain_macro_f1']:.4f} "
-                          f"ext {rows[-1]['external_macro_f1']:.4f}", flush=True)
-                del X, y
+                          f"ext {rows[-1]['external_macro_f1']:.4f} "
+                          f"| {_free_gb():.1f} GB free", flush=True)
+                del X, yv, keep_plain, keep_nc, variants
                 gc.collect()
 
     # ---- 3. target clipping ------------------------------------------------------------
