@@ -15,9 +15,7 @@ chance. It passes through it. Pooling four model families, twelve ordered pairs 
 help: we pre-specified the hypothesis that capacity-bound features carry testbed
 identity, and removing all twenty of them changes external macro-F1 by +0.0132 [-0.0084,
 +0.0320], an interval spanning zero, so the hypothesis is not supported at the power this
-study affords. What the data does support is a size effect: a single protocol bit reaches
-external macro-F1 0.6512 against 0.3748 for all 39 features, a paired difference of
-+0.2763 [+0.2230, +0.3366]. Distribution-divergence monitoring did not work in this benchmark: proxy A-distance, RBF-MMD and summed Wasserstein distance all predicted the observed loss worse than assuming the average drop, while the model's own confidence
+study affords. A one-feature set does reach external macro-F1 0.6512 against 0.3748 for all 39, a paired difference of +0.2763 [+0.2230, +0.3366], but a control over random subsets at controlled size shows that only +0.105 of that is dimensionality; the remaining +0.147 belongs to that particular feature, a DNS indicator that is itself a dataset shortcut. Feature count tracks in-domain separability (Spearman +0.626) and external macro-F1 (-0.290) while leaving external ranking untouched (+0.004 [-0.081, +0.088]), making it a threshold effect rather than a representational one. Distribution-divergence monitoring did not work in this benchmark: proxy A-distance, RBF-MMD and summed Wasserstein distance all predicted the observed loss worse than assuming the average drop, while the model's own confidence
 (ATC) reaches Spearman −0.726 and cuts leave-one-pair-out error by 24%. Recalibration
 works for one pair in twelve, the only one whose ranking survived, where a threshold
 read from target benign traffic recovers 97.0% of the available headroom using no attack
@@ -51,7 +49,7 @@ transfer does not decay toward chance. It passes through chance. Mean external R
 
 That last number is the paper. An AUC of 0.0697 is not weak evidence; it is strong evidence with the wrong sign. Attack flows are systematically assigned lower scores than benign flows, and negating the detector's output would yield an ROC-AUC of approximately 0.9303. Note that this is a statement about ranking, not about accuracy: ROC-AUC is threshold-free, and the accuracy of a negated detector would still depend on the operating point and the target prevalence. A model at chance carries no usable ordering. A model at 0.0697 carries a strong ordering with the sign reversed.
 
-A plausible mechanism is easy to state. If high throughput marks attack traffic in one testbed and marks the busiest legitimate hosts in another, a decision surface fitted to the first is close to optimal-but-negated on the second. The results below are consistent with the detector exploiting dataset-specific feature relationships whose association with the label changes sign across networks; we do not isolate the responsible relationships directly, and §6 says so.
+A plausible mechanism is easy to state. If high throughput marks attack traffic in one testbed and marks the busiest legitimate hosts in another, a decision surface fitted to the first is close to optimal-but-negated on the second. Two of our own results constrain what that mechanism can be. Logistic regression inverts on the same pairs as the tree ensembles (§4.2), so it cannot require high-order feature interactions, which a linear model cannot represent. And feature count is uncorrelated with external ranking quality (§4.4), so it is not a matter of model capacity either. What remains is the simplest reading: individual feature-label associations reverse sign between these networks. We do not isolate which associations, and §6 says so.
 
 Three consequences follow, each of which narrows a standard remedy:
 
@@ -59,9 +57,7 @@ Three consequences follow, each of which narrows a standard remedy:
 expectation that capacity-bound features (throughput, duration, volume) carry testbed
 identity and cause the collapse, and committed it to the project repository before the experiment ran. Removing all twenty of them moves external macro-F1 by +0.0132 [-0.0084,
 +0.0320], an interval spanning zero, and capacity features alone transfer as well as the
-full set. The hypothesis is not supported. What the data does support is a size effect: a
-*single* protocol bit reaches external macro-F1 0.6512 where all 39 features reach
-0.3748, a paired difference of +0.2763 [+0.2230, +0.3366].
+full set. The hypothesis is not supported. A one-feature set does out-transfer the full set by +0.2763 [+0.2230, +0.3366], but a control over randomly chosen subsets at controlled size splits that advantage almost evenly: +0.105 is dimensionality and +0.147 is the identity of that feature, which turns out to be a second dataset shortcut.
 
 **Distribution-divergence monitoring did not work here.** Proxy A-distance, RBF-MMD and
 summed Wasserstein distance, the quantities motivating much of the domain-adaptation
@@ -427,8 +423,8 @@ aggregation: bundling them with the throughput features, which contribute nothin
 chosen a priori was the wrong instrument, and we report that rather than re-cutting the
 classes until something reached significance.
 
-**What the data does support is a size effect.** Ordering the same 17 sets by external
-performance puts the smallest on top (Figure 4).
+**Smaller sets do transfer better, but not mainly because they are smaller.** Ordering
+the same 17 sets by external performance puts the smallest on top (Figure 4).
 
 ![Figure 4](../figures/fig4_feature_set_size.png)
 
@@ -445,17 +441,25 @@ performance puts the smallest on top (Figure 4).
 | `only_flags_behaviour` | 7 | 0.8380 | 0.4288 | +0.0539 | [+0.0371, +0.0705] | 0.3759 |
 | `all` | 39 | 0.9821 | 0.3748 | 0 | n/a | 0.4931 |
 
-Every one of these differences is significant at p < 0.001. One feature out-generalises the
-entire standard set by 0.2763 macro-F1 [+0.2230, +0.3366] and 0.2396 AUC, and the 38
-features added on top of it purchase 0.3110 in-domain at a cost of 0.2764 externally.
+Every one of these differences is significant at p < 0.001. One feature out-generalises the entire standard set by 0.2763 macro-F1 [+0.2230, +0.3366].
 
-We read this as follows. A gradient-boosted ensemble given 39 correlated flow statistics
-finds high-order conjunctions that separate its own testbed's attack traffic essentially
-perfectly, and those conjunctions encode the testbed. Restricted to one or three features
-the model cannot express them, fits a coarser and more transferable rule, and pays for it
-only at home. On this reading the semantic class of a feature matters less than how many
-features the model is given to combine, which is consistent with size and volume mattering
-individually while the 20-feature capacity bundle does not.
+That ordering cannot, on its own, tell dimensionality apart from feature identity: a one-bit DNS indicator and a four-feature throughput block differ in both. We therefore ran a control that varies size alone, sampling random subsets at controlled k over a 1 to 39 grid with splits, seeds, model and targets held fixed (584 runs).
+
+**Table 4b. Random subsets at controlled size.** Median over subsets, sources and seeds; 5th and 95th percentiles in brackets.
+
+| k | in-domain | external macro-F1 | external AUC |
+|---:|---:|---|---:|
+| 1 | 0.7158 | 0.5046 [0.2835, 0.6973] | 0.5889 |
+| 3 | 0.9250 | 0.4214 [0.2950, 0.5881] | 0.5336 |
+| 10 | 0.9774 | 0.4021 [0.2928, 0.5195] | 0.5766 |
+| 20 | 0.9842 | 0.3993 [0.2786, 0.5111] | 0.5898 |
+| 39 | 0.9843 | 0.3997 [0.3017, 0.4406] | 0.5843 |
+
+Size matters, and less than the semantic ablation implied. Across random subsets external macro-F1 falls from 0.5046 at k=1 to 0.3997 at k=39, Spearman -0.290 [-0.369, -0.210]. That accounts for **+0.105** of the one-feature advantage. The remaining **+0.147** is identity: `DNS_QUERY_ID` alone reaches 0.6512 where a random single feature reaches 0.5046. The headline advantage is therefore roughly two-fifths dimensionality and three-fifths shortcut, and we report it that way rather than as a size effect.
+
+**The size component is a threshold effect, not a representational one.** Feature count correlates strongly with in-domain macro-F1 (Spearman +0.626 [+0.566, +0.679]) and negatively with external macro-F1 (-0.290), but is uncorrelated with external ROC-AUC (+0.004 [-0.081, +0.088]). Adding features sharpens separation at home and leaves the target ordering unchanged; what degrades is the usefulness of the operating point chosen against that sharper separation. This connects directly to §4.3 and to §3.6: perfect in-domain separability widens the tied-optimal threshold plateau and pushes the chosen threshold into a position that does not survive a change of network.
+
+An earlier draft of this paper explained the ordering by supposing that a gradient-boosted ensemble given 39 correlated flow statistics finds high-order conjunctions encoding its own testbed, which a one-feature model cannot express. Two of our own results rule that out. Logistic regression inverts on the same pairs as the tree ensembles (§4.2) and cannot represent such conjunctions at all, and feature count is uncorrelated with external ranking quality, which is what a capacity explanation would predict it to govern. We record the discarded explanation because the experiments that killed it are in this paper, and a reader who reaches the same intuition deserves to know it was tested.
 
 **A correction, stated where the claim depends on it.** `DNS_QUERY_ID` was placed in its
 own class as a null control, on the assumption that a 16-bit DNS transaction ID is random
