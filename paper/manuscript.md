@@ -480,6 +480,42 @@ ID value itself carries nothing: AUC on the raw value equals AUC on the zero/non
 to four decimal places in all four datasets, and conditioning on nonzero leaves AUC at
 0.48–0.49. The correct statement is therefore that a **one-bit DNS indicator out-generalises the 39-feature standard set**, and we read that as a finding about the benchmark rather than as a detector worth deploying. A field that separates the classes this well across three of four independently built testbeds, while carrying no information about attack behaviour, is a dataset-construction shortcut: DNS traffic was generated as background in these testbeds and was therefore almost never labelled as attack. Its in-domain score of 0.6711 is unusable in any case. What it establishes is that feature count and semantic quality are different things, and that the standard feature set contains at least one shortcut that transfers better than the behaviour the model is supposed to be learning.
 
+### 4.4b Is the strongest inversion a weak-source artefact?
+
+Every transfer that falls below chance in all four model families has NF-UNSW-NB15 as its
+source, and NF-UNSW-NB15 retains only 3,075 attack flows after de-duplication at a 1.30%
+base rate. Source identity and source size are therefore confounded in the study's most
+extreme result, and the obvious alternative explanation is that a detector trained on very
+few positives simply fails unpredictably.
+
+We separate the two by holding size fixed and varying identity: every source is starved to
+the same 3,075 attack flows that NF-UNSW-NB15 actually has, and the transfer matrix is
+rerun over two model families and three seeds.
+
+**Table 6b. Source-size control.** External ROC-AUC, 144 transfers.
+
+| regime | source | n | mean external AUC | below chance |
+|---|---|---:|---:|---:|
+| matched (3,075 attacks) | NF-UNSW-NB15 | 18 | 0.3889 | 72.2% |
+| matched (3,075 attacks) | other three sources | 54 | 0.6155 | 25.9% |
+| full cap | NF-UNSW-NB15 | 18 | 0.2513 | 88.9% |
+| full cap | other three sources | 54 | 0.6147 | 20.4% |
+
+Starving the other three sources does not make them invert. Their mean external AUC moves
+from 0.6147 at the full cap to 0.6155 when reduced to NF-UNSW-NB15's attack count, a
+difference of 0.0008. Whatever produces the inversion, it is not the number of positives.
+
+NF-UNSW-NB15 inverts under both regimes and remains 0.227 below the other sources at
+identical size. The explanation is a property of that network rather than of its sample.
+
+One secondary effect is worth stating because it is not what we expected. NF-UNSW-NB15's
+external AUC is *higher* under the matched regime (0.3889) than under the full cap
+(0.2513). The two regimes differ for this source in class balance rather than attack
+count: capping at 3,075 balances it, whereas the ordinary cap leaves roughly eight benign
+flows per attack. A more balanced source therefore inverts less severely, which is
+consistent with the threshold reading in §4.4 but is a single observation and we do not
+build on it.
+
 ### 4.5 Can an operator predict the loss without labels?
 
 An operator deploying a detector on their own network has traffic but no attack labels. We
@@ -708,9 +744,7 @@ numbers describe a DoS/DDoS-versus-benign task.
 protocol for the question, but a 24% error reduction estimated from twelve pairs supports
 triage, not a service-level guarantee.
 
-**NF-UNSW-NB15 is a weak source.** After de-duplication it retains 3,075 DoS flows at a
-1.30% base rate. Its behaviour as a source, the most strongly inverted row in the matrix,
-may partly reflect that scarcity rather than domain distance alone.
+**NF-UNSW-NB15 is a small source.** After de-duplication it retains 3,075 DoS flows at a 1.30% base rate, and it produces the study's most extreme inversion. The obvious confound is tested rather than conceded in §4.4b: starving every other source to the same attack count leaves their transfer essentially unchanged (0.6147 to 0.6155), while NF-UNSW-NB15 remains 0.227 below them at identical size. Sample size does not account for the effect. Its class balance has a secondary influence that we note but do not interpret.
 
 **Low-rate attacks are underpowered in the NetFlow quartet.** After de-duplication,
 NF-CSE-CIC-IDS2018 retains only 203 low-rate application-layer flows, so §4.7 rests partly
