@@ -139,6 +139,41 @@ def split_row(line: str) -> list[str]:
     return [p.replace(r"\|", "|").strip() for p in parts]
 
 
+ORDERED = r"^\d+\.\s"
+BULLET = r"^[-*]\s"
+
+
+def take_list(lines: list[str], i: int, item_re: str, strip_re: str,
+              env: str, out: list[str]) -> int:
+    """Consume one list into a single LaTeX environment, returning the next index.
+
+    Blank lines between items belong to the same list: markdown calls that a loose
+    list, and closing the environment at each one restarts \\item numbering, which is
+    what left every reference in the bibliography rendered as "1.".
+    """
+    out.append(rf"\begin{{{env}}}[leftmargin=*,itemsep=2pt]")
+    while i < len(lines):
+        st = lines[i].strip()
+        if not st:
+            nxt = i + 1
+            while nxt < len(lines) and not lines[nxt].strip():
+                nxt += 1
+            # only a following item continues the list; a paragraph ends it
+            if nxt < len(lines) and re.match(item_re, lines[nxt].strip()):
+                i = nxt
+                continue
+            break
+        if re.match(item_re, st):
+            out.append(r"\item " + inline(re.sub(strip_re, "", st)))
+        elif lines[i].startswith("   "):
+            out[-1] += " " + inline(st)
+        else:
+            break
+        i += 1
+    out.append(rf"\end{{{env}}}")
+    return i
+
+
 def convert(md: str) -> str:
     lines = md.split("\n")
     out: list[str] = []
@@ -265,31 +300,13 @@ def convert(md: str) -> str:
             continue
 
         # ---- ordered list
-        if re.match(r"^\d+\.\s", st):
-            out.append(r"\begin{enumerate}[leftmargin=*,itemsep=2pt]")
-            while i < len(lines) and (re.match(r"^\d+\.\s", lines[i].strip()) or
-                                      (lines[i].startswith("   ") and lines[i].strip())):
-                s2 = lines[i].strip()
-                if re.match(r"^\d+\.\s", s2):
-                    out.append(r"\item " + inline(re.sub(r"^\d+\.\s*", "", s2)))
-                else:
-                    out[-1] += " " + inline(s2)
-                i += 1
-            out.append(r"\end{enumerate}")
+        if re.match(ORDERED, st):
+            i = take_list(lines, i, ORDERED, r"^\d+\.\s*", "enumerate", out)
             continue
 
         # ---- bullet list
-        if re.match(r"^[-*]\s", st):
-            out.append(r"\begin{itemize}[leftmargin=*,itemsep=2pt]")
-            while i < len(lines) and (re.match(r"^[-*]\s", lines[i].strip()) or
-                                      (lines[i].startswith("   ") and lines[i].strip())):
-                s2 = lines[i].strip()
-                if re.match(r"^[-*]\s", s2):
-                    out.append(r"\item " + inline(re.sub(r"^[-*]\s*", "", s2)))
-                else:
-                    out[-1] += " " + inline(s2)
-                i += 1
-            out.append(r"\end{itemize}")
+        if re.match(BULLET, st):
+            i = take_list(lines, i, BULLET, r"^[-*]\s*", "itemize", out)
             continue
 
         # ---- paragraph
