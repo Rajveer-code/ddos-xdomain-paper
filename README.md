@@ -1,24 +1,43 @@
-# Capacity, Not Attack
+# Confidently Wrong
 
-**Why flow-based DDoS detectors fail across networks — and predicting the damage without labels.**
+**Ranking inversion in cross-network denial-of-service detection.**
 
-Status: **work in progress.** No results yet. This repository currently contains the
-experimental harness only; every number will be produced by a seeded run and written to
-`results/*.json` before it appears anywhere else.
+Cross-dataset transfer of flow-based DoS detectors does not decay toward chance. It passes
+through chance. Across every ordered pair of four independently captured testbeds, mean
+external ROC-AUC is 0.5054 and 108 of 240 external evaluations fall *below* 0.5; the worst
+pair reaches 0.0697, which is a strong ranking with the sign reversed.
+
+Status: **complete.** Manuscript, figures and results are in the repository. Every number
+in the paper is produced by a seeded run and written to `results/*.json` first;
+`scripts/check_numbers.py` verifies that all 1,025 numeric literals in the manuscript trace
+back to a result file, and it is expected to pass at 100%.
+
+- Manuscript: [`paper/manuscript.pdf`](paper/manuscript.pdf) (22 pages) and
+  [`paper/manuscript.md`](paper/manuscript.md), the source of truth.
+- Target venue: Computers & Security (Elsevier), with an arXiv preprint.
 
 ---
 
-## What this study asks
+## What this study asks, and what it found
 
-Flow-based DDoS detectors report near-perfect scores in-domain and collapse when applied
-to a different network. That collapse is well documented. This work asks two questions
-that are not:
+The project began with a hypothesis about *which* features cause the collapse. That
+hypothesis was pre-specified in version control before the experiment ran, and the data did
+not support it. Both the original question and the answer are reported.
 
-1. **Which features cause it?** Hypothesis: features that encode *testbed capacity*
-   (throughput, packet rate, inter-arrival timing) — not attack semantics — drive
-   in-domain accuracy and destroy cross-dataset transfer.
-2. **Can you see it coming without labels?** Given an unlabelled target network, how
-   accurately can source↔target divergence predict the performance you will actually lose?
+1. **Which features cause it?** Pre-specified hypothesis: features encoding *testbed
+   capacity* (throughput, packet rate, inter-arrival timing) drive in-domain accuracy and
+   destroy transfer. **Not supported.** Removing all twenty capacity features moves external
+   macro-F1 by +0.0132 [-0.0084, +0.0320], an interval spanning zero.
+2. **Can you see it coming without labels?** **Largely no.** Proxy A-distance, MMD and
+   Wasserstein-1 carry almost no information about the loss; their intervals span zero and
+   all three are worse out-of-sample than predicting the mean.
+3. **What does the failure actually look like?** Inversion, not degradation, and it appears
+   in all four model families tested. Logistic regression inverts on the same pairs as the
+   tree ensembles, which rules out any mechanism requiring high-order feature interactions.
+
+Null and negative results are reported as such. The single strongest remedy found is a
+small number of target labels, not feature engineering, distance monitoring, or threshold
+recalibration; zero-label recalibration is net harmful when pooled.
 
 ## Protocol
 
@@ -48,13 +67,34 @@ scripts/      entry points
 pip install -r requirements.txt
 ```
 
-Kaggle credentials are read from `~/.kaggle/kaggle.json`. Then:
+Kaggle credentials are read from `~/.kaggle/kaggle.json` and are never copied into the
+repository. Then:
 
 ```bash
 python scripts/download_data.py
 ```
 
-Further entry points are added as experiments land.
+One experiment is one entry point; each writes its own file under `results/`.
+
+| script | produces |
+|---|---|
+| `run_transfer_matrix.py` | the transfer matrix, every ordered pair x model x seed |
+| `run_feature_ablation.py` | capacity/semantic ablation with paired bootstrap CIs |
+| `run_feature_count.py` | random subsets at controlled size, separating size from identity |
+| `run_inversion_controls.py` | permutation and label-reversal controls |
+| `run_unsw_robustness.py` | source-size control for the strongest inversion |
+| `run_preprocessing_sensitivity.py` | de-duplication, contradiction and clipping ablations |
+| `run_divergence.py` | proxy A-distance, MMD, Wasserstein-1, ATC |
+| `run_remedies.py` | CORAL, threshold transfer, benign-quantile recalibration |
+| `run_label_budget.py` | leakage-free label budget with disjoint adaptation and evaluation |
+| `run_cic_study.py` | the CICFlowMeter secondary study and corrected-label comparison |
+| `analyze_robustness.py` | model-family robustness and unit-of-inference analysis |
+| `make_figures.py` | all figures, regenerated from `results/` |
+| `build_pdf.py` | `paper/manuscript.pdf` from the markdown source |
+| `check_numbers.py` | verifies every numeric literal in the manuscript traces to a result |
+
+Long runs are checkpointed and hold a PID lock in `results/.locks/`, so an interrupted run
+resumes rather than restarting and two runs cannot race on the same output.
 
 ## Data credits
 
