@@ -368,9 +368,15 @@ def main() -> int:
     md = SRC.read_text(encoding="utf-8")
     body = convert(md)
 
-    title = "Confidently Wrong: Cross-Network DDoS Detectors Invert Rather Than Degrade"
+    # The H1 is authoritative. This was a hardcoded string, so retitling the manuscript
+    # changed the markdown and left the PDF showing the previous title.
+    lines = body.split("\n")
+    marked = [l[len("%TITLE%"):].strip() for l in lines if l.startswith("%TITLE%")]
+    if not marked:
+        raise SystemExit("no H1 title found in the manuscript")
+    title = marked[0]
     author = "Rajveer Singh Pall"
-    lines = [l for l in body.split("\n") if not l.startswith("%TITLE%")]
+    lines = [l for l in lines if not l.startswith("%TITLE%")]
     # the author line survives as a lone \textbf{...}; drop the first one
     for idx, l in enumerate(lines):
         if l.strip() == r"\textbf{Rajveer Singh Pall}":
