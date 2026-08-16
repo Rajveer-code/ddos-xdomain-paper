@@ -40,6 +40,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils.class_weight import compute_sample_weight
 
 from src.config import NETFLOW_V2, RESULTS
+from src.runlock import single_instance
 from src.metrics import benign_quantile_threshold, best_threshold
 from src.pipeline import apply_to, fit_source, get_domain, make_models, stratified_cap
 
@@ -209,4 +210,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    with single_instance("label_budget"):
+        raise SystemExit(main())

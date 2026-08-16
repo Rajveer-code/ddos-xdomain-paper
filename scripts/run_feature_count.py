@@ -34,6 +34,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 from src.config import NETFLOW_V2, RESULTS
+from src.runlock import single_instance
 from src.features import all_features
 from src.pipeline import apply_to, fit_source
 
@@ -114,4 +115,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    with single_instance("feature_count"):
+        raise SystemExit(main())
