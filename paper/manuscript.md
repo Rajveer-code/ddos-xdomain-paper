@@ -78,14 +78,10 @@ trained on.
 ### 1.1 Contributions
 
 1. Evidence that cross-network failure can manifest as systematic **ranking inversion** rather than monotonic degradation, across 240 model-pair-seed evaluations, with permutation and label-reversal controls establishing that the below-chance results are not a pipeline artefact.
-2. A pre-specified hypothesis about capacity features that the data does not support,
-   reported with its interval and the effect size this design could detect, alongside the
-   size effect the data does support.
-3. A negative result on distribution-divergence measures as deployment-risk predictors,
-   with a confidence-based alternative that beats a mean baseline.
+2. A pre-specified capacity-feature hypothesis that the data does not support, reported with    its interval, alongside a controlled random-subset analysis showing that feature-count    effects act on the operating point rather than on external ranking.
+3. A label-free triage analysis in which Average Thresholded Confidence beats the mean-gap    baseline under leave-one-pair-out evaluation while three marginal distribution-distance    measures do not.
 4. A failure taxonomy separating threshold failure from ranking failure, and ranking failure from sign inversion, together with evidence that which mode appears depends strongly on the source-target pairing.
-5. Duplicate and label-contradiction accounting that bounds every in-domain figure this
-   literature reports.
+5. A benchmark-integrity audit covering exact duplication, contradictory labels under the    full attack taxonomy, non-finite extractor artefacts and corrected labels, showing that    each can materially change measured transfer performance.
 
 ---
 
