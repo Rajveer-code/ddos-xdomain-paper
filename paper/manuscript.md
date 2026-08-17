@@ -49,7 +49,7 @@ That last number is what an aggregate near chance conceals. An AUC of 0.0697 is 
 
 A plausible mechanism is easy to state. If high throughput marks attack traffic in one testbed and marks the busiest legitimate hosts in another, a decision surface fitted to the first is close to optimal-but-negated on the second. Two of our own results constrain what that mechanism can be. Logistic regression inverts on the same pairs as the tree ensembles (§4.2), so it cannot require high-order feature interactions, which a linear model cannot represent. And feature count is uncorrelated with external ranking quality (§4.4), so it is not a matter of model capacity either. What remains is the simplest reading: individual feature-label associations reverse sign between these networks. We do not isolate which associations, and §6 says so.
 
-Three consequences follow, each of which narrows a standard remedy:
+Four consequences follow. The first three narrow a standard remedy; the fourth conditions all of them:
 
 **Feature engineering along the obvious axis does not help.** We pre-specified the
 expectation that capacity-bound features (throughput, duration, volume) carry testbed
@@ -70,10 +70,9 @@ attack labels, recovers 97.0% of the available headroom. On three others it is a
 harmful.
 Ten labelled target flows, drawn from an adaptation pool disjoint from the evaluation set, lift median external macro-F1 from 0.3919 to 0.7253 and beat the best threshold obtainable with unlimited labels.
 
-A fourth result conditions all of the above. In the feature space a model actually sees,
+**Dataset quality bounds what any of this measures.** In the feature space a model actually sees,
 these datasets are up to 99.7% exact duplicates: NF-BoT-IoT's 30,420,086 rows reduce to
-101,369. Studies that split them without de-duplicating are testing, in part, on rows they
-trained on.
+101,369. A random split that retains these duplicates places indistinguishable feature vectors on both sides of it, so the resulting scores are not independent test evidence.
 
 ### 1.1 Contributions
 
@@ -315,8 +314,7 @@ de-duplication, so they are not inflated by the train/test contamination describ
 the uncorrected figures would be higher still. Second, ROC-AUC reaches 1.0000 on
 NF-CSE-CIC-IDS2018 to four decimal places, meaning the classes are perfectly separable in
 the source domain. Perfect in-domain separability is what makes the threshold plateau of
-§3.6 wide, and it is the first hint that the model is fitting something more specific than
-attack behaviour.
+§3.6 wide, and it is the first indication that the source decision rule may be exploiting testbed-associated structure rather than attack behaviour alone.
 
 ### 4.2 Out-of-domain, the failure has a sign
 
@@ -350,8 +348,7 @@ target. This is the paper's central claim: cross-network failure can involve sys
 were run for four model families, which lets the question be asked directly rather than
 assumed away.
 
-**Table 3. Model-family robustness.** External performance over all 12 ordered pairs and 5
-seeds. The last column is the single worst run, not a pair mean.
+**Table 3. Model-family robustness.** External performance over all 12 ordered pairs and 5 seeds. Intervals are descriptive run-level bootstrap intervals over the 60 runs in each row; they are not pair-level inferential intervals, for the reason given below. The last column is the single worst run, not a pair mean.
 
 | model | n | mean external AUC | 95% CI | below 0.5 | mean macro-F1 | mean MCC | lowest run |
 |---|---:|---:|---|---:|---:|---:|---:|
@@ -757,7 +754,7 @@ least expected to miss, transfer worst, retaining 5.35% recall. This follows dir
 testbed. Low-rate application-layer attacks, defined by request patterns rather than
 volume, had roughly four times the external recall, an estimate limited by how few low-rate flows survive de-duplication.
 
-### 4.10 The pairing chosen governs the conclusion
+### 4.10 Dataset pairing changes the observed failure mode
 
 Repeating the study on the conventional CIC-DDoS2019 ↔ CICIDS2017 pairing over 76 shared
 CICFlowMeter features reproduces the gap: in-domain 0.9675–0.9995, external 0.3368–0.4986,
@@ -895,9 +892,7 @@ everything in the one regime where ranking survived and is net harmful pooled ac
 others, and ten balanced labelled target flows beat the zero-label methods we evaluated and also exceed the target-optimal threshold oracle, which consumes unlimited target labels but can only move a cut point along an ordering it cannot repair.
 
 Underneath all of it, these benchmarks are up to 99.7% duplicate, and correcting known
-label errors moves measured transfer *down* by 0.1437 macro-F1. The in-domain numbers this
-field reports, and a measurable share of the cross-dataset numbers, are bounded by dataset
-quality before any model is chosen.
+label errors moves measured transfer *down* by 0.1437 macro-F1. Apparent transfer performance can therefore be moved substantially by data preparation and label quality before any model is chosen.
 
 ---
 
