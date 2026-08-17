@@ -516,7 +516,7 @@ the same 17 sets by external performance puts the smallest on top (Figure 4).
 
 Every one of these differences is significant at p < 0.001. One feature out-generalises the entire standard set by 0.2763 macro-F1 [+0.2230, +0.3366].
 
-That ordering cannot, on its own, tell dimensionality apart from feature identity: a one-bit DNS indicator and a four-feature throughput block differ in both. We therefore ran a control that varies size alone, sampling random subsets at controlled k over a 1 to 39 grid with splits, seeds, model and targets held fixed (584 runs).
+That ordering cannot, on its own, tell dimensionality apart from feature identity: a one-bit DNS indicator and a four-feature throughput block differ in both. We therefore ran a control that varies size alone. For each k in {1, 2, 3, 5, 7, 10, 15, 20, 30, 39} we drew 8 subsets of size k uniformly at random without replacement from the 39 features, and trained on each of the 4 sources under 2 seeds at 25,000 rows per class, with splits, model and targets held fixed. At k = 39 only one subset exists, so that cell contributes 1 rather than 8, giving 584 runs.
 
 **Table 8. Random subsets at controlled size.** Median over subsets, sources and seeds; 5th and 95th percentiles in brackets.
 
@@ -677,7 +677,7 @@ intervals spanning zero and all three are worse than the mean baseline out-of-sa
 **Figure 5.** Observed generalization gap against three label-free predictors, with Spearman correlation and bootstrap CI.
 
 
-Measures of the model's own behaviour work, moderately. ATC reaches ρ = −0.726 against the
+Measures of the model's own behaviour work, moderately. ATC as defined by Garg et al. [2022] picks the confidence threshold at which the source's own fraction of below-threshold points equals its error rate, then reports the fraction of target points above that threshold as a label-free estimate of target accuracy. We do not treat that estimate as an estimator of macro-F1; we use it as a *predictor*, fitting a univariate linear map from it to the observed external score and scoring that map leave-one-pair-out, with all seeds of a held-out pair excluded together so no pair informs its own prediction. ATC reaches ρ = −0.726 against the
 gap and +0.756 [+0.585, +0.861] against external macro-F1, reducing leave-one-pair-out
 error by 24%. Twelve ordered pairs is a small sample, and a 24% error reduction supports
 triage, a decision about which deployments need labelled validation first, rather than a
