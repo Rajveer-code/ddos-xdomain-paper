@@ -280,8 +280,7 @@ To ask whether a detector's probabilities remain usable, we report **ECE** (15 e
 bins) and **Brier score** in both domains, because a detector deploys a threshold rather
 than a ranking.
 
-To keep the base rate visible, we report **FPR at 95% TPR** and expected alerts per hour,
-since balanced-test-set F1 flatters every detector in this literature.
+To keep the base rate visible, we report **FPR at 95% TPR**, since balanced-test-set F1 flatters every detector in this literature.
 
 **Table 2. Arp et al. [2022] pitfalls and how this protocol addresses each.**
 
@@ -289,12 +288,12 @@ since balanced-test-set F1 flatters every detector in this literature.
 |---|---|
 | Sampling bias | Four independently collected testbeds; every ordered pair in both directions; per-dataset base rates reported, not normalised away |
 | Label inaccuracy | Full label→class map released; contradictory groups counted; label error isolated against the corrected CICIDS2017 |
-| Data snooping | Scaler, imputer and threshold fitted on source-train only, asserted by the pipeline self-check |
+| Data snooping | De-duplicate before splitting; scaler, imputer and threshold fitted on source data only, verified by the pipeline self-check (§3.5) |
 | Spurious correlations | Socket columns dropped; feature classes ablated; `DNS_QUERY_ID` examined directly rather than trusted as noise |
 | Biased parameter selection | Fixed hyperparameters across all domains; no tuning against any target |
 | Inappropriate baseline | Four model families including logistic regression; a one-feature set as minimal reference |
 | Inappropriate performance measures | macro-F1, MCC, AUC, PR-AUC, ECE, Brier, FPR@95%TPR reported together |
-| Base rate fallacy | Base rates span 1.3%–77.4% and are stated; alert volumes given at realistic rates |
+| Base rate fallacy | Base rates span 1.3%–77.4% and are stated; FPR at 95% TPR reported in Table 5; the balanced evaluation cap and its effect on prevalence-sensitive metrics stated in §3.5 |
 | Lab-only evaluation | Acknowledged in §6; all four datasets are testbed captures, which is part of the finding |
 | Inappropriate threat model | Scope stated as DoS/DDoS detection under network change, not adversarial evasion |
 
@@ -406,6 +405,35 @@ the two are not interchangeable.
 
 ---
 
+**The rest of the protocol's metrics agree, and one of them is the operational headline.**
+Table 2 commits to reporting PR-AUC, Brier score and FPR at 95% TPR alongside the ranking
+and threshold measures; they are collected on every run and summarised here.
+
+**Table 5. Probabilistic and operating-point metrics.** Means over runs; 80 in-domain
+(4 sources x 4 models x 5 seeds) and 240 external. ECE is reported separately in §4.8 from
+a dedicated calibration run at a different sample size.
+
+| model | regime | PR-AUC | Brier | FPR@95%TPR |
+|---|---|---:|---:|---:|
+| Logistic regression | in-domain | 0.8727 | 0.0582 | 0.1127 |
+| Logistic regression | external | 0.4886 | 0.3448 | 0.7519 |
+| Random forest | in-domain | 0.9847 | 0.0095 | 0.0077 |
+| Random forest | external | 0.4721 | 0.3448 | 0.7261 |
+| XGBoost | in-domain | 0.9897 | 0.0092 | 0.0068 |
+| XGBoost | external | 0.4721 | 0.4148 | 0.7063 |
+| **LightGBM (primary)** | in-domain | 0.9900 | 0.0086 | 0.0066 |
+| **LightGBM (primary)** | external | 0.4734 | 0.4294 | 0.7142 |
+
+PR-AUC falls to roughly chance for the balanced evaluation set in every family, so the
+collapse is not an artefact of macro-F1's treatment of the two classes. The Brier score
+rises by a factor between six and fifty. The number an operator would feel first is the
+last column: holding sensitivity at 95% of attacks, the false-positive rate on an
+unfamiliar network runs from 0.0066 to 0.7142 for the primary model. A detector that
+flagged two benign flows in a thousand at home flags seven in ten abroad, at the same
+recall.
+
+---
+
 ### 4.3 Representation or operating point?
 
 A collapsed macro-F1 admits two explanations with opposite remedies. The model may no
@@ -447,7 +475,7 @@ held out) and trained under 17 feature sets. Each set is evaluated on the same
 (source, seed) combinations as the full-feature baseline, so differences are paired and
 the bootstrap resamples pairs.
 
-**Table 5. Capacity ablation, paired differences against the full 39-feature set.**
+**Table 6. Capacity ablation, paired differences against the full 39-feature set.**
 
 | feature set | k | external macro-F1 | Δ vs `all` | 95% CI | p |
 |---|---:|---:|---:|---|---:|
@@ -477,7 +505,7 @@ the same 17 sets by external performance puts the smallest on top (Figure 4).
 **Figure 4.** Feature-set size against in-domain and external macro-F1. The single-feature set attains the best external score of any subset tested.
 
 
-**Table 6. External performance by feature-set size.**
+**Table 7. External performance by feature-set size.**
 
 | feature set | k | in-domain | external macro-F1 | Δ vs `all` | 95% CI | external AUC |
 |---|---:|---:|---:|---:|---|---:|
@@ -491,7 +519,7 @@ Every one of these differences is significant at p < 0.001. One feature out-gene
 
 That ordering cannot, on its own, tell dimensionality apart from feature identity: a one-bit DNS indicator and a four-feature throughput block differ in both. We therefore ran a control that varies size alone, sampling random subsets at controlled k over a 1 to 39 grid with splits, seeds, model and targets held fixed (584 runs).
 
-**Table 7. Random subsets at controlled size.** Median over subsets, sources and seeds; 5th and 95th percentiles in brackets.
+**Table 8. Random subsets at controlled size.** Median over subsets, sources and seeds; 5th and 95th percentiles in brackets.
 
 | k | in-domain | external macro-F1 | external AUC |
 |---:|---:|---|---:|
@@ -501,7 +529,7 @@ That ordering cannot, on its own, tell dimensionality apart from feature identit
 | 20 | 0.9842 | 0.3993 [0.2786, 0.5111] | 0.5898 |
 | 39 | 0.9843 | 0.3997 [0.3017, 0.4406] | 0.5843 |
 
-Size matters, and less than the semantic ablation implied. Across random subsets external macro-F1 falls from 0.5046 at k=1 to 0.3997 at k=39, Spearman -0.290 [-0.369, -0.210]. That accounts for **+0.105** of the one-feature advantage. The remaining **+0.147** is identity: `DNS_QUERY_ID` alone reaches 0.6512 where a random single feature reaches 0.5046. Both components are measured inside the control, against its own median 39-feature baseline of 0.3997, whereas Table 6's +0.2763 is a mean paired difference against the full-feature runs at 0.3748. One baseline is a median over random subsets and the other a mean over the full-feature set, so the two components do not sum to +0.2763 and are not a partition of it. What survives either normalisation is that dimensionality is the smaller share: most of the one-feature advantage is the feature, not the count.
+Size matters, and less than the semantic ablation implied. Across random subsets external macro-F1 falls from 0.5046 at k=1 to 0.3997 at k=39, Spearman -0.290 [-0.369, -0.210]. That accounts for **+0.105** of the one-feature advantage. The remaining **+0.147** is identity: `DNS_QUERY_ID` alone reaches 0.6512 where a random single feature reaches 0.5046. Both components are measured inside the control, against its own median 39-feature baseline of 0.3997, whereas Table 7's +0.2763 is a mean paired difference against the full-feature runs at 0.3748. One baseline is a median over random subsets and the other a mean over the full-feature set, so the two components do not sum to +0.2763 and are not a partition of it. What survives either normalisation is that dimensionality is the smaller share: most of the one-feature advantage is the feature, not the count.
 
 **The size component is a threshold effect, not a representational one.** Feature count correlates strongly with in-domain macro-F1 (Spearman +0.626 [+0.566, +0.679]) and negatively with external macro-F1 (-0.290), but is uncorrelated with external ROC-AUC (+0.004 [-0.081, +0.088]). Adding features sharpens separation at home and leaves the target ordering unchanged; what degrades is the usefulness of the operating point chosen against that sharper separation. This connects directly to §4.3 and to §3.6: perfect in-domain separability widens the tied-optimal threshold plateau and pushes the chosen threshold into a position that does not survive a change of network.
 
@@ -511,7 +539,7 @@ An earlier draft of this paper explained the ordering by supposing that a gradie
 own class as a null control, on the assumption that a 16-bit DNS transaction ID is random
 and any accuracy from it would be memorisation by construction. That assumption is wrong.
 
-**Table 8. `DNS_QUERY_ID` is a protocol indicator, not an identifier.**
+**Table 9. `DNS_QUERY_ID` is a protocol indicator, not an identifier.**
 
 | dataset | P(attack \| id = 0) | P(attack \| id ≠ 0) |
 |---|---:|---:|
@@ -538,7 +566,7 @@ We separate the two by holding size fixed and varying identity: every source is 
 the same 3,075 attack flows that NF-UNSW-NB15 actually has, and the transfer matrix is
 rerun over two model families and three seeds.
 
-**Table 9. Source-size control.** External ROC-AUC, 144 transfers.
+**Table 10. Source-size control.** External ROC-AUC, 144 transfers.
 
 | regime | source | n | mean external AUC | below chance |
 |---|---|---:|---:|---:|
@@ -568,7 +596,7 @@ Three decisions in §3.3 and §3.4 could in principle produce the effect this pa
 rather than expose it. Each is ablated over four sources and two seeds, holding everything
 else fixed.
 
-**Table 10. Preprocessing sensitivity.** Mean over four sources and two seeds. The primary
+**Table 11. Preprocessing sensitivity.** Mean over four sources and two seeds. The primary
 configuration is marked.
 
 | configuration | in-domain macro-F1 | external macro-F1 | external ROC-AUC |
@@ -596,7 +624,7 @@ adds source-dependent noise to the very quantity this paper estimates, and on th
 inversion in the study it would have hidden the finding.
 
 **Contradictory groups do not bind here.** Excluding them changes nothing at all: the two
-rows of Table 10 are identical because, under the DoS-only policy, there are no such groups
+rows of Table 11 are identical because, under the DoS-only policy, there are no such groups
 to exclude. Zero of 8,889,592 distinct feature vectors in NF-CSE-CIC-IDS2018 and zero of
 203,641 in NF-UNSW-NB15 carry both labels. The 1,940 and 858 groups counted in §3.3 all pair
 a benign flow with a non-DoS attack and disappear with those rows. The arbitrary-survivor
@@ -630,7 +658,7 @@ mean
 gap (LOPO MAE 0.0827). A predictor that cannot beat "assume the average drop" is not
 useful whatever its in-sample correlation.
 
-**Table 11. Label-free predictors of the observed gap.**
+**Table 12. Label-free predictors of the observed gap.**
 
 | predictor | inspects | Spearman | 95% CI | LOPO MAE | vs baseline |
 |---|---|---:|---|---:|---:|
@@ -673,7 +701,7 @@ tracks external AUC almost exactly (Figure 6).
 **Figure 6.** External macro-F1 under the deployed threshold, zero-label benign-quantile recalibration, and the all-labels oracle, ordered by external AUC.
 
 
-**Table 12. Zero-label recalibration by pair.**
+**Table 13. Zero-label recalibration by pair.**
 
 | pair | ext AUC | source thr | benign-quantile | oracle | headroom recovered |
 |---|---:|---:|---:|---:|---:|
@@ -699,7 +727,7 @@ detection exist and are not evaluated here.
 
 **Ten balanced labelled flows outperformed the zero-label baselines evaluated here.** Each budget k is drawn as k/2 benign and k/2 attack flows from the adaptation pool. That isolates the value of supervision from the difficulty of finding attacks, and it is an assumption: this is a controlled label-budget experiment, not a claim that ten flows sampled from live traffic would contain five attacks.
 
-**Table 13. Label budget, leakage-free.** Median over 20 independent label draws per
+**Table 14. Label budget, leakage-free.** Median over 20 independent label draws per
 (pair, budget), 12 ordered pairs, 2 seeds; 5th and 95th percentiles in brackets.
 
 | k labelled target flows | re-tune threshold | retrain on source + k |
@@ -740,7 +768,7 @@ space of unsupervised domain adaptation, and the claim is limited accordingly.
 
 ### 4.9 Which attacks stop being detected
 
-**Table 14. Per-family recall under transfer.**
+**Table 15. Per-family recall under transfer.**
 
 | attack family | in-domain | external | drop |
 |---|---:|---:|---:|
@@ -777,7 +805,7 @@ is.
 
 ### 4.11 Correcting label errors makes transfer look worse
 
-**Table 15. Original versus corrected CICIDS2017, identical source model.**
+**Table 16. Original versus corrected CICIDS2017, identical source model.**
 
 | model | original | corrected | Δ macro-F1 |
 |---|---:|---:|---:|
