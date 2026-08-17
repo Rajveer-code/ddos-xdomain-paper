@@ -37,7 +37,7 @@ The default reading is quantitative. The model is somewhat overfitted to its tra
 network and performance degrades, so the remedies are the familiar three: engineer
 features that describe the attack rather than the capture, monitor the distance between
 training and deployment distributions, and recalibrate the decision threshold on arrival.
-This paper tests all three and finds the reading wrong in a way that matters.
+This paper tests a representative version of each and finds the reading incomplete in a way that matters.
 
 Running every ordered pair among four independently captured testbeds, on the NetFlow v2
 common feature set, with exact de-duplication and source-only preprocessing, we find that
@@ -45,7 +45,7 @@ transfer does not decay toward chance. It passes through chance. Mean external R
 0.5054; 108 of 240 run-level external evaluations fall *below* 0.5, as do 5 of the 12
 ordered pairs once seeds are averaged; one pair reaches **0.0697**.
 
-That last number is the paper. An AUC of 0.0697 is not weak evidence; it is strong evidence with the wrong sign. Attack flows are systematically assigned lower scores than benign flows, and negating the detector's output would yield an ROC-AUC of approximately 0.9303. Note that this is a statement about ranking, not about accuracy: ROC-AUC is threshold-free, and the accuracy of a negated detector would still depend on the operating point and the target prevalence. A model at chance carries no usable ordering. A model at 0.0697 carries a strong ordering with the sign reversed.
+That last number is what an aggregate near chance conceals. An AUC of 0.0697 is not weak evidence; it is strong evidence with the wrong sign. Attack flows are systematically assigned lower scores than benign flows, and negating the detector's output would yield an ROC-AUC of approximately 0.9303. Note that this is a statement about ranking, not about accuracy: ROC-AUC is threshold-free, and the accuracy of a negated detector would still depend on the operating point and the target prevalence. A model at chance carries no usable ordering. A model at 0.0697 carries a strong ordering with the sign reversed.
 
 A plausible mechanism is easy to state. If high throughput marks attack traffic in one testbed and marks the busiest legitimate hosts in another, a decision surface fitted to the first is close to optimal-but-negated on the second. Two of our own results constrain what that mechanism can be. Logistic regression inverts on the same pairs as the tree ensembles (§4.2), so it cannot require high-order feature interactions, which a linear model cannot represent. And feature count is uncorrelated with external ranking quality (§4.4), so it is not a matter of model capacity either. What remains is the simplest reading: individual feature-label associations reverse sign between these networks. We do not isolate which associations, and §6 says so.
 
@@ -556,7 +556,7 @@ rerun over two model families and three seeds.
 
 Starving the other three sources does not make them invert. Their mean external AUC moves
 from 0.6147 at the full cap to 0.6155 when reduced to NF-UNSW-NB15's attack count, a
-difference of 0.0008. Whatever produces the inversion, it is not the number of positives.
+difference of 0.0008. The inversion is therefore not explained by the number of positive training flows alone.
 
 NF-UNSW-NB15 inverts under both regimes and remains 0.227 below the other sources at
 identical size. The explanation is a property of that network rather than of its sample.
@@ -621,8 +621,7 @@ Logistic regression is where the choice can bind, and there it is mildly harmful
 clipping improves external macro-F1 by 0.0223 and external ROC-AUC by 0.0165. Clipping
 touches between 4,014 and 51,468 target rows per source-seed, so the intervention is not
 negligible in scope. The direction matters for the paper's honesty rather than its
-conclusion. Clipping is a conservative choice that costs a little external performance; it
-does not manufacture the collapse. Unclipped logistic regression still transfers at 0.5460
+conclusion. For the tree-based primary model clipping is immaterial; for logistic regression the chosen policy modestly reduces external performance. Neither manufactures the collapse. Unclipped logistic regression still transfers at 0.5460
 overall, and on NF-UNSW-NB15 it still inverts, at 0.4087.
 
 None of the three decisions creates the effect. One of them, de-duplication, would have
@@ -761,7 +760,7 @@ Volumetric floods, the largest and most conspicuous attacks and the class a dete
 least expected to miss, transfer worst, retaining 5.35% recall. This follows directly from
 §4.2: a flood is defined by rates being high, and "high" is a property of the capturing
 testbed. Low-rate application-layer attacks, defined by request patterns rather than
-volume, survive four times better.
+volume, had roughly four times the external recall, an estimate limited by how few low-rate flows survive de-duplication.
 
 ### 4.10 The pairing chosen governs the conclusion
 
@@ -806,11 +805,10 @@ this margin.
 
 The practical reading of these results is narrow and, we think, useful.
 
-A detector validated on one network carries no evidence about its behaviour on another,
+Validation on one network provides no empirical guarantee of behaviour on another,
 and the failure it will exhibit is not conservatism. It will keep issuing confident
 verdicts while its ranking is wrong or reversed, at an external ECE two orders of magnitude
-above its in-domain value. Monitoring for drift by comparing feature distributions will not
-raise the alarm, because that distance does not track the loss. Monitoring the model's own
+above its in-domain value. The three marginal feature-distribution measures evaluated here would not raise the alarm for these failures, because those distances did not track the loss. Monitoring the model's own
 confidence will, imperfectly.
 
 The remedy hierarchy inverts the usual order of effort. Zero-label feature alignment by
