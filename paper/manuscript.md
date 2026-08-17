@@ -16,10 +16,7 @@ help: we pre-specified the hypothesis that capacity-bound features carry testbed
 identity, and removing all twenty of them changes external macro-F1 by +0.0132 [-0.0084,
 +0.0320], an interval spanning zero, so the hypothesis is not supported at the power this
 study affords. A one-feature set does reach external macro-F1 0.6512 against 0.3748 for all 39, a paired difference of +0.2763 [+0.2230, +0.3366], but a control over random subsets at controlled size shows that dimensionality accounts for the smaller part of this and the identity of that feature — a DNS indicator that is itself a dataset shortcut — for the larger. Feature count tracks in-domain separability (Spearman +0.626) and external macro-F1 (-0.290) while leaving external ranking untouched (+0.004 [-0.081, +0.088]), making it a threshold effect rather than a representational one. Distribution-divergence monitoring did not work in this benchmark: proxy A-distance, RBF-MMD and summed Wasserstein distance all predicted the observed loss worse than assuming the average drop, while the model's own confidence
-(ATC) reaches Spearman −0.726 and cuts leave-one-pair-out error by 24%. Recalibration
-works for one pair in twelve, the only one whose ranking survived, where a threshold
-read from target benign traffic recovers 97.0% of the available headroom using no attack
-labels, but pooled over held-out evaluation sets that recalibration is net harmful. Ten labelled target flows, used to retrain, reach median macro-F1 0.7253 [0.5604, 0.9540] and exceed what the best achievable threshold reaches with unlimited target labels (0.6158).
+(ATC) reaches Spearman −0.726 and cuts leave-one-pair-out error by 24%. Recalibration works for one pair in twelve: in the primary LightGBM analysis it is the only pair whose ranking survived, and there a threshold read from target benign traffic recovers 97.0% of the available headroom using no attack labels, but pooled over held-out evaluation sets that recalibration is net harmful. Ten labelled target flows, used to retrain, reach median macro-F1 0.7253 [0.5604, 0.9540] and exceed what the best achievable threshold reaches with unlimited target labels (0.6158).
 Finally, the failure mode depends strongly on the dataset pair: the same-lineage CIC pairing failed mainly at the threshold and looked recoverable, while the independently built transfers failed at the ranking. Cross-network evaluation therefore has to distinguish ranking failure from threshold failure, because the two admit different remedies.
 
 **Keywords:** network intrusion detection, DDoS, cross-dataset generalisation,
@@ -67,8 +64,7 @@ predict the observed loss *worse* than assuming the average drop. What does carr
 is the model's own confidence: Average Thresholded Confidence reaches Spearman −0.726 and
 cuts leave-one-pair-out error by 24%.
 
-**Recalibration works for one pair in twelve.** Decomposing each failure into ranking loss
-and threshold loss shows eleven of twelve fail representationally. For the single
+**Recalibration works for one pair in twelve.** Decomposing each failure in the primary LightGBM analysis into ranking loss and threshold loss shows eleven of twelve fail representationally. For the single
 ranking-preserving pair, a threshold read from target benign traffic, which requires no
 attack labels, recovers 97.0% of the available headroom. On three others it is actively
 harmful.
