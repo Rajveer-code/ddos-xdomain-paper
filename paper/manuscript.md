@@ -700,7 +700,7 @@ over all pairs, which is indistinguishable from doing nothing. This bounds CORAL
 specifically; stronger representation-learning approaches to domain-invariant intrusion
 detection exist and are not evaluated here.
 
-**Ten labelled flows outperformed the zero-label baselines evaluated here.**
+**Ten balanced labelled flows outperformed the zero-label baselines evaluated here.** Each budget k is drawn as k/2 benign and k/2 attack flows from the adaptation pool. That isolates the value of supervision from the difficulty of finding attacks, and it is an assumption: this is a controlled label-budget experiment, not a claim that ten flows sampled from live traffic would contain five attacks.
 
 **Table 13. Label budget, leakage-free.** Median over 20 independent label draws per
 (pair, budget), 12 ordered pairs, 2 seeds; 5th and 95th percentiles in brackets.
@@ -727,14 +727,13 @@ report the corrected design here. The direction of the error is worth stating: t
 contaminated run gave 0.7099 at k=10 against 0.7253 for the clean one, so the leak was
 depressing the estimate slightly rather than inflating it, and the conclusion is unchanged.
 
-Ten labelled flows lift median external macro-F1 from 0.3919 to 0.7253, a hundred reach 0.9116, and a thousand reach 0.9574 against an in-domain ceiling near 0.98 (Figure 7). Re-tuning the threshold on the same labels plateaus at roughly 0.61, and the reason is structural rather than empirical: no threshold applied to a reversed ordering recovers it, whatever the label budget.
+Ten balanced labelled flows lift median external macro-F1 from 0.3919 to 0.7253, a hundred reach 0.9116, and a thousand reach 0.9574 against an in-domain ceiling near 0.98 (Figure 7). Re-tuning the threshold on the same labels plateaus at roughly 0.61, and the reason is structural rather than empirical: changing a threshold cannot restore discrimination when the score ordering itself is reversed, because a threshold only chooses a cut point on an ordering it cannot change. Recovering the ordering requires changing the scoring function, which is what target labels buy.
 
-The sharpest comparison is against the oracle. The best threshold obtainable on the evaluation set with unlimited target labels reaches 0.6158. Retraining on **ten** labelled flows reaches 0.7253 and so exceeds it. Recalibration and supervision are not two points on one scale; beyond a certain point recalibration cannot buy what a few labels buy immediately.
+The sharpest comparison is against a **target-optimal threshold oracle**: the best threshold obtainable on the evaluation set with unlimited target labels, which reaches 0.6158. It is an oracle rather than a zero-label method, since it consumes target labels without limit. Retraining on **ten** balanced labelled flows reaches 0.7253 and so exceeds it. Recalibration and supervision are not two points on one scale; beyond a certain point recalibration cannot buy what a few labels buy immediately.
 
-Recovery is uneven across pairs, and unevenly in an informative direction. NF-UNSW-NB15 to NF-CSE-CIC-IDS2018, the most strongly inverted transfer in the study at ROC-AUC 0.070, reaches 0.9076 [0.8174, 0.9566] with ten labels. That is what inversion predicts: the ordering still carries the information, with the sign reversed, and a small labelled sample is enough to supply the sign. The
+Recovery is uneven across pairs, and unevenly in an informative direction. NF-UNSW-NB15 to NF-CSE-CIC-IDS2018, the most strongly inverted transfer in the study at ROC-AUC 0.070, reaches 0.9076 [0.8174, 0.9566] with ten balanced labels. That is what inversion predicts: the ordering still carries the information, with the sign reversed, and a small labelled sample is enough to supply the sign. The
 operational reading, at the scope the evidence supports, is that in this benchmark a small
-labelled target sample was substantially more effective than the zero-label baselines
-tested. We evaluated one covariance-alignment method and one threshold heuristic, not the
+balanced labelled target sample was substantially more effective than the zero-label baselines tested. We evaluated one covariance-alignment method and one threshold heuristic, not the
 space of unsupervised domain adaptation, and the claim is limited accordingly.
 
 ![Figure 7](../figures/fig7_label_budget.png)
@@ -809,7 +808,7 @@ confidence will, imperfectly.
 
 The remedy hierarchy inverts the usual order of effort. Zero-label feature alignment by
 CORAL recovers 0.0029 macro-F1; a benign-quantile threshold helps substantially in the one
-regime where ranking survived and hurts in three others; ten labelled flows recover 0.3323.
+regime where ranking survived and hurts in three others; ten balanced labelled flows recover 0.3323.
 For an operator, the cheapest useful action is also the most effective one: label ten flows
 from the network you actually run. The ordering holds for the zero-label methods we
 evaluated and is not a claim about unsupervised domain adaptation in general.
@@ -893,8 +892,7 @@ separates the classes without describing attack behaviour. Feature count moves t
 operating point and leaves external ranking alone. Distribution-divergence monitoring does
 not predict the loss; model confidence partially does. Recalibration recovers almost
 everything in the one regime where ranking survived and is net harmful pooled across the
-others, and ten labelled target flows beat every zero-label method we evaluated, including
-the best threshold that unlimited target labels can buy.
+others, and ten balanced labelled target flows beat the zero-label methods we evaluated and also exceed the target-optimal threshold oracle, which consumes unlimited target labels but can only move a cut point along an ordering it cannot repair.
 
 Underneath all of it, these benchmarks are up to 99.7% duplicate, and correcting known
 label errors moves measured transfer *down* by 0.1437 macro-F1. The in-domain numbers this
