@@ -169,7 +169,7 @@ most of the gap.
 The design in one paragraph. Four intrusion-detection datasets, each captured on a
 different testbed, are reduced to a single shared 39-feature space. For each dataset in
 turn, four model families are trained on 80% of it and evaluated twice: on its own held-out
-20%, which we call **in-domain**, and on each of the other three datasets, which we call **external**. Nothing about the target is used in fitting: not its labels, not its
+20%, which we call **in-domain**, and on each of the other three datasets, which we call **external**. In the primary transfer experiment nothing about the target is used in fitting: not its labels, not its
 feature statistics, not its threshold. The quantity of interest is the difference between
 those two evaluations, and every design decision below exists to ensure that difference
 measures domain change rather than an artefact of preparation.
@@ -248,21 +248,18 @@ The order of operations is the substance of the protocol:
 
 Splits are stratified 80/20 and seeded. Scaler and median imputer are fitted on
 source-train alone and applied unchanged to the source test split and to every target.
-Target features are clipped to the range the scaler observed; the clipping is ablated in §4.6, not assumed. Imbalance is handled with balanced sample weights, never resampling, since SMOTE
+Target features are clipped to the range the scaler observed; the clipping is ablated in §4.6, not assumed. Imbalance is handled with balanced sample weights, never resampling, in all model fitting reported here; the label-budget experiment of §4.8 deliberately draws a balanced labelled adaptation set, which is a controlled supervision-budget intervention rather than a training-time resampling choice, since SMOTE
 applied before a split leaks synthetic neighbours across it. Models are LightGBM
 (primary), XGBoost, RandomForest and LogisticRegression at fixed hyperparameters, with no
 tuning against any target. Five seeds are used for the transfer matrix and three for the ablations and remedy experiments, which are correspondingly more expensive; the asymmetry is a cost decision and every reported interval states the number of pairs it rests on.
 
 A stratified cap of 50,000 rows per class bounds cost, and it is applied to **both** the source and the target: external metrics are computed on a seeded stratified sample of the de-duplicated target, not on the target in full. Because the cap equalises the two classes it also changes the evaluated prevalence, which moves every prevalence-sensitive metric. This is why ROC-AUC, which is invariant to prevalence under a fixed score ordering, carries the paper's central claim, and macro-F1 and MCC are read alongside it rather than in place of it.
 
-The leakage guarantee is asserted rather than documented. The pipeline self-check verifies
-that a scaler fitted on train maps train exactly into [0, 1] **and** lets some unseen test
-rows fall outside it; a scaler that had seen the test set fails this check.
+The order of operations that carries the leakage guarantee is: de-duplicate, then split, then fit. Exact duplicates are removed from a dataset before any partition is drawn, so no feature vector can appear on both sides of a split. The imputer and the scaler are fitted on the source training partition alone and applied unchanged to the source evaluation partition and to every target; the decision threshold is chosen on the source evaluation partition (§3.6). No target label, target feature statistic or target-derived threshold enters the primary transfer experiment. A pipeline self-check verifies the scaler property on every run: a scaler fitted on train maps train exactly into [0, 1] **and** lets some unseen rows fall outside it, which a scaler that had seen those rows cannot do.
 
 ### 3.6 Choosing the operating threshold
 
-The decision threshold is tuned on the source test split, never on target data, and taken
-as the midpoint of the widest tied-optimal plateau, over candidates placed between
+The decision threshold is chosen on the source evaluation split, never on target data, and taken as the midpoint of the widest tied-optimal plateau, over candidates placed between
 consecutive score levels.
 
 This is not a detail. In-domain AUC here routinely reaches 1.0000, so a wide interval of
