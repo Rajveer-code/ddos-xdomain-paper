@@ -140,16 +140,27 @@ def fig_decomposition(matrix):
         agg[k]["auc"].append(r["metrics"]["roc_auc"])
 
     fig, ax = plt.subplots(figsize=(5.8, 5.0))
-    for (s, t), v in agg.items():
+    # Labels are placed left of points in the right half so none runs off the axis, and
+    # nudged vertically when a already-placed label sits close enough to overlap.
+    placed: list[tuple[float, float]] = []
+    for (s, t), v in sorted(agg.items(), key=lambda kv: mean(kv[1]["r"])):
         x, y = mean(v["r"]), mean(v["t"])
         ax.scatter(x, y, s=46, color=OKABE[0] if x > y else OKABE[2], zorder=3)
+        left = x > 0.55
+        free = [d for d in (4.0, -11.0, 14.0, -21.0, 24.0, -31.0)
+                if 0.02 < y + d / 260 < 0.98
+                and not any(abs(x - px) < 0.22 and abs(y + d / 260 - py) < 0.035
+                            for px, py in placed)]
+        dy = free[0] if free else 4.0
         ax.annotate(f"{SHORT[s]}→{SHORT[t]}", (x, y), fontsize=7,
-                    xytext=(4, 4), textcoords="offset points")
+                    xytext=(-5 if left else 5, dy), textcoords="offset points",
+                    ha="right" if left else "left", va="center")
+        placed.append((x, y + dy / 260))
     lim = 1.0
     ax.plot([0, lim], [0, lim], "k--", lw=1, zorder=1)
     ax.text(0.72, 0.60, "threshold-limited\n(recalibration helps)", fontsize=7.5,
             color=OKABE[2], ha="center")
-    ax.text(0.62, 0.06, "ranking-limited\n(recalibration cannot help)", fontsize=7.5,
+    ax.text(0.86, 0.50, "ranking-limited\n(recalibration cannot help)", fontsize=7.5,
             color=OKABE[0], ha="center")
     ax.set_xlabel("ranking loss  (in-domain AUC − external AUC)")
     ax.set_ylabel("threshold loss  (oracle − stale threshold, macro-F1)")
