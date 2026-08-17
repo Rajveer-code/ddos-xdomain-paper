@@ -39,6 +39,8 @@ features that describe the attack rather than the capture, monitor the distance 
 training and deployment distributions, and recalibrate the decision threshold on arrival.
 This paper tests a representative version of each and finds the reading incomplete in a way that matters.
 
+There is a structural reason to expect the two readings to diverge. Drift monitoring watches $P(X)$, the distribution of the features. What decides whether a detector still works is $P(Y \mid X)$, the relationship between features and labels. Nothing ties the two together: a target network can look statistically familiar and score differently, or look alien and score the same. That gap is what the experiments below exploit, and it is why the divergence measures in §4.7 fail as risk predictors while a measure of the model's own behaviour does not.
+
 Running every ordered pair among four independently captured testbeds, on the NetFlow v2
 common feature set, with exact de-duplication and source-only preprocessing, we find that
 transfer does not decay toward chance. It passes through chance. Mean external ROC-AUC is
@@ -93,15 +95,13 @@ established reference scores on CIC-IDS2017 and CSE-CIC-IDS2018 across twelve su
 algorithms and concluded that the classifiers could not operate reliably on traffic from a
 network unseen at training time. Cantone et al. [2024] extended the design to four datasets
 and four classifiers, reported cross-dataset accuracy largely commensurate with random
-chance, and traced part of it to anomalies in the data itself.
+chance, and traced part of it to anomalies in the data itself. The question has stayed open: Hossain et al. [2026] report cross-dataset accuracy below 40% between UNSW-NB15 and ToN-IoT for models scoring above 95% within either one, and Elangovan et al. [2026] find the same pattern across four datasets when generalisation is tested temporally and semantically rather than within a single capture.
 
 Our study shares their protocol and departs on the question. Prior work establishes *that*
 the gap exists and how large it is. We ask what kind of failure it is. That distinction is
 not rhetorical: an aggregate accuracy near chance is compatible with a detector that has
 lost its signal and with one that has reversed it, and only the second is visible once
-ROC-AUC is reported per ordered pair. The remedies implied by the two readings differ
-completely, which is why sections 4.4 to 4.6 test three of them rather than proposing a
-fourth.
+ROC-AUC is reported per ordered pair. The remedies implied by the two readings differ completely, which is why we test a representative version of each rather than proposing a fourth.
 
 ### 2.2 Feature standardisation and dataset quality
 
@@ -114,6 +114,8 @@ assumption. The four source datasets themselves are CSE-CIC-IDS2018 [Sharafaldin
 [Moustafa and Slay 2015]; the secondary study uses CIC-DDoS2019 [Sharafaldin et al. 2019]
 and CICIDS2017 [Sharafaldin et al. 2018].
 
+A second line of work asks not whether the labels are right but whether the features are honest. D'hooge et al. [2022a] showed that metadata fields, destination port above all, act as shortcuts strong enough to separate ten intrusion-detection datasets at 70–100% accuracy on their own; D'hooge et al. [2022b] extended the search to non-metadata contaminants, and D'hooge et al. [2021] showed how much of the apparent value of a large feature set is carried by a small block of it. Goldschmidt and Chudá [2025] survey 89 public NIDS datasets and reach a compatible conclusion about how dataset construction shapes what models learn. Our `DNS_QUERY_ID` result (§4.4) is an instance of the phenomenon they describe, and we do not present shortcut features as a discovery. What is new here is what a shortcut does across networks rather than within one: the same feature space that inflates in-domain scores can also produce a *reversed* target ordering, and the failure mode determines whether recalibration or target supervision is the right response.
+
 Dataset quality has its own literature. Engelen et al. [2021] documented labelling and
 traffic-generation defects in CICIDS2017 and released a corrected version; Lanvin et al.
 [2022] extended the analysis and quantified the effect of the corrections on measured
@@ -123,9 +125,7 @@ corrected targets isolates label error from domain shift, and the result runs op
 the intuitive direction (§4.11).
 
 Our duplicate accounting (§3.3) is adjacent to this work but, to our knowledge, has not
-been reported at this scale for the NetFlow v2 datasets. That three of four are more than
-80% duplicate in the model's own feature space bounds every in-domain number computed on
-them.
+been reported at this scale for the NetFlow v2 datasets. That three of four are more than 80% duplicate in the model's own feature space constrains how in-domain numbers computed on them should be read, and §4.6 measures how much it moves the transfer results themselves.
 
 ### 2.3 Methodology and evaluation norms
 
@@ -468,7 +468,7 @@ Flow features divide into those describing *how much traffic moved and how fast*
 did* (protocol, TCP flags, TTLs, retransmissions). The first group's values are set partly
 by the capturing testbed's link capacity and generator configuration. The hypothesis this
 study was designed around is that these **capacity features** inflate in-domain accuracy
-while carrying testbed identity, so removing them should recover external performance. It was committed to the project repository before the experiment ran; the commit recording it precedes the commit carrying the result by two hours and seventeen minutes. The repository was private at that time and made public on release, so this is time-stamped pre-specification in version history rather than public pre-registration, and we claim only the former.
+while carrying testbed-associated structure, so removing them should recover external performance. It was committed to the project repository before the experiment ran; the commit recording it precedes the commit carrying the result by two hours and seventeen minutes. The repository was private at that time and made public on release, so this is time-stamped pre-specification in version history rather than public pre-registration, and we claim only the former.
 
 We assigned all 39 features to one of five semantic classes (20 capacity, 18 semantic, 1
 held out) and trained under 17 feature sets. Each set is evaluated on the same
@@ -490,7 +490,7 @@ Removing every capacity feature moves external macro-F1 by +0.0132, and the inte
 **The coarse grouping does, however, hide one real sub-effect.** Dropping the 13
 size and volume features alone yields +0.0615 [+0.0278, +0.0991], p < 0.001, and dropping
 the three duration features yields +0.0114 [+0.0009, +0.0277], p = 0.021. Byte and packet
-counts do carry testbed identity in the way the hypothesis anticipated. What fails is the
+counts do carry testbed-associated structure in the way the hypothesis anticipated. What fails is the
 aggregation: bundling them with the throughput features, which contribute nothing
 (−0.0010 [−0.0033, +0.0013]), dilutes the effect to non-significance. A semantic partition
 chosen a priori was the wrong instrument, and we report that rather than re-cutting the
@@ -842,6 +842,8 @@ be read as an endorsement of one-feature detectors, since its in-domain score of
 unusable. It is a statement about what the other 38 features are doing, which is encoding a
 testbed at a 0.2764 external cost.
 
+**What this does not settle.** The experiments do not identify which feature-label associations reverse sign; invariance across four hypothesis classes narrows the candidates without naming them. They do not show that unsupervised domain adaptation fails in general, only that one covariance-alignment method and one threshold heuristic did not recover the loss here. They do not show that drift monitoring is hopeless, only that three marginal divergence measures carried no usable signal across twelve pairs. And ten balanced labels are a controlled budget, not a deployment procedure. What the study does establish is a taxonomy of cross-network failure and the fact that which intervention helps depends on whether the target ranking survived.
+
 Finally, §4.10 has a methodological consequence beyond this paper. Because the failure mode
 depends on whether the source and target share a lineage, the community's habit of
 evaluating transfer within a single institution's dataset family produces optimistic and
@@ -982,3 +984,15 @@ result.
 14. Alsaedi, A., Moustafa, N., Tari, Z., Mahmood, A., and Anwar, A. "TON_IoT telemetry
     dataset: A new generation dataset of IoT and IIoT for data-driven intrusion detection
     systems." *IEEE Access* 8, 165130–165150, 2020.
+
+15. D'hooge, L., Verkerken, M., Volckaert, B., Wauters, T., and De Turck, F. "Establishing the Contaminating Effect of Metadata Feature Inclusion in Machine-Learned Network Intrusion Detection Models." *Detection of Intrusions and Malware, and Vulnerability Assessment (DIMVA), Lecture Notes in Computer Science*, 23--41, 2022a.
+
+16. D'hooge, L., Verkerken, M., Wauters, T., Volckaert, B., and De Turck, F. "Discovering Non-Metadata Contaminant Features in Intrusion Detection Datasets." *19th Annual International Conference on Privacy, Security and Trust (PST)*, 1--11, 2022b.
+
+17. D'hooge, L., Verkerken, M., Wauters, T., Volckaert, B., and De Turck, F. "Hierarchical feature block ranking for data-efficient intrusion detection modeling." *Computer Networks* 201, 108613, 2021.
+
+18. Goldschmidt, P., and Chudá, D. "Network intrusion datasets: A survey, limitations, and recommendations." *Computers & Security* 156, 104510, 2025.
+
+19. Hossain, M. Z., Khan, M. A. R., Islam, M. R., Islam, S. M. S., and Gedeon, T. "Assessing Generalisation Capability of Machine Learning Models for Intrusion Detection." *arXiv:2605.04407*, 2026.
+
+20. Elangovan, R., Parthasarathy, D. D., Jawahar, M., Kaliyaperumal, P., Balusamy, B., Yogarayan, S., and Venkatesan, V. "Cross-Dataset Temporal and Semantic Generalization of Intrusion Detection Models for the Future Internet." *Future Internet* 18(4), 194, 2026.
