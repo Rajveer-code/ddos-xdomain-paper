@@ -477,16 +477,15 @@ the bootstrap resamples pairs.
 
 **Table 6. Capacity ablation, paired differences against the full 39-feature set.**
 
-| feature set | k | external macro-F1 | Δ vs `all` | 95% CI | p |
-|---|---:|---:|---:|---|---:|
-| `semantic_only` | 18 | 0.3896 | +0.0148 | [−0.0077, +0.0341] | 0.174 |
-| `no_capacity` | 19 | 0.3881 | +0.0132 | [−0.0084, +0.0320] | 0.209 |
-| **`all`** | **39** | **0.3748** | 0 | n/a | n/a |
-| `drop_rate_throughput` | 35 | 0.3739 | −0.0010 | [−0.0033, +0.0013] | 0.406 |
-| `capacity_only` | 20 | 0.3738 | −0.0011 | [−0.0293, +0.0314] | 0.915 |
+| feature set | k | external macro-F1 | Δ vs `all` | 95% CI | p | external AUC |
+|---|---:|---:|---:|---|---:|---:|
+| `semantic_only` | 18 | 0.3896 | +0.0148 | [−0.0077, +0.0341] | 0.174 | 0.5394 |
+| `no_capacity` | 19 | 0.3881 | +0.0132 | [−0.0084, +0.0320] | 0.209 | 0.5386 |
+| **`all`** | **39** | **0.3748** | 0 | n/a | n/a | 0.4931 |
+| `drop_rate_throughput` | 35 | 0.3739 | −0.0010 | [−0.0033, +0.0013] | 0.406 | 0.4882 |
+| `capacity_only` | 20 | 0.3738 | −0.0011 | [−0.0293, +0.0314] | 0.915 | 0.5221 |
 
-Removing every capacity feature moves external macro-F1 by +0.0132, and the interval spans
-zero. The hypothesis is not supported. We state that carefully: this is a failure to detect an effect, not a demonstration that none exists. The interval does not exclude effects up to roughly three points of macro-F1 in either direction, and with 12 source-seed pairs the study is not positioned to resolve differences of that size.
+Removing every capacity feature moves external macro-F1 by +0.0132, and the interval spans zero. The hypothesis is not supported. The last column adds something the pre-specified test could not see: on the ranking metric, capacity removal does move the needle, from 0.4931 to 0.5386, which is the difference between inverting and not. We flag this as an observation rather than a result — external AUC was not the pre-specified endpoint and no paired interval was computed for it — but it points the same way as §4.4's conclusion that feature choices act on the operating point and the ranking separately. We state that carefully: this is a failure to detect an effect, not a demonstration that none exists. The interval does not exclude effects up to roughly three points of macro-F1 in either direction, and with 12 source-seed pairs the study is not positioned to resolve differences of that size.
 
 **The coarse grouping does, however, hide one real sub-effect.** Dropping the 13
 size and volume features alone yields +0.0615 [+0.0278, +0.0991], p < 0.001, and dropping
