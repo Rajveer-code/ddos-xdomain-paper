@@ -120,6 +120,11 @@ repairs it. Sections 5 and 6 give the practical reading and the limits.
 
 ## 2. Related work
 
+Four strands bear on this study: the measured size of the cross-dataset gap, the feature
+spaces those measurements are taken in, the quality of the underlying captures, and what
+can be estimated about a deployment before any target label exists. Each strand has
+established that something goes wrong. None of them settles what kind of failure it is.
+
 ### 2.1 The cross-dataset gap
 
 That flow-based intrusion detectors transfer badly is not in dispute. D'Hooge et al. [2020]
@@ -127,39 +132,61 @@ established reference scores on CIC-IDS2017 and CSE-CIC-IDS2018 across twelve su
 algorithms and concluded that the classifiers could not operate reliably on traffic from a
 network unseen at training time. Cantone et al. [2024] extended the design to four datasets
 and four classifiers, reported cross-dataset accuracy largely commensurate with random
-chance, and traced part of it to anomalies in the data itself. The question has stayed open: Hossain et al. [2026] report cross-dataset accuracy below 40% between UNSW-NB15 and ToN-IoT for models scoring above 95% within either one, and Elangovan et al. [2026] find the same pattern across four datasets when generalisation is tested temporally and semantically rather than within a single capture.
+chance, and traced part of it to anomalies in the data itself. The question has stayed
+open: Hossain et al. [2026] report cross-dataset accuracy below 40% between UNSW-NB15 and
+ToN-IoT for models scoring above 95% within either one, and Elangovan et al. [2026] find
+the same pattern across four datasets when generalisation is tested temporally and
+semantically rather than within a single capture.
 
 Our study shares their protocol and departs on the question. Prior work establishes *that*
 the gap exists and how large it is. We ask what kind of failure it is. That distinction is
 not rhetorical: an aggregate accuracy near chance is compatible with a detector that has
 lost its signal and with one that has reversed it, and only the second is visible once
-ROC-AUC is reported per ordered pair. The remedies implied by the two readings differ completely, which is why we test a representative version of each rather than proposing a fourth.
+ROC-AUC is reported per ordered pair. The remedies implied by the two readings differ
+completely, which is why we test a representative version of each rather than proposing a
+fourth.
 
-### 2.2 Feature standardisation and dataset quality
+### 2.2 Shared feature spaces, and what hides inside them
 
 Sarhan et al. [2021] identified the absence of a common feature set as a structural
 obstacle to cross-dataset claims, and released NetFlow v2 conversions of four datasets
 sharing 43 fields. We adopt that feature set precisely so our transfer results cannot be
 attributed to ad-hoc harmonisation, and verify the shared space by assertion rather than
-assumption. The four source datasets themselves are CSE-CIC-IDS2018 [Sharafaldin et al.
-2018], BoT-IoT [Koroniotis et al. 2019], ToN-IoT [Alsaedi et al. 2020] and UNSW-NB15
-[Moustafa and Slay 2015]; the secondary study uses CIC-DDoS2019 [Sharafaldin et al. 2019]
-and CICIDS2017 [Sharafaldin et al. 2018].
+assumption. The four sources are CSE-CIC-IDS2018 [Sharafaldin et al. 2018], BoT-IoT
+[Koroniotis et al. 2019], ToN-IoT [Alsaedi et al. 2020] and UNSW-NB15 [Moustafa and Slay
+2015]; the secondary study uses CIC-DDoS2019 [Sharafaldin et al. 2019] and CICIDS2017
+[Sharafaldin et al. 2018].
 
-A second line of work asks not whether the labels are right but whether the features are honest. D'hooge et al. [2022a] showed that metadata fields, destination port above all, act as shortcuts strong enough to separate ten intrusion-detection datasets at 70–100% accuracy on their own; D'hooge et al. [2022b] extended the search to non-metadata contaminants, and D'hooge et al. [2021] showed how much of the apparent value of a large feature set is carried by a small block of it. Goldschmidt and Chudá [2025] survey 89 public NIDS datasets and reach a compatible conclusion about how dataset construction shapes what models learn. Our `DNS_QUERY_ID` result (§4.4) is an instance of the phenomenon they describe, and we do not present shortcut features as a discovery. What is new here is what a shortcut does across networks rather than within one: the same feature space that inflates in-domain scores can also produce a *reversed* target ordering, and the failure mode determines whether recalibration or target supervision is the right response.
+A standard feature space settles one problem and exposes another. A second line of work
+asks not whether the labels are right but whether the features are honest. D'hooge et al.
+[2022a] showed that metadata fields, destination port above all, act as shortcuts strong
+enough to separate ten intrusion-detection datasets at 70–100% accuracy on their own;
+D'hooge et al. [2022b] extended the search to non-metadata contaminants; and D'hooge et al.
+[2021] showed how much of the apparent value of a large feature set is carried by a small
+block of it. Goldschmidt and Chudá [2025] survey 89 public NIDS datasets and reach a
+compatible conclusion about how dataset construction shapes what models learn.
 
-Dataset quality has its own literature. Engelen et al. [2021] documented labelling and
-traffic-generation defects in CICIDS2017 and released a corrected version; Lanvin et al.
-[2022] extended the analysis and quantified the effect of the corrections on measured
-performance. Both studies examine in-domain consequences. We use the corrected release
-differently, as an instrument: applying one identical source model to the original and
-corrected targets isolates label error from domain shift, and the result runs opposite to
-the intuitive direction (§4.11).
+Our `DNS_QUERY_ID` result (§4.4) is an instance of the phenomenon that literature
+describes, and we do not present shortcut features as a discovery. What is new here is what
+a shortcut does across networks rather than within one. The same feature space that
+inflates in-domain scores can also produce a reversed target ordering, and which of those
+two happens decides whether recalibration or target supervision is the right response.
+
+### 2.3 Dataset quality and label error
+
+Engelen et al. [2021] documented labelling and traffic-generation defects in CICIDS2017 and
+released a corrected version; Lanvin et al. [2022] extended the analysis and quantified the
+effect of the corrections on measured performance. Both studies examine in-domain
+consequences. We use the corrected release differently, as an instrument: applying one
+identical source model to the original and the corrected target isolates label error from
+domain shift, and the result runs opposite to the intuitive direction (§4.11).
 
 Our duplicate accounting (§3.3) is adjacent to this work but, to our knowledge, has not
-been reported at this scale for the NetFlow v2 datasets. That three of four are more than 80% duplicate in the model's own feature space constrains how in-domain numbers computed on them should be read, and §4.6 measures how much it moves the transfer results themselves.
+been reported at this scale for the NetFlow v2 datasets. That three of four are more than
+80% duplicate in the model's own feature space constrains how in-domain numbers computed on
+them should be read, and §4.6 measures how much it moves the transfer results themselves.
 
-### 2.3 Methodology and evaluation norms
+### 2.4 Evaluation norms, and what is knowable without target labels
 
 Arp et al. [2022] catalogue ten recurring pitfalls in machine learning for security, of
 which sampling bias, data snooping, spurious correlations and the base-rate fallacy bear
@@ -169,27 +196,25 @@ dominated by the base rate; the datasets here span base rates from 1.3% to 77.4%
 balanced-test-set F1 is not comparable across them and operating-point metrics are reported
 alongside.
 
-### 2.4 Predicting performance without labels
+An operator meeting a new network has traffic but no labels, which makes estimating target
+performance from unlabelled data the practical question. Garg et al. [2022] introduced
+Average Thresholded Confidence, which learns a confidence threshold on source data and
+predicts accuracy as the fraction of unlabelled target points above it. The competing
+family measures the distance between the source and target feature distributions directly,
+which is also the theoretical motivation for domain-adversarial training. Section 4.7
+evaluates both families on the same twelve ordered pairs and finds their ordering reversed
+relative to the assumption embedded in most of that work: the distribution-distance
+measures lose to a mean baseline, and the confidence-based estimator does not.
 
-Estimating target accuracy from unlabelled data is an active area outside security. Garg et
-al. [2022] introduced Average Thresholded Confidence, which learns a confidence threshold
-on source data and predicts accuracy as the fraction of unlabelled target points above it.
-The competing family of approaches measures distance between source and target feature
-distributions directly, which is also the theoretical motivation for domain-adversarial
-training. Section 4.5 evaluates both families on the same twelve ordered pairs and finds
-their ordering reversed relative to the assumption embedded in most of that work: the
-distribution-distance measures lose to a mean baseline, and the confidence-based estimator
-does not.
-
-### 2.5 Domain adaptation for intrusion detection
-
-Adapting a detector to a new network is a well-populated area, including covariance
-alignment [Sun et al. 2016] and domain-invariant representation learning for NIDS
-specifically. We make no methodological contribution here and do not claim one. CORAL
+Adapting a detector to a new network is a well-populated area in its own right, including
+covariance alignment [Sun et al. 2016] and domain-invariant representation learning for
+NIDS specifically. We make no methodological contribution there and do not claim one. CORAL
 appears in §4.8 as the standard zero-label baseline, and the contribution is the
 measurement: what the available zero-label methods actually recover in this setting, which
 is close to nothing, against what a handful of labelled target flows recovers, which is
 most of the gap.
+
+---
 
 ## 3. Data and experimental protocol
 
