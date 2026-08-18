@@ -294,20 +294,39 @@ NF-ToN-IoT) rather than allowed to become silent infinities under a numeric cast
 
 ### 3.5 Training
 
-The order of operations is the substance of the protocol:
+The order of operations is the substance of the protocol, and it is what carries the
+leakage guarantee:
 
-> de-duplicate → split → fit scaler on **source-train only** → transform everything else
+> de-duplicate → split → fit on **source-train only** → transform everything else
 
-Splits are stratified 80/20 and seeded. Scaler and median imputer are fitted on
-source-train alone and applied unchanged to the source test split and to every target.
-Target features are clipped to the range the scaler observed; the clipping is ablated in §4.6, not assumed. Imbalance is handled with balanced sample weights, never resampling, in all model fitting reported here; the label-budget experiment of §4.8 deliberately draws a balanced labelled adaptation set, which is a controlled supervision-budget intervention rather than a training-time resampling choice, since SMOTE
-applied before a split leaks synthetic neighbours across it. Models are LightGBM
-(primary), XGBoost, RandomForest and LogisticRegression at fixed hyperparameters, with no
-tuning against any target. Five seeds are used for the transfer matrix and three for the ablations and remedy experiments, which are correspondingly more expensive; the asymmetry is a cost decision and every reported interval states the number of pairs it rests on.
+Exact duplicates are removed from a dataset before any partition is drawn, so no feature
+vector can appear on both sides of a split. Splits are then stratified 80/20 and seeded.
+The median imputer and the scaler are fitted on source-train alone and applied unchanged to
+the source evaluation split and to every target, and the decision threshold is chosen on
+the source evaluation split (§3.6). No target label, target feature statistic or
+target-derived threshold enters the primary transfer experiment. A self-check verifies the
+scaler property on every run: a scaler fitted on train maps train exactly into [0, 1] and
+lets some unseen rows fall outside it, which a scaler that had seen those rows could not do.
 
-A stratified cap of 50,000 rows per class bounds cost, and it is applied to **both** the source and the target: external metrics are computed on a seeded stratified sample of the de-duplicated target, not on the target in full. Because the cap equalises the two classes it also changes the evaluated prevalence, which moves every prevalence-sensitive metric. This is why ROC-AUC, which is invariant to prevalence under a fixed score ordering, carries the paper's central claim, and macro-F1 and MCC are read alongside it rather than in place of it.
+Target features are clipped to the range the scaler observed; the clipping is ablated in
+§4.6, not assumed. Imbalance is handled with balanced sample weights and never by
+resampling, because SMOTE applied before a split leaks synthetic neighbours across it. The
+label-budget experiment of §4.8 does deliberately draw a balanced labelled adaptation set,
+but that is a controlled supervision budget rather than a training-time resampling choice.
 
-The order of operations that carries the leakage guarantee is: de-duplicate, then split, then fit. Exact duplicates are removed from a dataset before any partition is drawn, so no feature vector can appear on both sides of a split. The imputer and the scaler are fitted on the source training partition alone and applied unchanged to the source evaluation partition and to every target; the decision threshold is chosen on the source evaluation partition (§3.6). No target label, target feature statistic or target-derived threshold enters the primary transfer experiment. A pipeline self-check verifies the scaler property on every run: a scaler fitted on train maps train exactly into [0, 1] **and** lets some unseen rows fall outside it, which a scaler that had seen those rows cannot do.
+Models are LightGBM (primary), XGBoost, RandomForest and LogisticRegression at fixed
+hyperparameters, with no tuning against any target. Five seeds are used for the transfer
+matrix and three for the ablations and remedy experiments, which are correspondingly more
+expensive; the asymmetry is a cost decision, and every reported interval states the number
+of pairs it rests on.
+
+A stratified cap of 50,000 rows per class bounds cost, and it applies to **both** the
+source and the target: external metrics are computed on a seeded stratified sample of the
+de-duplicated target, not on the target in full. Because the cap equalises the two classes
+it also changes the evaluated prevalence, which moves every prevalence-sensitive metric.
+This is why ROC-AUC, which is invariant to prevalence under a fixed score ordering, carries
+the paper's central claim, while macro-F1 and MCC are read alongside it rather than in
+place of it.
 
 ### 3.6 Choosing the operating threshold
 
@@ -360,7 +379,7 @@ To keep the base rate visible, we report **FPR at 95% TPR**, since balanced-test
 
 ### 4.1 In-domain, the problem looks solved
 
-On its own held-out split every source reaches what this literature routinely reports.
+On its own source evaluation split every source reaches what this literature routinely reports.
 LightGBM averages 0.9817 macro-F1 across the four sources (0.9546–1.0000) at ROC-AUC
 0.9977–1.0000. The other three model families agree within a few points, and seed-to-seed
 standard deviations reach at most 0.0023. Nothing here suggests an unsolved problem.
