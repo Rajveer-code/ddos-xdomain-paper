@@ -6,18 +6,30 @@
 
 ## Abstract
 
-Flow-based DDoS detectors report accuracies above 99% and lose most of that skill when
-applied to a different network. The loss is well documented; its character is not, and
-the difference decides which remedies can work. Training four model families on each of
-four independently constructed testbeds under a published common feature set, and
-evaluating every ordered pair, we find that cross-network transfer does not decay toward
-chance. It passes through it. Pooling four model families, twelve ordered pairs and five seeds, 108 of 240 external evaluations score below 0.5 and mean external ROC-AUC is 0.5054; and one pair reaches 0.0697, meaning attack flows are systematically assigned lower scores than benign flows; negating that detector's score would yield an ROC-AUC of approximately 0.9303. A model at chance carries no usable ordering; a model at 0.0697 carries a strong one with the sign reversed. Three consequences follow. Feature engineering along the obvious semantic axis does not
-help: we pre-specified the hypothesis that capacity-bound features carry testbed
-identity, and removing all twenty of them changes external macro-F1 by +0.0132 [-0.0084,
-+0.0320], an interval spanning zero, so the hypothesis is not supported at the power this
-study affords. A one-feature set does reach external macro-F1 0.6512 against 0.3748 for all 39, a paired difference of +0.2763 [+0.2230, +0.3366], but a control over random subsets at controlled size shows that dimensionality accounts for the smaller part of this and the identity of that feature — a DNS indicator that is itself a dataset shortcut — for the larger. Feature count tracks in-domain separability (Spearman +0.626) and external macro-F1 (-0.290) while leaving external ranking untouched (+0.004 [-0.081, +0.088]), making it a threshold effect rather than a representational one. Distribution-divergence monitoring did not work in this benchmark: proxy A-distance, RBF-MMD and summed Wasserstein distance all predicted the observed loss worse than assuming the average drop, while the model's own confidence
-(ATC) reaches Spearman −0.726 and cuts leave-one-pair-out error by 24%. Recalibration works for one pair in twelve: in the primary LightGBM analysis it is the only pair whose ranking survived, and there a threshold read from target benign traffic recovers 97.0% of the available headroom using no attack labels, but pooled over held-out evaluation sets that recalibration is net harmful. Ten labelled target flows, used to retrain, reach median macro-F1 0.7253 [0.5604, 0.9540] and exceed what the best achievable threshold reaches with unlimited target labels (0.6158).
-Finally, the failure mode depends strongly on the dataset pair: the same-lineage CIC pairing failed mainly at the threshold and looked recoverable, while the independently built transfers failed at the ranking. Cross-network evaluation therefore has to distinguish ranking failure from threshold failure, because the two admit different remedies.
+Flow-based DoS detectors report accuracies above 99% and lose most of that skill on a
+different network. The loss is well documented; its character is not. That character
+decides the remedy: a detector whose score ordering survives the move needs only a new
+threshold, while one whose ordering has broken needs new labels.
+
+We train four model families on each of four independently captured testbeds under a
+published common feature set, and evaluate every ordered pair over five seeds. Transfer
+does not decay toward chance. It passes through chance. Of 240 run-level evaluations 108
+score below ROC-AUC 0.5, three of the twelve ordered pairs do so in all four model
+families, and the worst reaches 0.0697: a ranking so consistently reversed that negating
+the score would give 0.9303. Attack flows are being scored below benign ones.
+
+Eleven of twelve pairs fail at the ranking rather than at the threshold, which makes
+recalibration the wrong instrument for almost all of them. A threshold read from target
+benign traffic recovers 97.0% of the available headroom on the one ranking-preserving
+pair, and is net harmful pooled across the rest. Retraining on ten balanced labelled
+target flows reaches median macro-F1 0.7253 and beats an oracle allowed unlimited target
+labels to tune the threshold (0.6158), because a threshold can only cut an ordering it
+cannot repair.
+
+Two standard remedies also fail. A pre-specified hypothesis that capacity-bound features
+carry testbed identity is not supported, and three distribution-divergence measures
+predict the loss worse than assuming the average drop. Cross-network evaluation has to
+separate ranking failure from threshold failure, because the two admit different fixes.
 
 **Keywords:** network intrusion detection, DDoS, cross-dataset generalisation,
 distribution shift, calibration, evaluation methodology
