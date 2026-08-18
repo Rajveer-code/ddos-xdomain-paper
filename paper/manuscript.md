@@ -132,7 +132,7 @@ established that something goes wrong. None of them settles what kind of failure
 ### 2.1 The cross-dataset gap
 
 That flow-based intrusion detectors transfer badly is not in dispute. D'Hooge et al. [2020]
-established reference scores on CIC-IDS2017 and CSE-CIC-IDS2018 across twelve supervised
+established reference scores on CICIDS2017 and CSE-CIC-IDS2018 across twelve supervised
 algorithms and concluded that the classifiers could not operate reliably on traffic from a
 network unseen at training time. Cantone et al. [2024] extended the design to four datasets
 and four classifiers, reported cross-dataset accuracy largely commensurate with random
