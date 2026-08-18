@@ -41,17 +41,25 @@ distribution shift, calibration, evaluation methodology
 Published flow-based DDoS detectors report accuracies above 99%. Deployed ones do not
 behave that way. The gap between those two facts has been measured repeatedly: models
 trained on one intrusion-detection dataset and tested on another lose most of their
-apparent skill [D'hooge 2020; Cantone 2024]. That finding is established. What it *means*
-is not, and the ambiguity is expensive, because the two available readings prescribe
-opposite engineering.
+apparent skill [D'hooge 2020; Cantone 2024]. That finding is established.
 
-The default reading is quantitative. The model is somewhat overfitted to its training
-network and performance degrades, so the remedies are the familiar three: engineer
-features that describe the attack rather than the capture, monitor the distance between
-training and deployment distributions, and recalibrate the decision threshold on arrival.
-This paper tests a representative version of each and finds the reading incomplete in a way that matters.
+What the gap *means* is not, and the ambiguity is expensive, because two readings of the
+same collapsed score prescribe opposite engineering. The familiar reading is quantitative.
+The model is somewhat overfitted to its training network and its performance degrades, so
+the remedies are the standard three: engineer features that describe the attack rather than
+the capture, monitor the distance between the training and deployment distributions, and
+recalibrate the decision threshold on arrival. The second reading is that the detector has
+not lost its signal but reversed it. If that is what happens, none of the three can work,
+because each assumes the model still orders traffic in a useful direction and that only the
+cut point or the input representation needs attention.
 
-There is a structural reason to expect the two readings to diverge. Drift monitoring watches $P(X)$, the distribution of the features. What decides whether a detector still works is $P(Y \mid X)$, the relationship between features and labels. Nothing ties the two together: a target network can look statistically familiar and score differently, or look alien and score the same. That gap is what the experiments below exploit, and it is why the divergence measures in §4.7 fail as risk predictors while a measure of the model's own behaviour does not.
+Separating the two readings takes one change of instrument: report ROC-AUC for each ordered
+source-target pair instead of accuracy in aggregate. A detector that has lost its signal
+sits at 0.5. A detector that has reversed it sits below 0.5, and the further below, the more
+information it carries with the wrong sign. We call the first a **threshold failure**, which
+moving the decision boundary can repair, and the second a **ranking failure**, which only a
+change to the scoring function can repair. Which of the two a deployment suffers is the
+question this paper answers, and the answer decides what an operator should do about it.
 
 Running every ordered pair among four independently captured testbeds, on the NetFlow v2
 common feature set, with exact de-duplication and source-only preprocessing, we find that
@@ -59,42 +67,54 @@ transfer does not decay toward chance. It passes through chance. Mean external R
 0.5054; 108 of 240 run-level external evaluations fall *below* 0.5, as do 5 of the 12
 ordered pairs once seeds are averaged; one pair reaches **0.0697**.
 
-That last number is what an aggregate near chance conceals. An AUC of 0.0697 is not weak evidence; it is strong evidence with the wrong sign. Attack flows are systematically assigned lower scores than benign flows, and negating the detector's output would yield an ROC-AUC of approximately 0.9303. Note that this is a statement about ranking, not about accuracy: ROC-AUC is threshold-free, and the accuracy of a negated detector would still depend on the operating point and the target prevalence. A model at chance carries no usable ordering. A model at 0.0697 carries a strong ordering with the sign reversed.
+That last number is what an aggregate near chance conceals. An AUC of 0.0697 is not weak
+evidence; it is strong evidence with the wrong sign. Attack flows are systematically
+assigned lower scores than benign flows, and negating the detector's output would yield an
+ROC-AUC of approximately 0.9303. This is a statement about ranking, not about accuracy:
+ROC-AUC is threshold-free, and the accuracy of a negated detector would still depend on the
+operating point and the target prevalence. A model at chance carries no usable ordering. A
+model at 0.0697 carries a strong ordering with the sign reversed.
 
-A plausible mechanism is easy to state. If high throughput marks attack traffic in one testbed and marks the busiest legitimate hosts in another, a decision surface fitted to the first is close to optimal-but-negated on the second. Two of our own results constrain what that mechanism can be. Logistic regression inverts on the same pairs as the tree ensembles (§4.2), so it cannot require high-order feature interactions, which a linear model cannot represent. And feature count is uncorrelated with external ranking quality (§4.4), so it is not a matter of model capacity either. What remains is the simplest reading: individual feature-label associations reverse sign between these networks. We do not isolate which associations, and §6 says so.
+Nothing in the standard monitoring toolkit sees this coming. Drift monitoring watches
+$P(X)$, the distribution of the features. What decides whether a detector still works is
+$P(Y \mid X)$, the relationship between features and labels. The two need not move together:
+a target network can look statistically familiar and score differently, or look alien and
+score the same. That is why the divergence measures in §4.7 fail as risk predictors while a
+measure of the model's own behaviour does not.
 
-Four consequences follow. The first three narrow a standard remedy; the fourth conditions all of them:
-
-**Feature engineering along the obvious axis does not help.** We pre-specified the
-expectation that capacity-bound features (throughput, duration, volume) carry testbed
-identity and cause the collapse, and committed it to the project repository before the experiment ran. Removing all twenty of them moves external macro-F1 by +0.0132 [-0.0084,
-+0.0320], an interval spanning zero, and capacity features alone transfer as well as the
-full set. The hypothesis is not supported. A one-feature set does out-transfer the full set by +0.2763 [+0.2230, +0.3366], but a control over randomly chosen subsets at controlled size shows dimensionality to be the smaller part of that advantage. Random subsets gain +0.105 on the way from 39 features down to one, while the chosen feature beats a random single feature by +0.147. The two are measured against different baselines and are not an additive split of +0.2763 (§4.4); what they jointly establish is that most of the advantage is the feature, which turns out to be a second dataset shortcut.
-
-**Distribution-divergence monitoring did not work here.** Proxy A-distance, RBF-MMD and
-summed Wasserstein distance, the quantities motivating much of the domain-adaptation
-literature, all have correlations whose confidence intervals span zero, and all three
-predict the observed loss *worse* than assuming the average drop. What does carry signal
-is the model's own confidence: Average Thresholded Confidence reaches Spearman −0.726 and
-cuts leave-one-pair-out error by 24%.
-
-**Recalibration works for one pair in twelve.** Decomposing each failure in the primary LightGBM analysis into ranking loss and threshold loss shows eleven of twelve fail representationally. For the single
-ranking-preserving pair, a threshold read from target benign traffic, which requires no
-attack labels, recovers 97.0% of the available headroom. On three others it is actively
-harmful.
-Ten labelled target flows, drawn from an adaptation pool disjoint from the evaluation set, lift median external macro-F1 from 0.3919 to 0.7253 and beat the best threshold obtainable with unlimited labels.
-
-**Dataset quality bounds what any of this measures.** In the feature space a model actually sees,
-these datasets are up to 99.7% exact duplicates: NF-BoT-IoT's 30,420,086 rows reduce to
-101,369. A random split that retains these duplicates places indistinguishable feature vectors on both sides of it, so the resulting scores are not independent test evidence.
+A plausible mechanism is easy to state. If high throughput marks attack traffic in one
+testbed and marks the busiest legitimate hosts in another, a decision surface fitted to the
+first is close to optimal-but-negated on the second. Two of our own results constrain what
+that mechanism can be. Logistic regression inverts on the same pairs as the tree ensembles
+(§4.2), so it cannot require high-order feature interactions, which a linear model cannot
+represent. And feature count is uncorrelated with external ranking quality (§4.4), so it is
+not a matter of model capacity either. What remains is the simplest reading: individual
+feature-label associations reverse sign between these networks. We do not isolate which
+associations, and §6 says so.
 
 ### 1.1 Contributions
 
-1. Evidence that cross-network failure can manifest as systematic **ranking inversion** rather than monotonic degradation, across 240 model-pair-seed evaluations, with permutation and label-reversal controls establishing that the below-chance results are not a pipeline artefact.
-2. A pre-specified capacity-feature hypothesis that the data does not support, reported with    its interval, alongside a controlled random-subset analysis showing that feature-count    effects act on the operating point rather than on external ranking.
-3. A label-free triage analysis in which Average Thresholded Confidence beats the mean-gap    baseline under leave-one-pair-out evaluation while three marginal distribution-distance    measures do not.
-4. A failure taxonomy separating threshold failure from ranking failure, and ranking failure from sign inversion, together with evidence that which mode appears depends strongly on the source-target pairing.
-5. A benchmark-integrity audit covering exact duplication, contradictory labels under the    full attack taxonomy, non-finite extractor artefacts and corrected labels, showing that    each can materially change measured transfer performance.
+1. **The principal finding: cross-network failure can invert the ranking rather than
+   attenuate it.** Three of twelve ordered pairs score below chance in all four model
+   families, logistic regression included, and the worst reaches ROC-AUC 0.0697.
+2. A failure taxonomy separating threshold failure from ranking failure, decomposed for
+   every ordered pair, with evidence that which mode appears depends on whether source and
+   target share a testbed lineage.
+3. A pre-specified capacity-feature hypothesis that the data does not support, alongside a
+   controlled random-subset experiment showing that feature count acts on the operating
+   point rather than on the external ranking.
+4. A label-free triage analysis in which Average Thresholded Confidence beats the mean-gap
+   baseline under leave-one-pair-out evaluation while three marginal distribution-distance
+   measures do not.
+5. A benchmark-integrity audit covering exact duplication, contradictory labels under the
+   full attack taxonomy, non-finite extractor artefacts and corrected labels, showing that
+   each can materially change measured transfer performance.
+
+Section 2 places the study against prior cross-dataset work and against the
+contaminant-feature literature. Section 3 gives the data and the protocol, including the
+de-duplication and threshold decisions the results turn out to depend on. Section 4 reports
+the transfer matrix, applies the taxonomy, tests what causes the inversion and measures what
+repairs it. Sections 5 and 6 give the practical reading and the limits.
 
 ---
 
