@@ -8,8 +8,9 @@
 
 Flow-based DoS detectors report accuracies above 99% and lose most of that skill on a
 different network. The loss is well documented; its character is not. That character
-decides the remedy: a detector whose score ordering survives the move needs only a new
-threshold, while one whose ordering has broken needs new labels.
+decides the remedy: where the score ordering survives the move, the repair is a new
+threshold; where the ordering has broken, no threshold is enough and the scoring function
+itself has to change.
 
 We train four model families on each of four independently captured testbeds under a
 published common feature set, and evaluate every ordered pair over five seeds. Transfer
@@ -49,9 +50,10 @@ The model is somewhat overfitted to its training network and its performance deg
 the remedies are the standard three: engineer features that describe the attack rather than
 the capture, monitor the distance between the training and deployment distributions, and
 recalibrate the decision threshold on arrival. The second reading is that the detector has
-not lost its signal but reversed it. If that is what happens, none of the three can work,
-because each assumes the model still orders traffic in a useful direction and that only the
-cut point or the input representation needs attention.
+not lost its signal but reversed it. If that is what happens, recalibration cannot help at
+all, because it moves a cut point along an ordering that is already wrong, and the forms of
+feature engineering and drift monitoring evaluated here do not address it either. All three
+assume the model still orders traffic in a useful direction.
 
 Separating the two readings takes one change of instrument: report ROC-AUC for each ordered
 source-target pair instead of accuracy in aggregate. A detector that has lost its signal
@@ -77,7 +79,7 @@ ROC-AUC is threshold-free, and the accuracy of a negated detector would still de
 operating point and the target prevalence. A model at chance carries no usable ordering. A
 model at 0.0697 carries a strong ordering with the sign reversed.
 
-Nothing in the standard monitoring toolkit sees this coming. Drift monitoring watches
+A monitor that watches the input distribution does not see this coming. Drift monitoring watches
 $P(X)$, the distribution of the features. What decides whether a detector still works is
 $P(Y \mid X)$, the relationship between features and labels. The two need not move together:
 a target network can look statistically familiar and score differently, or look alien and
@@ -90,9 +92,9 @@ first is close to optimal-but-negated on the second. Two of our own results cons
 that mechanism can be. Logistic regression inverts on the same pairs as the tree ensembles
 (§4.3), so it cannot require high-order feature interactions, which a linear model cannot
 represent. And feature count is uncorrelated with external ranking quality (§4.7), so it is
-not a matter of model capacity either. What remains is the simplest reading: individual
-feature-label associations reverse sign between these networks. We do not isolate which
-associations, and §6 says so.
+not a matter of model capacity either. The reading consistent with both constraints is that
+individual feature-label associations reverse sign between these networks. Consistent with is
+not established by: we do not isolate which associations, and §6 says so.
 
 ### 1.1 Contributions
 
@@ -666,7 +668,8 @@ from 0.6147 at the full cap to 0.6155 when reduced to NF-UNSW-NB15's attack coun
 difference of 0.0008. The inversion is therefore not explained by the number of positive training flows alone.
 
 NF-UNSW-NB15 inverts under both regimes and remains 0.227 below the other sources at
-identical size. The explanation is a property of that network rather than of its sample.
+identical size. What separates it from the other three is therefore not size, and this
+experiment does not say what it is.
 
 One secondary effect is worth stating because it is not what we expected. NF-UNSW-NB15's
 external AUC is *higher* under the matched regime (0.3889) than under the full cap
@@ -924,16 +927,18 @@ Hossain et al. [2026] report accuracy below 40% for models scoring above 95% wit
 dataset. Read as accuracy, those numbers say the signal is gone. Read as ranking, per
 ordered pair, the same collapse turns out to contain transfers that are not merely
 uninformative but systematically inverted. The distinction earns its keep operationally: an
-uninformative detector has to be retrained from scratch, whereas an inverted one still
-carries most of the information needed to repair it, which is why ten labelled flows go as
-far as they do.
+uninformative detector offers no target ordering to work with, whereas an inverted one
+offers a strong ordering with the wrong sign, which is why ten labelled flows go as far as
+they do.
 
 The remedy hierarchy inverts the usual order of effort. Zero-label feature alignment by
 CORAL recovers 0.0029 macro-F1; a benign-quantile threshold helps substantially in the one
 regime where ranking survived and hurts in three others; ten balanced labelled flows recover
-0.3323. For an operator, the cheapest useful action is also the most effective one: label
-ten flows from the network you actually run. The ordering holds for the zero-label methods
-we evaluated and is not a claim about unsupervised domain adaptation in general.
+0.3323. For an operator the implication is to build a small labelled set from the target
+network deliberately, covering both classes, rather than to rely on zero-label recalibration:
+the ten flows of §4.12 are drawn balanced, which a live sample of ten would not be. The
+ordering holds for the zero-label methods we evaluated and is not a claim about unsupervised
+domain adaptation in general.
 
 The finding that a single protocol bit out-generalises a 39-feature standard set should not
 be read as an endorsement of one-feature detectors, since its in-domain score of 0.6711 is
@@ -1025,8 +1030,8 @@ a ranking so consistently reversed that negating the score would yield 0.9303.
 That distinction is the paper's practical content, because the two failures take different
 repairs. Where the ranking survives the move, a threshold read from target benign traffic
 recovers almost all of the loss without a single attack label. Where the ranking has
-reversed, no threshold helps at any budget, and ten balanced labelled target flows do more
-than an oracle handed unlimited labels to tune the threshold. The diagnosis has to come
+reversed, no threshold restores the ordering at any budget, and ten balanced labelled target
+flows do more than an oracle handed unlimited labels to move the cut point. The diagnosis has to come
 before the remedy, and §4.10 shows that a label-free proxy for it exists, imperfectly.
 
 What any of this measures rests on how the data was prepared. These benchmarks are up to
