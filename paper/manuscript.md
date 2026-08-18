@@ -909,27 +909,44 @@ this margin.
 
 ## 5. Discussion
 
-The practical reading of these results is narrow and, we think, useful.
-
-Validation on one network provides no empirical guarantee of behaviour on another,
-and the failure it will exhibit is not conservatism. It will keep issuing confident
-verdicts while its ranking is wrong or reversed, at an external ECE two orders of magnitude
-above its in-domain value. The three marginal feature-distribution measures evaluated here would not raise the alarm for these failures, because those distances did not track the loss. Monitoring the model's own
+Validation on one network provides no empirical guarantee of behaviour on another, and the
+failure it will exhibit is not conservatism. The detector keeps issuing confident verdicts
+while its ranking is wrong or reversed, at an external ECE two orders of magnitude above its
+in-domain value. The three marginal feature-distribution measures evaluated here would not
+raise the alarm, because those distances did not track the loss. Monitoring the model's own
 confidence will, imperfectly.
+
+This sharpens the prior measurements rather than contradicting them. D'Hooge et al. [2020]
+and Cantone et al. [2024] reported cross-dataset accuracy commensurate with chance, and
+Hossain et al. [2026] report accuracy below 40% for models scoring above 95% within either
+dataset. Read as accuracy, those numbers say the signal is gone. Read as ranking, per
+ordered pair, the same collapse turns out to contain transfers that are not merely
+uninformative but systematically inverted. The distinction earns its keep operationally: an
+uninformative detector has to be retrained from scratch, whereas an inverted one still
+carries most of the information needed to repair it, which is why ten labelled flows go as
+far as they do.
 
 The remedy hierarchy inverts the usual order of effort. Zero-label feature alignment by
 CORAL recovers 0.0029 macro-F1; a benign-quantile threshold helps substantially in the one
-regime where ranking survived and hurts in three others; ten balanced labelled flows recover 0.3323.
-For an operator, the cheapest useful action is also the most effective one: label ten flows
-from the network you actually run. The ordering holds for the zero-label methods we
-evaluated and is not a claim about unsupervised domain adaptation in general.
+regime where ranking survived and hurts in three others; ten balanced labelled flows recover
+0.3323. For an operator, the cheapest useful action is also the most effective one: label
+ten flows from the network you actually run. The ordering holds for the zero-label methods
+we evaluated and is not a claim about unsupervised domain adaptation in general.
 
 The finding that a single protocol bit out-generalises a 39-feature standard set should not
 be read as an endorsement of one-feature detectors, since its in-domain score of 0.6711 is
 unusable. It is a statement about what the other 38 features are doing, which is encoding a
-testbed at a 0.2764 external cost.
+testbed at a 0.2763 external cost.
 
-**What this does not settle.** The experiments do not identify which feature-label associations reverse sign; invariance across four hypothesis classes narrows the candidates without naming them. They do not show that unsupervised domain adaptation fails in general, only that one covariance-alignment method and one threshold heuristic did not recover the loss here. They do not show that drift monitoring is hopeless, only that three marginal divergence measures carried no usable signal across twelve pairs. And ten balanced labels are a controlled budget, not a deployment procedure. What the study does establish is a taxonomy of cross-network failure and the fact that which intervention helps depends on whether the target ranking survived.
+**What this does not settle.** The experiments do not identify which feature-label
+associations reverse sign; invariance across four hypothesis classes narrows the candidates
+without naming them. They do not show that unsupervised domain adaptation fails in general,
+only that one covariance-alignment method and one threshold heuristic did not recover the
+loss here. They do not show that drift monitoring is hopeless, only that three marginal
+divergence measures carried no usable signal across twelve pairs. And ten balanced labels
+are a controlled budget, not a deployment procedure. What the study does establish is a
+taxonomy of cross-network failure, and that which intervention helps depends on whether the
+target ranking survived.
 
 Finally, §4.14 has a methodological consequence beyond this paper. Because the failure mode
 depends on whether the source and target share a lineage, the community's habit of
@@ -941,10 +958,10 @@ evaluation should be the default.
 
 ## 6. Threats to validity
 
-**All four datasets are testbed captures.** None is production traffic. This limits
-external validity in the usual way, but it sharpens the finding rather than weakening it:
-if detectors cannot transfer between four carefully constructed research testbeds, the case
-for transfer to a live network is not stronger.
+**All four datasets are testbed captures.** None is production traffic. This limits external
+validity in the usual way, but it sharpens the finding rather than weakening it: if
+detectors cannot transfer between four carefully constructed research testbeds, the case for
+transfer to a live network is not stronger.
 
 **De-duplication is a consequential choice.** Removing exact duplicates in the
 post-socket-drop feature space reduces NF-BoT-IoT by 99.7%. A reader who considers those
@@ -960,55 +977,61 @@ throughout and operating-point metrics accompany F1 for this reason.
 base rate again; the policy is explicit and the counts moved are recorded, but the primary
 numbers describe a DoS/DDoS-versus-benign task.
 
-**Twelve ordered pairs is a small sample for §4.10.** Leave-one-pair-out is the right
-protocol for the question, but a 24% error reduction estimated from twelve pairs supports
-triage, not a service-level guarantee.
+**Twelve ordered pairs is a small sample for the label-free prediction analysis.**
+Leave-one-pair-out is the right protocol for the question, but a 24% error reduction
+estimated from twelve pairs supports triage, not a service-level guarantee. Resolving it
+needs more independently captured networks, not more seeds on these four.
 
-**NF-UNSW-NB15 is a small source.** After de-duplication it retains 3,075 DoS flows at a 1.30% base rate, and it produces the study's most extreme inversion. The obvious confound is tested rather than conceded in §4.8: starving every other source to the same attack count leaves their transfer essentially unchanged (0.6147 to 0.6155), while NF-UNSW-NB15 remains 0.227 below them at identical size. Sample size does not account for the effect. Its class balance has a secondary influence that we note but do not interpret.
+**NF-UNSW-NB15 is a small source.** After de-duplication it retains 3,075 DoS flows at a
+1.30% base rate, and it produces the study's most extreme inversion. The obvious confound is
+tested rather than conceded in §4.8: starving every other source to the same attack count
+leaves their transfer essentially unchanged (0.6147 to 0.6155), while NF-UNSW-NB15 remains
+0.227 below them at identical size. Sample size does not account for the effect. Its class
+balance has a secondary influence that we note but do not interpret.
 
 **Low-rate attacks are underpowered in the NetFlow quartet.** After de-duplication,
 NF-CSE-CIC-IDS2018 retains only 203 low-rate application-layer flows, so §4.13 rests partly
-on the CICFlowMeter secondary study.
+on the CICFlowMeter secondary study. The per-family comparison there should be read as
+indicative, and the direction of any error is unknown rather than bounded.
 
 **Label error is bounded, not eliminated.** CICIDS2017's defects are addressed against the
 corrected release; the NetFlow quartet has no comparably corrected counterpart, so residual
-label noise there is unmeasured.
+label noise there is unmeasured. On the one target where the correction can be applied it
+moved measured transfer down, so uncorrected label error in the quartet most plausibly
+flatters our external numbers rather than depressing them.
 
-**The mechanism behind the inversion is not isolated.** Our experiments rule two
-explanations out without establishing a third. It is not a gradient-boosting artefact:
-logistic regression inverts on the same source-target pairs (§4.3) and cannot represent
-feature interactions at all. It is not model capacity expressed as feature count: external
-ranking quality is uncorrelated with the number of features (§4.7), which is the quantity a
-capacity account predicts it should track. What remains, and what we did not measure, is
-which individual feature-label associations reverse sign between networks. Invariance
-across four hypothesis classes is consistent with reversal in the low-order associations
-those classes have in common, but consistency is not identification, and we do not report
-it as a finding.
+**The mechanism behind the inversion is not isolated.** Our experiments rule two explanations
+out without establishing a third. It is not a gradient-boosting artefact: logistic regression
+inverts on the same source-target pairs (§4.3) and cannot represent feature interactions at
+all. It is not model capacity expressed as feature count: external ranking quality is
+uncorrelated with the number of features (§4.7), which is the quantity a capacity account
+predicts it should track. What remains, and what we did not measure, is which individual
+feature-label associations reverse sign between networks. Invariance across four hypothesis
+classes is consistent with reversal in the low-order associations those classes have in
+common, but consistency is not identification, and we do not report it as a finding.
 
 ---
 
 ## 7. Conclusion
 
 A flow-based DDoS detector moved to an independently constructed network does not become
-uncertain. It becomes confidently inverted: 108 of 240 run-level external evaluations score
-below chance, 5 of 12 ordered pairs do so once seeds are averaged, three of those invert in
-all four model families tried, and the worst pair reaches ROC-AUC 0.0697 — a ranking so
-consistently reversed that negating the score would yield 0.9303.
+uncertain. It becomes confidently wrong. Across four testbeds, four model families and
+twelve ordered pairs, 108 of 240 external evaluations rank attack flows below benign ones,
+three ordered pairs do so in every model family tried, and the worst reaches ROC-AUC 0.0697:
+a ranking so consistently reversed that negating the score would yield 0.9303.
 
-That distinction governs what can be done about it. Feature engineering along the obvious
-semantic axis does not help: the pre-specified capacity hypothesis is not supported
-(+0.0132 [−0.0084, +0.0320]), although size and volume features do matter individually
-(+0.0615 [+0.0278, +0.0991]). One protocol bit out-generalises the 39-feature standard by
-+0.2763 [+0.2230, +0.3366], but a control at matched size splits that advantage into +0.105
-for dimensionality and +0.147 for the identity of that feature, a DNS indicator that
-separates the classes without describing attack behaviour. Feature count moves the
-operating point and leaves external ranking alone. Distribution-divergence monitoring does
-not predict the loss; model confidence partially does. Recalibration recovers almost
-everything in the one regime where ranking survived and is net harmful pooled across the
-others, and ten balanced labelled target flows beat the zero-label methods we evaluated and also exceed the target-optimal threshold oracle, which consumes unlimited target labels but can only move a cut point along an ordering it cannot repair.
+That distinction is the paper's practical content, because the two failures take different
+repairs. Where the ranking survives the move, a threshold read from target benign traffic
+recovers almost all of the loss without a single attack label. Where the ranking has
+reversed, no threshold helps at any budget, and ten balanced labelled target flows do more
+than an oracle handed unlimited labels to tune the threshold. The diagnosis has to come
+before the remedy, and §4.10 shows that a label-free proxy for it exists, imperfectly.
 
-Underneath all of it, these benchmarks are up to 99.7% duplicate, and correcting known
-label errors moves measured transfer *down* by 0.1437 macro-F1. Apparent transfer performance can therefore be moved substantially by data preparation and label quality before any model is chosen.
+What any of this measures rests on how the data was prepared. These benchmarks are up to
+99.7% duplicate in the feature space a model actually sees, and correcting known label
+errors in one target moves measured transfer down by 0.1437 macro-F1. The next step the
+taxonomy points at, and the one this study stops short of, is identifying which individual
+feature-label associations reverse sign between networks.
 
 ---
 
