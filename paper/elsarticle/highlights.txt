@@ -1,0 +1,5 @@
+DoS detectors score below chance in 108 of 240 cross-network evaluations
+The worst transfer reaches ROC-AUC 0.0697: attack flows ranked below benign ones
+Most failures lie in the ranking, so recalibrating the threshold cannot fix them
+Ten target labels alone beat source-plus-ten retraining at median macro-F1
+Benchmark copies are up to 99.7% duplicate in the feature space a model sees
