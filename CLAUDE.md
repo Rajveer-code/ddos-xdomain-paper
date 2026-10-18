@@ -5,8 +5,17 @@ Project-level rules. Extends the global `~/.claude/CLAUDE.md`; the global file w
 ## What this is
 
 A sole-author research study on cross-dataset generalisation of flow-based DDoS detectors.
-Target: **Computers & Security** (Elsevier, Q1, no APC under the subscription model) plus an
-arXiv preprint. Secondary shot: COMSNETS 2027 / WTMC 2027.
+Target: **IEEE Transactions on Network and Service Management (TNSM)** (Q1, no APC under the
+subscription model) plus an arXiv preprint. Secondary shot: COMSNETS 2027 / WTMC 2027.
+
+**Not Computers & Security** (Elsevier) — ruled out 2026-08-22. COSE instituted a moratorium
+on AI/ML-as-significant-component submissions in early 2024; this paper trains four ML model
+families, so it falls inside the exclusion, not near its edge. See `RESEARCH.md` §3 1b.
+
+TNSM mechanics that constrain the manuscript: two-column IEEE Transactions format, 16-page
+hard ceiling (10 free + up to 6 paid pages at $220/page, waivable for unfunded academic
+authors), 75–200 word abstract, mandatory related-work section. The manuscript is currently
+25 pages single-column — compression is a submission requirement, not a style preference.
 
 Strategy, venue analysis and the full contribution plan live in [`RESEARCH.md`](RESEARCH.md).
 Task state lives in `PLAN_phase*.md` (gitignored — working state, not deliverable).

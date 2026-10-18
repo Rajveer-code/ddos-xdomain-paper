@@ -77,10 +77,11 @@ Ranked for: renown × acceptance probability × cost × fits the Nov–Dec 2026 
 - Also has a workshop track (incl. a security/privacy workshop) with later deadlines and higher acceptance if the main track misses.
 - Risk: 16 days. Only viable with a scoped contribution (see §5 Option 1).
 
-**1b. Elsevier *Computers & Security* (COSE)**
-- Q1, CORE-listed, **zero cost** under the subscription model, and it is *the* journal for NIDS evaluation-methodology work.
-- Won't produce an acceptance before Nov 2026, but "under review at Computers & Security" plus a public arXiv preprint is a legitimate and verifiable CV line.
-- Alternative of equal standing and equal cost: **IEEE TNSM** (Transactions on Network and Service Management).
+**1b. ~~Elsevier *Computers & Security* (COSE)~~ — ruled out 2026-08-22**
+- **Addendum, 2026-08-22:** COSE instituted a moratorium on AI/ML-as-significant-component submissions in early 2024 ("Submissions about applying an AI/ML technique to system security and privacy topics will not be considered" — Elsevier guide for authors, corroborated independently via Grokipedia's sourced summary of the same page). This paper trains four ML model families; it is not a borderline case. **Retargeted to IEEE TNSM.**
+- IEEE TNSM confirmed in-scope by its own topics-of-interest list ("novel approaches to cyber-security, intrusion detection, threat analysis... based on Big Data analytics and machine learning") and by precedent (TNSM regularly publishes ML-based intrusion/DDoS detection). Hybrid journal, no APC under the subscription route — same zero-cost structure COSE would have had.
+- Hard mechanical constraint COSE didn't have: TNSM caps at 10 pages free + up to 6 paid pages ($220/page, waivable for unfunded academic authors) — **16-page hard ceiling**, two-column IEEE Transactions format, 75–200 word abstract. The current 25-page single-column manuscript needs real compression, not just line-edits, to fit — source: comsoc.org/publications/journals/ieee-tnsm/policies-guidelines.
+- **Correction, 2026-08-22:** "no APC" above is precise but incomplete — it's true only for the traditional (non-open-access) route. TNSM is a hybrid journal: the traditional route has no OA payment, but a separate **optional gold-OA APC of US$2800 for articles submitted in 2026** exists if open access is elected, on top of the $220/page mandatory charge beyond page 10. Don't elect OA unless there's a funder covering it — the traditional route is the zero-cost path, not "OA is free too."
 
 ### Tier 2 — topically perfect, later cycles
 
@@ -209,7 +210,7 @@ Scope: **A1 + A2 + A5 + A6 + B1**, with C2 and C4.
 Honest risk: 16 days, sole author, from zero real results. Achievable **only** because the pipeline already exists and is well built. If the real run reveals something unexpected (likely — the smoke numbers tell you nothing), the schedule breaks. Decide by ~Aug 22 whether to continue or fall back.
 
 ### Option 2 — stronger paper, later placement
-Full **B1 + B2 + B3 + B4** → **Computers & Security** (₹0) or **IEEE TNSM**, submit ~Oct 2026. arXiv preprint immediately regardless.
+Full **B1 + B2 + B3 + B4** → ~~**Computers & Security** (₹0) or~~ **IEEE TNSM** (COSE ruled out 2026-08-22, see §3 1b addendum). arXiv preprint immediately regardless.
 
 ### Recommended: both
 Ship the scoped 8-page COMSNETS version now; extend it into the journal version with B2/B3/B4 afterwards. Conference-to-journal extension is standard practice — `[VERIFY COMSNETS/IEEE policy: normally requires ≥30% new material]`.

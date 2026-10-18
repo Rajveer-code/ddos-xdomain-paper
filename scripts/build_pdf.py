@@ -69,6 +69,11 @@ def inline(t: str) -> str:
     t = re.sub(r"\$[^$\n]+\$", stash, t)
     t = esc(t)
     t = re.sub(r"`([^`]+)`", lambda m: r"\texttt{" + m.group(1) + "}", t)
+    # Straight ASCII quotes (reference titles, quoted phrases) render as typewriter
+    # ditto marks under XeLaTeX; TeX's own curly-quote convention needs the pair
+    # distinguished by what's adjacent, since both ends use the same input character.
+    t = re.sub(r'(?<!\S)"(?=\S)', "``", t)
+    t = re.sub(r'(?<=\S)"(?!\S)', "''", t)
     t = re.sub(r"\*\*([^*]+)\*\*", lambda m: r"\textbf{" + m.group(1) + "}", t)
     t = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", lambda m: r"\emph{" + m.group(1) + "}", t)
     for i, expr in enumerate(math):
@@ -164,7 +169,18 @@ def take_list(lines: list[str], i: int, item_re: str, strip_re: str,
                 continue
             break
         if re.match(item_re, st):
-            out.append(r"\item " + inline(re.sub(strip_re, "", st)))
+            # Collect this item's text across any wrapped continuation lines before
+            # running inline() once on the whole thing. inline()-per-fragment let
+            # markdown emphasis that straddles a line-wrap (e.g. "*International\n
+            # Conference*") show up as literal, unmatched asterisks in the PDF,
+            # since each half has only one of the pair.
+            parts = [re.sub(strip_re, "", st)]
+            i += 1
+            while i < len(lines) and lines[i].strip() and lines[i].startswith("   "):
+                parts.append(lines[i].strip())
+                i += 1
+            out.append(r"\item " + inline(" ".join(parts)))
+            continue
         elif lines[i].startswith("   "):
             out[-1] += " " + inline(st)
         else:
