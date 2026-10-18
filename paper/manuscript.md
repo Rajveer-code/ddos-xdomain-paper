@@ -229,9 +229,9 @@ datasets and reports that earlier domain adaptation for NIDS had limited success
 Singla et al. [27] use adversarial adaptation to prepare a detector for a network with little
 labelled data. We make no methodological contribution there and do not claim one. We
 evaluate only one shallow adaptation baseline; CORAL appears in §4.11 as the standard
-zero-label baseline, and the contribution is the measurement: what the available zero-label methods actually recover in this setting, which
-is close to nothing, against what a handful of labelled target flows recovers, which is
-most of the gap.
+zero-label baseline, and the contribution is the measurement: what the available methods
+that use no attack labels recover in this setting, which is little and uneven, against what
+a handful of labelled target flows recovers, which is most of the gap.
 
 ---
 
@@ -812,24 +812,27 @@ error by 24%. Twelve ordered pairs is a small sample, and a 24% error reduction 
 triage, a decision about which deployments need labelled validation first, rather than a
 guarantee.
 
-### 4.11 What zero-label methods can and cannot buy
+### 4.11 What recalibration and alignment can and cannot buy
 
 **Calibration collapses by two orders of magnitude.** Mean ECE is 0.0043 in-domain and
 0.4372 externally. These detectors do not become hesitant on an unfamiliar network; they
 stay confident and become wrong, which is the worse failure for an operator setting an
 alert threshold.
 
-**Zero-label recalibration fixes the diagnosable minority, and harms others.** A threshold
-read from the target's benign-traffic quantiles requires no attack labels. Its recovery,
-as a fraction of the headroom between the deployed threshold and the all-labels oracle,
-tracks external AUC almost exactly (Figure 6).
+**Benign-reference recalibration fixes the diagnosable minority, and harms others.** A
+threshold read from the quantiles of the target's benign traffic requires no attack labels.
+We compute it on every target flow labelled benign, so it is an optimistic reference rather
+than a deployable zero-label method: it assumes the operator can isolate benign traffic
+perfectly, whereas a real sample of believed-benign traffic would contain some attacks and
+move the threshold. Its recovery, as a fraction of the headroom between the deployed
+threshold and the all-labels oracle, tracks external AUC almost exactly (Figure 6).
 
 ![Figure 6](../figures/fig6_remedies.png)
 
-**Figure 6.** External macro-F1 under the deployed threshold, zero-label benign-quantile recalibration, and the all-labels oracle, ordered by external AUC.
+**Figure 6.** External macro-F1 under the deployed threshold, benign-reference recalibration (clean target benign traffic), and the all-labels oracle, ordered by external AUC.
 
 
-**Table 13. Zero-label recalibration by pair.** All 12 ordered pairs, LightGBM, mean over 3 seeds (`results/calibration.json`), sorted by headroom recovered. Headroom recovered = (benign-quantile − source threshold) / (oracle − source threshold); where the oracle barely exceeds the source threshold, a large percentage can be a small absolute gain.
+**Table 13. Benign-reference recalibration by pair.** All 12 ordered pairs, LightGBM, mean over 3 seeds (`results/calibration.json`), sorted by headroom recovered. Headroom recovered = (benign-quantile − source threshold) / (oracle − source threshold); where the oracle barely exceeds the source threshold, a large percentage can be a small absolute gain.
 
 | pair | ext AUC | source thr | benign-quantile | oracle | headroom recovered |
 |---|---:|---:|---:|---:|---:|
@@ -848,20 +851,23 @@ tracks external AUC almost exactly (Figure 6).
 
 It closes 97.0% of the one ranking-preserving pair and is actively harmful on three.
 
-Pooled, it does not pay for itself. Scored on the held-out evaluation sets of §4.12,
-benign-quantile recalibration reaches median macro-F1 0.3482 against 0.3919 for the
-deployed source threshold, so averaged over all twelve pairs the procedure loses ground.
-The per-pair table is the useful reading and the pooled number is the warning attached to
-it: recalibration is worth doing when the ranking survived, and worth avoiding otherwise,
-which means an operator needs the diagnosis of §4.5 before choosing it rather than after.
-CORAL, a standard zero-label covariance alignment, recovers 0.0029 macro-F1 averaged
-over all pairs, which is indistinguishable from doing nothing. This bounds CORAL
+Pooled, the verdict depends on the summary. Scored on the held-out evaluation sets of
+§4.12, benign-reference recalibration reaches median macro-F1 0.3482 against 0.3919 for the
+deployed source threshold, but mean 0.4215 against 0.3953: it gains a great deal on a few
+pairs and loses a little on many. Neither pooled number is the useful reading. The per-pair
+table is: recalibration is worth doing when the ranking survived, and worth avoiding
+otherwise, which means an operator needs the diagnosis of §4.5 before choosing it rather
+than after. CORAL, a standard zero-label covariance alignment, recovers 0.0029 macro-F1
+averaged over all pairs, which is indistinguishable from doing nothing. That figure comes
+from the first remedies run (`results/label_budget.json`, k = 0), whose label-using arms
+were superseded by the leakage-free design of §4.12; CORAL uses no target labels, so the
+leakage that invalidated those arms does not affect it. This bounds CORAL
 specifically; stronger representation-learning approaches to domain-invariant intrusion
 detection exist and are not evaluated here.
 
 ### 4.12 What ten labelled flows buy
 
-Ten balanced labelled flows outperformed every zero-label baseline evaluated here. Each budget k is drawn as k/2 benign and k/2 attack flows from the adaptation pool. That isolates the value of supervision from the difficulty of finding attacks — a controlled label-budget experiment, not a claim about live sampling.
+Ten balanced labelled flows outperformed every baseline evaluated here that uses no attack labels. Each budget k is drawn as k/2 benign and k/2 attack flows from the adaptation pool. That isolates the value of supervision from the difficulty of finding attacks — a controlled label-budget experiment, not a claim about live sampling.
 
 **Table 14. Label budget, leakage-free.** LightGBM. For k > 0, median over 240 runs per
 cell (12 ordered pairs × 2 seeds × 10 independent balanced label draws); for k = 0, over the
@@ -879,7 +885,8 @@ cell (12 ordered pairs × 2 seeds × 10 independent balanced label draws); for k
 
 Each target is split once per (pair, seed) into a disjoint adaptation pool and evaluation
 set. Labels are drawn only from the pool and every score is computed only on the
-evaluation set, including the zero-label baselines, so the comparison is like for like.
+evaluation set, including the baselines that use no attack labels, so the comparison is like
+for like.
 Draws are balanced, k/2 per class: at a 1.3% base rate a prevalence-proportional draw of
 ten flows usually contains no attack at all, which would measure the base rate rather than
 the value of supervision.
@@ -896,7 +903,7 @@ The sharpest comparison is against a **target-optimal threshold oracle**: the be
 
 Recovery is uneven across pairs, and unevenly in an informative direction. NF-UNSW-NB15 to NF-CSE-CIC-IDS2018, the most strongly inverted transfer in the study at ROC-AUC 0.070, reaches 0.9076 [0.8174, 0.9566] with ten balanced labels. That is what inversion predicts: the ordering still carries the information, with the sign reversed, and a small labelled sample is enough to supply the sign. The
 operational reading, at the scope the evidence supports, is that in this benchmark a small
-balanced labelled target sample was substantially more effective than the zero-label baselines tested (§5 states the scope of that claim precisely).
+balanced labelled target sample was substantially more effective than the baselines tested that use no attack labels (§5 states the scope of that claim precisely).
 
 ![Figure 7](../figures/fig7_label_budget.png)
 
@@ -987,10 +994,10 @@ offers a strong ordering with the wrong sign, which is why ten labelled flows go
 they do.
 
 The remedy hierarchy inverts the usual order of effort. Zero-label feature alignment by
-CORAL recovers 0.0029 macro-F1; a benign-quantile threshold helps substantially in the one
+CORAL recovers 0.0029 macro-F1; a benign-reference threshold helps substantially in the one
 regime where ranking survived and hurts in three others; ten balanced labelled flows raise
 median macro-F1 from 0.3919 to 0.7253. For an operator the implication is to build a small labelled set from the target
-network deliberately, covering both classes, rather than to rely on zero-label recalibration:
+network deliberately, covering both classes, rather than to rely on recalibration:
 the ten flows of §4.12 are drawn balanced, which a live sample of ten would not be.
 
 The finding that a single protocol bit out-generalises a 39-feature standard set should not

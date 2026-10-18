@@ -1,3 +1,5 @@
+> **Working notes from August 2026.** Some numbers here predate the leakage-free and audit-corrected runs. `paper/manuscript.md` supersedes this file wherever they differ.
+
 # FINDINGS
 
 Every number here traces to a file in `results/`. Nothing is quoted from another paper.

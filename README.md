@@ -37,7 +37,8 @@ not support it. Both the original question and the answer are reported.
 
 Null and negative results are reported as such. The single strongest remedy found is a
 small number of target labels, not feature engineering, distance monitoring, or threshold
-recalibration; zero-label recalibration is net harmful when pooled.
+recalibration; recalibrating on clean target benign traffic helps the ranking-preserving
+pair and hurts others, so its pooled effect depends on the summary (median down, mean up).
 
 ## Protocol
 
