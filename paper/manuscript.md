@@ -21,8 +21,10 @@ being scored below benign ones.
 Most pairs fail at the ranking rather than at the threshold, nine to eleven of twelve for
 the primary model depending on how the two losses are compared, which makes recalibration the
 wrong instrument for most of them: a threshold can only cut an
-ordering it cannot repair. Retraining on ten deliberately balanced labelled target flows instead
-reaches median macro-F1 0.7253, against 0.3919 without adaptation. Cross-network
+ordering it cannot repair. Ten deliberately balanced labelled target flows lift median
+macro-F1 from 0.3919 to 0.7253 when added to the source data, but a classifier trained on
+those ten flows alone does at least as well (0.7852): here the labels, not the source model,
+do the repair. Cross-network
 evaluation has to separate ranking failure from threshold failure, because the two admit
 different fixes.
 
@@ -892,15 +894,17 @@ Ten balanced labelled flows outperformed every baseline evaluated here that uses
 cell (12 ordered pairs × 2 seeds × 10 independent balanced label draws); for k = 0, over the
 24 pair-seeds. 5th and 95th percentiles in brackets. This experiment caps each domain at
 25,000 flows per class, half the 50,000 of the main matrix, to keep the refits tractable.
+The two target-only columns train on the same k labelled flows alone, matched draw for draw
+(`results/label_budget_target_only.json`).
 
-| k labelled target flows | re-tune threshold | retrain on source + k |
-|---:|---|---|
-| 0 | 0.3919 [0.2779, 0.5106] | 0.3919 [0.2779, 0.5106] |
-| **10** | 0.5600 [0.2851, 0.9383] | **0.7253 [0.5604, 0.9540]** |
-| 50 | 0.6090 [0.3336, 0.9592] | 0.8795 [0.7952, 0.9804] |
-| 100 | 0.6104 [0.3482, 0.9604] | 0.9116 [0.8393, 0.9932] |
-| 500 | 0.6135 [0.3503, 0.9600] | 0.9548 [0.8958, 0.9974] |
-| 1000 | 0.6142 [0.3620, 0.9609] | 0.9574 [0.9228, 0.9986] |
+| k labelled target flows | re-tune threshold | retrain on source + k | target only: logistic regression | target only: 1-NN |
+|---:|---|---|---|---|
+| 0 | 0.3919 [0.2779, 0.5106] | 0.3919 [0.2779, 0.5106] | — | — |
+| **10** | 0.5600 [0.2851, 0.9383] | **0.7253 [0.5604, 0.9540]** | 0.7852 [0.6157, 0.9797] | 0.7704 [0.6175, 0.9735] |
+| 50 | 0.6090 [0.3336, 0.9592] | 0.8795 [0.7952, 0.9804] | 0.8606 [0.7662, 0.9906] | 0.8788 [0.7069, 0.9867] |
+| 100 | 0.6104 [0.3482, 0.9604] | 0.9116 [0.8393, 0.9932] | 0.9035 [0.8096, 0.9944] | 0.9033 [0.7734, 0.9932] |
+| 500 | 0.6135 [0.3503, 0.9600] | 0.9548 [0.8958, 0.9974] | 0.9332 [0.8679, 0.9967] | 0.9421 [0.8612, 0.9967] |
+| 1000 | 0.6142 [0.3620, 0.9609] | 0.9574 [0.9228, 0.9986] | 0.9425 [0.8831, 0.9969] | 0.9494 [0.8899, 0.9973] |
 
 Each target is split once per (pair, seed) into a disjoint adaptation pool and evaluation
 set. Labels are drawn only from the pool and every score is computed only on the
@@ -918,11 +922,30 @@ depressing the estimate slightly rather than inflating it, and the conclusion is
 
 Ten balanced labelled flows lift median external macro-F1 from 0.3919 to 0.7253, a hundred reach 0.9116, and a thousand reach 0.9574 against an in-domain ceiling near 0.98 (Figure 7). Re-tuning the threshold on the same labels plateaus at roughly 0.61, and the reason is structural rather than empirical: changing a threshold cannot restore discrimination when the score ordering itself is reversed, because a threshold only chooses a cut point on an ordering it cannot change. Recovering the ordering requires changing the scoring function, which is what target labels buy.
 
-The sharpest comparison is against a **target-optimal threshold oracle**: the best threshold obtainable on the evaluation set with unlimited target labels, which reaches 0.6158. It is an oracle rather than a zero-label method, since it consumes target labels without limit. Retraining on **ten** balanced labelled flows reaches 0.7253 and so exceeds it. Recalibration and supervision are not two points on one scale; beyond a certain point recalibration cannot buy what a few labels buy immediately.
+The sharpest comparison is against a **target-optimal threshold oracle**: the best threshold obtainable on the evaluation set with unlimited target labels, which reaches 0.6158. It is an oracle rather than a zero-label method, since it consumes target labels without limit. Retraining on **ten** balanced labelled flows reaches 0.7253 and so exceeds it, and so does
+a classifier trained on the ten flows alone. Recalibration and supervision are not two points on one scale; beyond a certain point recalibration cannot buy what a few labels buy immediately.
 
-Recovery is uneven across pairs, and unevenly in an informative direction. NF-UNSW-NB15 to NF-CSE-CIC-IDS2018, the most strongly inverted transfer in the study at ROC-AUC 0.070, reaches 0.9076 [0.8174, 0.9566] with ten balanced labels. That is what inversion predicts: the ordering still carries the information, with the sign reversed, and a small labelled sample is enough to supply the sign. The
-operational reading, at the scope the evidence supports, is that in this benchmark a small
-balanced labelled target sample was substantially more effective than the baselines tested that use no attack labels (§5 states the scope of that claim precisely).
+**The labels do the work, not the source model.** A gain from retraining on source plus k
+target flows credits the source only if a model trained on the same k flows alone does
+worse. It does not. At k = 10, logistic regression trained on the ten flows alone reaches
+median macro-F1 0.7852 and a one-nearest-neighbour classifier 0.7704, both above the 0.7253
+of source-plus-ten retraining; source-plus-ten beats the better of the two on only 27% of
+matched draws. The LightGBM configuration used elsewhere cannot split ten rows and stays at
+0.3333, so the comparison is made against learners suited to ten examples. From k = 50 the
+arms are within about two points of each other, source plus k slightly ahead of the two
+small-sample learners (Table 14), while the LightGBM configuration trained on the target
+alone overtakes source plus k from k = 100 (0.9335 against 0.9116). Per pair, the
+source helps at k = 10 on only 3 of 12 pairs, two of them among the three pairs whose external
+AUC exceeds 0.8; across all twelve the association between external AUC and the source's
+benefit is weak and uncertain (Spearman ρ = +0.34 [−0.41, +0.75],
+`results/target_only_per_pair.json`). We had read the fast recovery of the most inverted
+pairs as labels supplying the reversed sign of a still-informative ordering; the control does
+not support that reading, because the same pairs recover as well without the source.
+
+The operational reading, at the scope the evidence supports, is that in this benchmark a
+small balanced labelled target sample was substantially more effective than the baselines
+tested that use no attack labels, and that what it buys is mostly a new target model rather
+than a repaired source model.
 
 ![Figure 7](../figures/fig7_label_budget.png)
 
@@ -1009,15 +1032,14 @@ confidence will, imperfectly.
 
 This sharpens the prior measurements in §2.1 rather than contradicting them. Read as accuracy, those numbers say the signal is gone. Read as ranking, per
 ordered pair, the same collapse turns out to contain transfers that are not merely
-uninformative but systematically inverted. The distinction earns its keep operationally: an
-uninformative detector offers no target ordering to work with, whereas an inverted one
-offers a strong ordering with the wrong sign, which is why ten labelled flows go as far as
-they do.
+uninformative but systematically inverted. The distinction earns its keep operationally: it
+tells an operator that recalibration cannot help. It does not, on the evidence of §4.12, make
+the inverted source model worth repairing; ten target labels do as well without it.
 
 The remedy hierarchy inverts the usual order of effort. Zero-label feature alignment by
 CORAL recovers 0.0029 macro-F1; a benign-reference threshold helps substantially in the one
 regime where ranking survived and hurts in three others; ten balanced labelled flows raise
-median macro-F1 from 0.3919 to 0.7253. For an operator the implication is to build a small labelled set from the target
+median macro-F1 from 0.3919 to 0.7253 with the source data and to 0.7852 without it. For an operator the implication is to build a small labelled set from the target
 network deliberately, covering both classes, rather than to rely on recalibration:
 the ten flows of §4.12 are drawn balanced, which a live sample of ten would not be.
 
@@ -1135,7 +1157,8 @@ That distinction is the paper's practical content, because the two failures take
 repairs. Where the ranking survives the move, a threshold read from target benign traffic
 recovers almost all of the loss without a single attack label. Where the ranking has
 reversed, no threshold restores the ordering at any budget, and ten balanced labelled target
-flows do more than an oracle handed unlimited labels to move the cut point. The diagnosis has to come
+flows do more than an oracle handed unlimited labels to move the cut point, whether or not
+the source model is kept. The diagnosis has to come
 before the remedy, and §4.10 shows that a label-free proxy for it exists, imperfectly.
 
 What any of this measures rests on how the data was prepared. These benchmarks are up to

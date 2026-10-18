@@ -251,6 +251,54 @@
       ],
       "fmt": "word",
       "where": "Abstract, 4.5 same-unit rule"
+    },
+    {
+      "text": "0.7852",
+      "file": "label_budget_target_only.json",
+      "path": [
+        "per_k",
+        "10",
+        "logreg",
+        "median"
+      ],
+      "decimals": 4,
+      "where": "Abstract, 4.12, Discussion"
+    },
+    {
+      "text": "0.7704",
+      "file": "label_budget_target_only.json",
+      "path": [
+        "per_k",
+        "10",
+        "nn1",
+        "median"
+      ],
+      "decimals": 4,
+      "where": "4.12"
+    },
+    {
+      "text": "27%",
+      "file": "label_budget_target_only.json",
+      "path": [
+        "per_k",
+        "10",
+        "best_of_three",
+        "share_source_plus_k_better"
+      ],
+      "decimals": 0,
+      "fmt": "pct",
+      "where": "4.12"
+    },
+    {
+      "text": "+0.34",
+      "file": "target_only_per_pair.json",
+      "path": [
+        "spearman_auc_vs_source_benefit",
+        "rho"
+      ],
+      "decimals": 2,
+      "fmt": "signed",
+      "where": "4.12"
     }
   ]
 }

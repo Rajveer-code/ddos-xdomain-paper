@@ -40,6 +40,7 @@ STEPS: list[tuple[str, list[str]]] = [
     ("remedies", ["run_remedies.py"]),
     ("label_budget", ["run_label_budget.py", "--n-per-class", "25000", "--seeds", "42", "43",
                       "--draws", "10"]),
+    ("target_only_control", ["run_target_only_control.py"]),
     ("cic_study", ["run_cic_study.py"]),
     ("summarize_all", ["summarize_all.py"]),
     ("summarize_secondary", ["summarize_secondary.py"]),

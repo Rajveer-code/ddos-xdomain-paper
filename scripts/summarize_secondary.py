@@ -173,7 +173,44 @@ def decomposition_rule() -> dict:
     return {"per_model": out, "aggregation": "seed means per ordered pair"}
 
 
+def target_only_per_pair(k: int = 10) -> dict:
+    """
+    Per ordered pair at budget k: source+k retraining against learners trained on the same
+    k target flows alone (results/label_budget_target_only.json), matched draw for draw,
+    with each pair's external AUC. Tests whether the source helps where its ranking survived.
+    """
+    to = {(r["target"], r["seed"], r["k"], r["draw"]): r
+          for r in load("label_budget_target_only.json")["rows"]}
+    budget = load("label_budget_v2.json")["rows"]
+    aucs, vals = defaultdict(list), defaultdict(lambda: defaultdict(list))
+    for b in budget:
+        pair = f'{b["source"]}|{b["target"]}'
+        if b["k"] == 0:
+            aucs[pair].append(b["external_auc"])
+        elif b["k"] == k:
+            t = to[(b["target"], b["seed"], b["k"], b["draw"])]
+            vals[pair]["source_plus_k"].append(b["f1_finetune"])
+            vals[pair]["logreg"].append(t["f1_logreg"])
+            vals[pair]["nn1"].append(t["f1_nn1"])
+    per_pair = {}
+    for pair, v in vals.items():
+        med = {m: float(np.median(x)) for m, x in v.items()}
+        best_target_only = max(med["logreg"], med["nn1"])
+        per_pair[pair] = {"external_auc": float(np.mean(aucs[pair])), **med,
+                          "source_benefit_vs_best_target_only": med["source_plus_k"] - best_target_only}
+    a = np.array([p["external_auc"] for p in per_pair.values()])
+    d = np.array([p["source_benefit_vs_best_target_only"] for p in per_pair.values()])
+    lo, hi = bootstrap_spearman(a, d)
+    return {"k": k, "per_pair": per_pair,
+            "n_pairs_source_helps": int((d > 0).sum()),
+            "spearman_auc_vs_source_benefit": {"rho": float(spearmanr(a, d).statistic),
+                                               "ci_lo": lo, "ci_hi": hi},
+            "note": "medians over 20 draws per pair (2 seeds x 10); benefit = source+k minus "
+                    "the better of the two target-only learners"}
+
+
 def main() -> int:
+    dump("target_only_per_pair.json", target_only_per_pair())
     dump("decomposition_rule.json", decomposition_rule())
     dump("label_budget_summary.json", label_budget())
     dump("feature_count_summary.json", feature_count())

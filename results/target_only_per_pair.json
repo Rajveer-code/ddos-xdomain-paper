@@ -1,0 +1,96 @@
+{
+  "k": 10,
+  "per_pair": {
+    "nf_cse_cic_ids2018|nf_bot_iot": {
+      "external_auc": 0.5232818046119989,
+      "source_plus_k": 0.8780928101625064,
+      "logreg": 0.8320970312582542,
+      "nn1": 0.7895510139305689,
+      "source_benefit_vs_best_target_only": 0.045995778904252216
+    },
+    "nf_cse_cic_ids2018|nf_ton_iot": {
+      "external_auc": 0.5591531632,
+      "source_plus_k": 0.6179156562500815,
+      "logreg": 0.7274239821960096,
+      "nn1": 0.7250781758781535,
+      "source_benefit_vs_best_target_only": -0.10950832594592808
+    },
+    "nf_cse_cic_ids2018|nf_unsw_nb15": {
+      "external_auc": 0.8120297686645637,
+      "source_plus_k": 0.8023081317186989,
+      "logreg": 0.6720726278457524,
+      "nn1": 0.6578020066867445,
+      "source_benefit_vs_best_target_only": 0.13023550387294647
+    },
+    "nf_bot_iot|nf_cse_cic_ids2018": {
+      "external_auc": 0.964439824,
+      "source_plus_k": 0.9538249873722922,
+      "logreg": 0.958255862705791,
+      "nn1": 0.9567977000118524,
+      "source_benefit_vs_best_target_only": -0.0044308753334988404
+    },
+    "nf_bot_iot|nf_ton_iot": {
+      "external_auc": 0.5897721504000001,
+      "source_plus_k": 0.607298125780678,
+      "logreg": 0.7274239821960096,
+      "nn1": 0.7250781758781535,
+      "source_benefit_vs_best_target_only": -0.12012585641533158
+    },
+    "nf_bot_iot|nf_unsw_nb15": {
+      "external_auc": 0.8005477287066245,
+      "source_plus_k": 0.7420911372548145,
+      "logreg": 0.6720726278457524,
+      "nn1": 0.6578020066867445,
+      "source_benefit_vs_best_target_only": 0.07001850940906207
+    },
+    "nf_ton_iot|nf_cse_cic_ids2018": {
+      "external_auc": 0.4307855872,
+      "source_plus_k": 0.7513704609956786,
+      "logreg": 0.958255862705791,
+      "nn1": 0.9567977000118524,
+      "source_benefit_vs_best_target_only": -0.20688540171011238
+    },
+    "nf_ton_iot|nf_bot_iot": {
+      "external_auc": 0.6569601722323222,
+      "source_plus_k": 0.6764518790889716,
+      "logreg": 0.8320970312582542,
+      "nn1": 0.7895510139305689,
+      "source_benefit_vs_best_target_only": -0.15564515216928254
+    },
+    "nf_ton_iot|nf_unsw_nb15": {
+      "external_auc": 0.3948632807570978,
+      "source_plus_k": 0.6443432343087249,
+      "logreg": 0.6720726278457524,
+      "nn1": 0.6578020066867445,
+      "source_benefit_vs_best_target_only": -0.027729393537027525
+    },
+    "nf_unsw_nb15|nf_cse_cic_ids2018": {
+      "external_auc": 0.1384906272,
+      "source_plus_k": 0.9075922560688797,
+      "logreg": 0.958255862705791,
+      "nn1": 0.9567977000118524,
+      "source_benefit_vs_best_target_only": -0.050663606636911274
+    },
+    "nf_unsw_nb15|nf_bot_iot": {
+      "external_auc": 0.20762908621184575,
+      "source_plus_k": 0.7261467755956508,
+      "logreg": 0.8320970312582542,
+      "nn1": 0.7895510139305689,
+      "source_benefit_vs_best_target_only": -0.10595025566260341
+    },
+    "nf_unsw_nb15|nf_ton_iot": {
+      "external_auc": 0.2178271136,
+      "source_plus_k": 0.6115681735357325,
+      "logreg": 0.7274239821960096,
+      "nn1": 0.7250781758781535,
+      "source_benefit_vs_best_target_only": -0.11585580866027712
+    }
+  },
+  "n_pairs_source_helps": 3,
+  "spearman_auc_vs_source_benefit": {
+    "rho": 0.3356643356643357,
+    "ci_lo": -0.41320126227208975,
+    "ci_hi": 0.7517743438422116
+  },
+  "note": "medians over 20 draws per pair (2 seeds x 10); benefit = source+k minus the better of the two target-only learners"
+}
