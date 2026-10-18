@@ -106,9 +106,10 @@ not established by: we do not isolate which associations or how they change, and
    baseline under leave-one-pair-out evaluation while three marginal distribution-distance
    measures do not.
 5. A benchmark-integrity audit covering exact duplication, contradictory labels under the
-   full attack taxonomy, non-finite extractor artefacts and corrected labels, showing that
-   de-duplication and label correction materially change measured transfer performance
-   while contradictory-label exclusion does not, under the primary DoS-only setting.
+   full attack taxonomy, non-finite extractor artefacts and a regenerated release of
+   CICIDS2017, showing that de-duplication and the choice of release materially change
+   measured transfer performance while contradictory-label exclusion does not, under the
+   primary DoS-only setting.
 
 Section 2 places the study against prior cross-dataset work and against the
 contaminant-feature literature. Section 3 gives the data and the protocol, including the
@@ -171,13 +172,18 @@ two happens decides whether recalibration or target supervision is the right res
 
 Engelen et al. [15] documented labelling and traffic-generation defects in CICIDS2017 and
 released a corrected version; Lanvin et al. [16] extended the analysis and quantified the
-effect of the corrections on measured performance. Both studies examine in-domain
-consequences. We use the corrected release differently, as an instrument: applying one
-identical source model to the original and the corrected target isolates label error from
-domain shift, and the result runs opposite to the intuitive direction (§4.15).
+effect of the corrections on measured performance. Liu et al. [21] then documented labelling,
+feature-generation and attack-orchestration errors in both CICIDS2017 and CSE-CIC-IDS2018 and
+released regenerated flows for both; the corrected CICIDS2017 used in this paper is that 2022
+release. These studies examine in-domain consequences. We use the regenerated release
+differently, as an instrument: one identical source model is applied to the original and the
+regenerated target. Because the regeneration changes flow features as well as labels, the
+comparison measures how much a cross-dataset result depends on which release is used rather
+than isolating label error, and the result runs opposite to the intuitive direction (§4.15).
 
 Our duplicate accounting (§3.3) is adjacent to this work but, to our knowledge, has not
-been reported at this scale for the NetFlow v2 datasets. That three of four are more than
+been reported at this scale for the NetFlow v2 datasets. It is measured on the publicly
+mirrored copies described in §3.1, not on the original releases. That three of four are more than
 80% duplicate in the model's own feature space constrains how in-domain numbers computed on
 them should be read, and §4.9 measures how much it moves the transfer results themselves.
 
@@ -229,16 +235,33 @@ itself a confound: a transfer result obtained this way cannot be separated from 
 harmonisation that produced it.
 
 We use the NetFlow v2 feature set of Sarhan et al. [5], built for this purpose. Its
-four datasets ship an identical 43-column schema. We verify rather than assume this: the
-loader asserts that the numeric feature sets of all four are equal, not merely
-overlapping, and fails otherwise. From the 43 columns we drop the two label columns and
-`L4_SRC_PORT` and `L4_DST_PORT`, leaving **39 features**. Ports are dropped because in
+four datasets are released with an identical schema of 43 NetFlow features plus two label
+columns. The copies we use (below) omit the two IPv4 address columns, leaving 43 columns
+including the labels. We verify rather than assume that the schemas agree: the loader asserts
+that the numeric feature sets of all four are equal, not merely overlapping, and fails
+otherwise. We drop the two label columns and `L4_SRC_PORT` and `L4_DST_PORT`, leaving
+**39 features**; the loader would also drop the address columns if they were present. Ports are dropped because in
 these testbeds a destination port frequently identifies the attack script rather than the
 service. That is the spurious-correlation failure Arp et al. [17] describe.
 
 The conventional CICFlowMeter pairing (CIC-DDoS2019 ↔ CICIDS2017) is retained as a
 secondary study, so the primary conclusions can be checked in the feature space the
 literature actually uses.
+
+**Provenance.** All seven datasets were obtained as Parquet copies from public Kaggle
+mirrors uploaded by one third party (Kaggle user `dhoogla`), not from the originators'
+distribution points: NF-CSE-CIC-IDS2018-v2, NF-BoT-IoT-v2, NF-ToN-IoT-v2 and NF-UNSW-NB15-v2
+(mirror version 2), CIC-DDoS2019 and CICIDS2017 (version 3), and the DistriNet CICIDS2017
+release (version 5, the 2022 files of Liu et al. [21]). Each mirror is labelled CC BY-NC-SA
+4.0. The copies are pre-cleaned. The uploader reports removing records with missing values
+and duplicate records, and the four NetFlow copies hold 9.3% to 22.5% fewer rows than the
+totals the University of Queensland publishes for the original releases (Table 1). The
+CIC-DDoS2019 copy was down-sampled by its uploader to correct the original's extreme
+attack-to-benign imbalance, so its base rate is not that of the original capture. Row counts,
+duplicate rates and base rates in this paper therefore describe these copies. We do not
+redistribute any data; the code downloads the same mirror versions, and the originals are
+available from the University of Queensland, the Canadian Institute for Cybersecurity and
+DistriNet.
 
 ### 3.2 Labels
 
@@ -263,17 +286,19 @@ socket columns are dropped. Two flows differing only in source port are one exam
 model that never observes the port, and letting such a pair straddle a train/test split is
 leakage.
 
-**Table 1. Datasets after preparation.**
+**Table 1. Datasets after preparation.** "Rows in copy" counts the mirrored copy used (§3.1);
+"official rows" is the total the University of Queensland publishes for the original NetFlow v2
+release. Duplicate rate is measured in the feature space the model sees.
 
-| dataset | raw rows | after de-duplication | duplicate rate | DDoS/DoS flows | base rate |
-|---|---:|---:|---:|---:|---:|
-| NF-CSE-CIC-IDS2018 | 17,129,715 | 8,981,062 | 47.6% | 453,237 | 0.0505 |
-| NF-BoT-IoT | 30,420,086 | 101,369 | **99.7%** | 53,005 | 0.5229 |
-| NF-ToN-IoT | 13,135,881 | 2,477,944 | 81.1% | 529,884 | 0.2138 |
-| NF-UNSW-NB15 | 1,986,745 | 236,999 | 88.1% | 3,075 | 0.0130 |
-| CIC-DDoS2019 | 431,371 | 418,884 | 2.9% | 324,197 | 0.7740 |
-| CICIDS2017 | 2,313,810 | 2,231,536 | 3.6% | 321,706 | 0.1442 |
-| CICIDS2017 (corrected) | 1,787,358 | 1,747,255 | 2.2% | 266,899 | 0.1528 |
+| dataset | official rows | rows in copy | after de-duplication | duplicate rate | DDoS/DoS flows | base rate |
+|---|---:|---:|---:|---:|---:|---:|
+| NF-CSE-CIC-IDS2018 | 18,893,708 | 17,129,715 | 8,981,062 | 47.6% | 453,237 | 0.0505 |
+| NF-BoT-IoT | 37,763,497 | 30,420,086 | 101,369 | **99.7%** | 53,005 | 0.5229 |
+| NF-ToN-IoT | 16,940,496 | 13,135,881 | 2,477,944 | 81.1% | 529,884 | 0.2138 |
+| NF-UNSW-NB15 | 2,390,275 | 1,986,745 | 236,999 | 88.1% | 3,075 | 0.0130 |
+| CIC-DDoS2019 | — | 431,371 | 418,884 | 2.9% | 324,197 | 0.7740 |
+| CICIDS2017 | — | 2,313,810 | 2,231,536 | 3.6% | 321,706 | 0.1442 |
+| CICIDS2017 (DistriNet 2022) | — | 1,787,358 | 1,747,255 | 2.2% | 266,899 | 0.1528 |
 
 Three of the four NetFlow datasets are more than 80% duplicate. We additionally count *contradictory groups*, identical feature vectors carrying opposite labels, at 1,940 in NF-CSE-CIC-IDS2018 and 858 in NF-UNSW-NB15. Those counts are taken over the full attack taxonomy. Under the DoS-only policy the primary analysis actually uses, both fall to zero: every contradictory group in these two datasets pairs a benign flow with a *non-DoS* attack, and those rows are removed before modelling. The ceiling is therefore real for a general intrusion detector on these captures and absent for the DoS detector studied here, which is verified rather than assumed in §4.9.
 
@@ -359,7 +384,7 @@ To keep the base rate visible, we report **FPR at 95% TPR**, since balanced-test
 | Pitfall | Addressed by |
 |---|---|
 | Sampling bias | Four independently collected testbeds; every ordered pair in both directions; per-dataset base rates reported, not normalised away |
-| Label inaccuracy | Full label→class map released; contradictory groups counted; label error isolated against the corrected CICIDS2017 |
+| Label inaccuracy | Full label→class map released; contradictory groups counted; original and DistriNet-regenerated CICIDS2017 compared under one source model (§4.15) |
 | Data snooping | De-duplicate before splitting; scaler, imputer and threshold fitted on source data only, verified by the pipeline self-check (§3.5) |
 | Spurious correlations | Socket columns dropped; feature classes ablated; `DNS_QUERY_ID` examined directly rather than trusted as noise |
 | Biased parameter selection | Fixed hyperparameters across all domains; no tuning against any target |
@@ -380,7 +405,7 @@ kinds that need different repairs. Sections 4.6 to 4.9 ask what causes the inver
 whether our own preprocessing manufactured it. Sections 4.10 to 4.12 ask what an operator
 can see coming and what actually repairs it. Sections 4.13 to 4.15 give the scope
 conditions: which attacks are lost, which dataset pairings hide the effect, and how much
-of the measurement survives correcting the labels.
+of the measurement survives switching to a regenerated release of the target.
 
 ### 4.1 In-domain, the problem looks solved
 
@@ -893,21 +918,28 @@ unusually similar for reasons other than shared provenance. Under either reading
 confined to one institution's dataset family risks overstating how recoverable the problem
 is.
 
-### 4.15 Correcting label errors makes transfer look worse
+### 4.15 A regenerated CICIDS2017 release makes transfer look worse
 
-**Table 16. Original versus corrected CICIDS2017, identical source model.**
+**Table 16. Original versus DistriNet-regenerated CICIDS2017 as target, identical
+CIC-DDoS2019 source model.** External macro-F1.
 
-| model | original | corrected | Δ macro-F1 |
+| model | original | regenerated | Δ macro-F1 |
 |---|---:|---:|---:|
 | LightGBM | 0.4827 | 0.3375 | −0.1453 |
 | XGBoost | 0.4986 | 0.3391 | −0.1595 |
 | RandomForest | 0.4824 | 0.3381 | −0.1443 |
 | LogisticRegression | 0.4543 | 0.3287 | −0.1256 |
 
-Mean |Δ| is 0.1437, consistent across all four model families. For this source-target evaluation, correcting the target labels reduced measured macro-F1 by 0.1256 to 0.1595 across model families, so label error can materially inflate apparent transfer performance. Roughly a quarter of
-the external macro-F1 measured against the original labels does not survive correction, so
-any cross-dataset result using uncorrected CICIDS2017 as a target is optimistic by about
-this margin.
+Mean |Δ| is 0.1437, consistent across all four model families. Replacing the original
+target with the 2022 regenerated release [21] lowers measured macro-F1 by 0.1256 to 0.1595,
+between 28% and 32% of the macro-F1 measured on the original. The regenerated release
+corrects labels but was also re-extracted with a repaired flow meter: it carries additional
+columns and 526,452 fewer rows. Labels and features therefore change together, and the
+comparison does not isolate label error. For LightGBM (seed 42) recall falls from 0.19 to
+0.007 on the regenerated target, which a feature-distribution change explains at least as
+well as relabelling. What the result does establish is that the choice of release alone moves
+this cross-dataset number by close to a third, downward, so a cross-dataset result that uses
+the original CICIDS2017 as a target should be read as optimistic.
 
 ---
 
@@ -996,11 +1028,13 @@ NF-CSE-CIC-IDS2018 retains only 203 low-rate application-layer flows, so §4.13 
 on the CICFlowMeter secondary study. The per-family comparison there should be read as
 indicative, and the direction of any error is unknown rather than bounded.
 
-**Label error is bounded, not eliminated.** CICIDS2017's defects are addressed against the
-corrected release; the NetFlow quartet has no comparably corrected counterpart, so residual
-label noise there is unmeasured. On the one target where the correction can be applied it
-moved measured transfer down, so uncorrected label error in the quartet most plausibly
-flatters our external numbers rather than depressing them.
+**Label error is unmeasured in the quartet.** For CICIDS2017 we compare against the 2022
+regenerated release, which changes features as well as labels. A regenerated CSE-CIC-IDS2018
+also exists [21], but only in CICFlowMeter form; a NetFlow v2 version of it would have to be
+rebuilt from the pcaps, so residual label noise in the quartet is unmeasured. On the one
+target where a regenerated release can be applied, measured transfer moved down, so the
+quartet's uncorrected errors more plausibly flatter our external numbers than depress them,
+but this is an extrapolation from one target.
 
 **The mechanism behind the inversion is not isolated.** Our experiments rule two explanations
 out without establishing a third — neither a gradient-boosting artefact nor model capacity
@@ -1027,8 +1061,9 @@ flows do more than an oracle handed unlimited labels to move the cut point. The 
 before the remedy, and §4.10 shows that a label-free proxy for it exists, imperfectly.
 
 What any of this measures rests on how the data was prepared. These benchmarks are up to
-99.7% duplicate in the feature space a model actually sees, and correcting known label
-errors in one target moves measured transfer down by 0.1437 macro-F1. The next step the
+99.7% duplicate in the feature space a model actually sees, and replacing one target with
+its regenerated release, which corrects labels and re-extracts features, moves measured
+transfer down by 0.1437 macro-F1. The next step the
 taxonomy points at, and the one this study stops short of, is identifying which individual
 feature-label associations change between networks, and how.
 
@@ -1107,3 +1142,4 @@ result.
 
 20. Sun, B., Feng, J., and Saenko, K. "Return of Frustratingly Easy Domain Adaptation."
    *AAAI Conference on Artificial Intelligence*, 2016.
+21. Liu, L., Engelen, G., Lynar, T., Essam, D., and Joosen, W. "Error Prevalence in NIDS datasets: A Case Study on CIC-IDS-2017 and CSE-CIC-IDS-2018." In *Proc. IEEE Conference on Communications and Network Security (CNS)*, pp. 254–262, 2022. doi:10.1109/CNS56114.2022.9947235

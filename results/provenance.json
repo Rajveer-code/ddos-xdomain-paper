@@ -1,0 +1,75 @@
+{
+  "read_on": "2026-10-18",
+  "datasets": {
+    "nf_cse_cic_ids2018": {
+      "mirror": "dhoogla/nfcsecicids2018v2",
+      "mirror_version": 2,
+      "licence": "CC BY-NC-SA 4.0",
+      "source": "https://www.kaggle.com/api/v1/datasets/view/dhoogla/nfcsecicids2018v2",
+      "rows_in_copy": 17129715,
+      "official_rows": 18893708,
+      "official_source": "https://staff.itee.uq.edu.au/marius/NIDS_datasets/",
+      "rows_missing_from_copy": 1763993,
+      "pct_fewer_than_official": 9.3
+    },
+    "nf_bot_iot": {
+      "mirror": "dhoogla/nfbotiotv2",
+      "mirror_version": 2,
+      "licence": "CC BY-NC-SA 4.0",
+      "source": "https://www.kaggle.com/api/v1/datasets/view/dhoogla/nfbotiotv2",
+      "rows_in_copy": 30420086,
+      "official_rows": 37763497,
+      "official_source": "https://staff.itee.uq.edu.au/marius/NIDS_datasets/",
+      "rows_missing_from_copy": 7343411,
+      "pct_fewer_than_official": 19.4
+    },
+    "nf_ton_iot": {
+      "mirror": "dhoogla/nftoniotv2",
+      "mirror_version": 2,
+      "licence": "CC BY-NC-SA 4.0",
+      "source": "https://www.kaggle.com/api/v1/datasets/view/dhoogla/nftoniotv2",
+      "rows_in_copy": 13135881,
+      "official_rows": 16940496,
+      "official_source": "https://staff.itee.uq.edu.au/marius/NIDS_datasets/",
+      "rows_missing_from_copy": 3804615,
+      "pct_fewer_than_official": 22.5
+    },
+    "nf_unsw_nb15": {
+      "mirror": "dhoogla/nfunswnb15v2",
+      "mirror_version": 2,
+      "licence": "CC BY-NC-SA 4.0",
+      "source": "https://www.kaggle.com/api/v1/datasets/view/dhoogla/nfunswnb15v2",
+      "rows_in_copy": 1986745,
+      "official_rows": 2390275,
+      "official_source": "https://staff.itee.uq.edu.au/marius/NIDS_datasets/",
+      "rows_missing_from_copy": 403530,
+      "pct_fewer_than_official": 16.9
+    },
+    "cic_ddos2019": {
+      "mirror": "dhoogla/cicddos2019",
+      "mirror_version": 3,
+      "licence": "CC BY-NC-SA 4.0",
+      "source": "https://www.kaggle.com/api/v1/datasets/view/dhoogla/cicddos2019",
+      "rows_in_copy": 431371
+    },
+    "cic_ids2017": {
+      "mirror": "dhoogla/cicids2017",
+      "mirror_version": 3,
+      "licence": "CC BY-NC-SA 4.0",
+      "source": "https://www.kaggle.com/api/v1/datasets/view/dhoogla/cicids2017",
+      "rows_in_copy": 2313810
+    },
+    "cic_ids2017_fixed": {
+      "mirror": "dhoogla/distrinetcicids2017",
+      "mirror_version": 5,
+      "licence": "CC BY-NC-SA 4.0",
+      "source": "https://www.kaggle.com/api/v1/datasets/view/dhoogla/distrinetcicids2017",
+      "rows_in_copy": 1787358
+    }
+  },
+  "netflow_pct_fewer_range": [
+    9.3,
+    22.5
+  ],
+  "cicids2017_regenerated_minus_original_rows": 526452
+}
