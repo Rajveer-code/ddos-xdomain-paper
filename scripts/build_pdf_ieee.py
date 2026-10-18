@@ -269,7 +269,7 @@ PREAMBLE = r"""\documentclass[journal]{IEEEtran}
 \begin{document}
 
 \title{%s}
-\author{%s\thanks{[PLACEHOLDER: author affiliation + email]}}
+\author{%s\thanks{Department of Computer Science and Business Systems, Gyan Ganga Institute of Technology and Sciences, Jabalpur, India (e-mail: rajveerpall04@gmail.com).}}
 
 \maketitle
 

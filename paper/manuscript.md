@@ -1012,10 +1012,25 @@ argues for cross-institution evaluation as the more informative default.
 
 ## 6. Threats to validity
 
-**All four datasets are testbed captures.** None is production traffic. This limits external
-validity, but it sharpens the finding rather than weakening it: if
-detectors cannot transfer between four carefully constructed research testbeds, the case for
-transfer to a live network is not stronger.
+**All four datasets are testbed captures.** None is production traffic, and the benign
+traffic of synthetic benchmarks differs statistically from real traffic [29]. The inversion
+could therefore be partly a product of how the testbeds encode attacks, and we cannot say
+whether production networks would invert. What the result does show is that a strong score
+on one research testbed is not evidence of transfer to another, which is the comparison
+most published cross-dataset numbers rest on.
+
+**The data are third-party copies.** All seven datasets come from public Kaggle mirrors by
+one uploader (§3.1). The copies are pre-cleaned, hold 9.3% to 22.5% fewer NetFlow rows than
+the official releases, and in the case of CIC-DDoS2019 were down-sampled. Duplicate rates
+and base rates are therefore properties of these copies. We expect the direction of the
+main results to survive on the official files, because exact duplicates removed upstream
+would also have been removed by our own de-duplication, but we have not re-run on them.
+
+**Only classical supervised learners and one shallow adaptation baseline are tested.** The
+four families are tree ensembles and logistic regression; neural detectors, unsupervised
+detectors, which [22] and [25] report generalise better on these data, and adversarial
+domain adaptation [26], [27] are not evaluated. "Not a property of one learner" is a claim
+about these four families.
 
 **De-duplication is a consequential choice.** Removing exact duplicates in the
 post-socket-drop feature space reduces NF-BoT-IoT by 99.7%. A reader who considers those
@@ -1091,10 +1106,12 @@ feature-label associations change between networks, and how.
 
 ## Data and code availability
 
-All code, fixed seeds, configuration and result files are released. Every number in this
-paper is regenerated from `results/*.json` by the scripts that produced them; a
-verification script checks that each numeric literal in the manuscript traces to a stored
-result.
+Code, fixed seeds, configuration and result files are available at
+https://github.com/Rajveer-code/ddos-xdomain-paper. Every number in this paper is
+regenerated from `results/*.json` by the scripts that produced them. The datasets are not
+redistributed; they are available from the University of Queensland, the Canadian Institute
+for Cybersecurity and DistriNet, and the exact mirror versions used are listed in §3.1 and
+recorded in `results/provenance.json`.
 
 ## References
 
