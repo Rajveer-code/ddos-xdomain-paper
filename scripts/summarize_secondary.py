@@ -148,7 +148,33 @@ def family_transfer() -> dict:
     return out
 
 
+def decomposition_rule() -> dict:
+    """
+    Count ranking-dominated pairs under two rules. The manuscript's original rule compares
+    ranking loss in AUC units with threshold loss in macro-F1 units, which is a convention.
+    The same-unit rule splits the macro-F1 gap itself: (in-domain F1 - external F1 at the
+    target-optimal threshold) against (that oracle F1 - external F1 at the deployed threshold).
+    """
+    rows = [r for r in load("transfer_matrix.json")["rows"] if r["kind"] == "external"]
+    out = {}
+    for model in sorted({r["model"] for r in rows}):
+        by_pair = defaultdict(list)
+        for r in rows:
+            if r["model"] == model:
+                by_pair[(r["source"], r["target"])].append(r["decomposition"])
+        mixed = same = 0
+        for ds in by_pair.values():
+            m = lambda f: float(np.mean([d[f] for d in ds]))
+            thr = m("threshold_loss")
+            mixed += m("ranking_loss") > thr
+            same += (m("f1_in") - m("f1_external_oracle_threshold")) > thr
+        out[model] = {"n_pairs": len(by_pair), "ranking_dominated_auc_vs_f1": int(mixed),
+                      "ranking_dominated_f1_units": int(same)}
+    return {"per_model": out, "aggregation": "seed means per ordered pair"}
+
+
 def main() -> int:
+    dump("decomposition_rule.json", decomposition_rule())
     dump("label_budget_summary.json", label_budget())
     dump("feature_count_summary.json", feature_count())
     dump("family_transfer.json", family_transfer())

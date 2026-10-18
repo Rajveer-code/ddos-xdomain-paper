@@ -1,0 +1,25 @@
+{
+  "per_model": {
+    "LightGBM": {
+      "n_pairs": 12,
+      "ranking_dominated_auc_vs_f1": 11,
+      "ranking_dominated_f1_units": 9
+    },
+    "LogisticRegression": {
+      "n_pairs": 12,
+      "ranking_dominated_auc_vs_f1": 10,
+      "ranking_dominated_f1_units": 9
+    },
+    "RandomForest": {
+      "n_pairs": 12,
+      "ranking_dominated_auc_vs_f1": 9,
+      "ranking_dominated_f1_units": 8
+    },
+    "XGBoost": {
+      "n_pairs": 12,
+      "ranking_dominated_auc_vs_f1": 10,
+      "ranking_dominated_f1_units": 9
+    }
+  },
+  "aggregation": "seed means per ordered pair"
+}

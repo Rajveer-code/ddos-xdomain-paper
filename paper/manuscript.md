@@ -18,8 +18,9 @@ below ROC-AUC 0.5, three of the twelve ordered pairs do so in all four model fam
 and the worst reaches 0.0697 — negating the score would give 0.9303. Attack flows are
 being scored below benign ones.
 
-Eleven of twelve pairs fail at the ranking rather than at the threshold, which makes
-recalibration the wrong instrument for almost all of them: a threshold can only cut an
+Most pairs fail at the ranking rather than at the threshold, nine to eleven of twelve for
+the primary model depending on how the two losses are compared, which makes recalibration the
+wrong instrument for most of them: a threshold can only cut an
 ordering it cannot repair. Retraining on ten deliberately balanced labelled target flows instead
 reaches median macro-F1 0.7253, against 0.3919 without adaptation. Cross-network
 evaluation has to separate ranking failure from threshold failure, because the two admit
@@ -74,7 +75,7 @@ ROC-AUC is threshold-free, and the accuracy of a negated detector would still de
 operating point and the target prevalence. A model at chance carries no usable ordering. A
 model at 0.0697 carries a strong ordering with the sign reversed.
 
-A monitor that watches the input distribution does not see this coming. Drift monitoring watches
+Monitors that summarise the input distribution as a whole do not see this coming (§4.10). Drift monitoring watches
 $P(X)$, the distribution of the features. What decides whether a detector still works is
 $P(Y \mid X)$, the relationship between features and labels. The two need not move together:
 a target network can look statistically familiar and score differently, or look alien and
@@ -219,8 +220,9 @@ predicts accuracy as the fraction of unlabelled target points above it. The comp
 family measures the distance between the source and target feature distributions directly,
 which is also the theoretical motivation for domain-adversarial training. Section 4.10
 evaluates both families on the same twelve ordered pairs and finds their ordering reversed
-relative to the assumption embedded in most of that work: the distribution-distance
-measures lose to a mean baseline, and the confidence-based estimator does not.
+relative to the assumption embedded in most of that work: three aggregate
+distribution-distance measures lose to a mean baseline, and the confidence-based estimator
+does not.
 
 Adapting a detector to a new network is a well-populated area in its own right, including
 covariance alignment [20] and domain-invariant representation learning for NIDS
@@ -362,8 +364,10 @@ of pairs it rests on.
 
 A stratified cap of 50,000 rows per class bounds cost, and it applies to **both** the
 source and the target: external metrics are computed on a seeded stratified sample of the
-de-duplicated target, not on the target in full. Because the cap equalises the two classes
-it also changes the evaluated prevalence, which moves every prevalence-sensitive metric.
+de-duplicated target, not on the target in full. The cap equalises the two classes wherever
+both have at least 50,000 rows; a target with fewer attack flows, such as NF-UNSW-NB15 with
+3,075, stays imbalanced. Either way it changes the evaluated prevalence, which moves every
+prevalence-sensitive metric.
 This is why ROC-AUC, which is invariant to prevalence under a fixed score ordering, carries
 the paper's central claim, while macro-F1 and MCC are read alongside it rather than in
 place of it.
@@ -434,6 +438,9 @@ LightGBM averages 0.9817 macro-F1 across the four sources (0.9546–1.0000) at R
 0.9973–1.0000 (per-source means). The other three model families agree within a few points.
 For LightGBM, seed-to-seed standard deviations reach at most 0.0023; across all four families
 the largest is 0.0087 (logistic regression on ToN-IoT). Nothing here suggests an unsolved problem.
+These in-domain scores are computed on the same source split that chooses the threshold
+(§3.6), so in-domain macro-F1 is slightly optimistic and the gap correspondingly slightly
+overstated; ROC-AUC does not depend on the threshold.
 
 Two features of these numbers matter for what follows. First, they are obtained *after*
 de-duplication, so they are not inflated by the train/test contamination described in §3.3;
@@ -552,8 +559,9 @@ a dedicated calibration run at a different sample size.
 | **LightGBM (primary)** | in-domain | 0.9900 | 0.0086 | 0.0066 |
 | **LightGBM (primary)** | external | 0.4734 | 0.4294 | 0.7142 |
 
-PR-AUC falls to roughly chance for the balanced evaluation set in every family, so the
-collapse is not an artefact of macro-F1's treatment of the two classes. The Brier score
+PR-AUC falls toward chance in every family, so the collapse is not an artefact of
+macro-F1's treatment of the two classes. Chance PR-AUC equals the evaluated prevalence: 0.5
+where the cap balances the target, lower where it cannot. The Brier score
 rises by a factor between six and fifty. The number an operator would feel first is the
 last column: holding sensitivity at 95% of attacks, the false-positive rate on an
 unfamiliar network runs from 0.0066 to 0.7142 for the primary model. A detector that
@@ -567,7 +575,14 @@ longer separate the classes (a **ranking** failure, requiring retraining), or it
 separate them well while the in-domain threshold has become meaningless (a **threshold**
 failure, requiring only recalibration).
 
-Eleven of twelve pairs are ranking-dominated (Figure 3). The lone exception,
+We call a pair ranking-dominated when its ranking loss exceeds its threshold loss, where
+threshold loss is the macro-F1 regained by moving from the deployed threshold to the
+target-optimal one. Ranking loss can be measured two ways. As the drop in ROC-AUC, the
+comparison crosses units and is a convention; eleven of twelve pairs are ranking-dominated
+(Figure 3). As the macro-F1 still missing at the target-optimal threshold, both losses are in
+the same unit; nine of twelve are. Across the four model families the counts are 9 to 11 and
+8 to 9 respectively (`results/decomposition_rule.json`), so the majority is robust and the
+exact count is not. The clearest exception,
 NF-BoT-IoT → NF-CSE-CIC-IDS2018, retains ROC-AUC 0.9656, a ranking that transferred nearly
 intact, while losing 0.4217 macro-F1 to a stale operating point.
 
@@ -577,7 +592,7 @@ intact, while losing 0.4217 macro-F1 to a stale operating point.
 
 
 The optimistic reading available in the literature, that cross-domain collapse is largely
-a calibration artefact, is therefore true here for exactly one pair in twelve. §4.11
+a calibration artefact, is therefore true here for one to three pairs in twelve. §4.11
 measures what that is worth.
 
 The decomposition also gives an operator a decision rule, though not a free one. Ranking
@@ -611,7 +626,7 @@ the bootstrap resamples pairs.
 | `drop_rate_throughput` | 35 | 0.3739 | −0.0010 | [−0.0033, +0.0013] | 0.406 | 0.4882 |
 | `capacity_only` | 20 | 0.3738 | −0.0011 | [−0.0293, +0.0314] | 0.915 | 0.5221 |
 
-Removing every capacity feature moves external macro-F1 by +0.0132, and the interval spans zero. The hypothesis is not supported. The last column adds something the pre-specified test could not see: on the ranking metric, capacity removal does move the needle, from 0.4931 to 0.5386, which is the difference between inverting and not. We flag this as an observation rather than a result — external AUC was not the pre-specified endpoint — but it points the same way as §4.7's finding that feature choices act on the operating point and the ranking separately. This is a failure to detect an effect, not a demonstration that none exists: the interval does not exclude effects up to roughly three points of macro-F1, and 12 source-seed pairs cannot resolve differences that size.
+Removing every capacity feature moves external macro-F1 by +0.0132, and the interval spans zero. The hypothesis is not supported. The last column adds something the pre-specified test could not see: on the ranking metric, capacity removal does move the needle, from 0.4931 to 0.5386, which is the difference between inverting and not. We flag this as an observation rather than a result — external AUC was not the pre-specified endpoint — but it points the same way as §4.7's finding that feature choices act on the operating point and the ranking separately. This is a failure to detect an effect, not a demonstration that none exists: the interval does not exclude effects up to roughly three points of macro-F1, and 12 source-seed pairs cannot resolve differences that size. Two caveats apply to every interval in Table 6. Seeds within a source share data, so the 12 units are closer to four independent ones and the intervals are narrower than they should be. And 16 feature sets are compared with `all`, uncorrected; at a Bonferroni level of 0.05/16, about 0.003, dropping the size and volume features (p < 0.001) survives and dropping the duration features (p = 0.021) does not.
 
 **The coarse grouping does, however, hide one real sub-effect.** Dropping the 13
 size and volume features alone yields +0.0615 [+0.0278, +0.0991], p < 0.001, and dropping
@@ -799,7 +814,11 @@ useful whatever its in-sample correlation.
 
 The result splits by what the measure inspects (Figure 5). Measures of distance between
 feature distributions fail: proxy A-distance, RBF-MMD and summed Wasserstein all have
-intervals spanning zero and all three are worse than the mean baseline out-of-sample. This deserves stating plainly, because proxy A-distance in particular is the theoretical motivation behind a large body of domain-adaptation work. In this benchmark, these three marginal feature-distribution measures carry almost no information about how much a detector will lose. The result is not paradoxical: these measures describe the shift in $P(X)$, whereas the loss is driven by the shift in $P(Y \mid X)$, and the two need not move together. A benchmark on which they did would be a benchmark on which covariate shift dominated concept shift, and these four testbeds are evidently not that.
+intervals spanning zero and all three are worse than the mean baseline out-of-sample. The
+exception is the largest single-feature shift: the maximum per-feature Wasserstein distance
+reduces leave-one-pair-out error by 18% (ρ = +0.433 [+0.103, +0.720]). One feature moving far
+carries signal that the aggregate distance dilutes. With nine predictors on 36 observations
+and no multiplicity correction we treat it as a lead, not a result. This deserves stating plainly, because proxy A-distance in particular is the theoretical motivation behind a large body of domain-adaptation work. In this benchmark, these three marginal feature-distribution measures carry almost no information about how much a detector will lose. The result is not paradoxical: these measures describe the shift in $P(X)$, whereas the loss is driven by the shift in $P(Y \mid X)$, and the two need not move together. A benchmark on which they did would be a benchmark on which covariate shift dominated concept shift, and these four testbeds are evidently not that.
 
 ![Figure 5](../figures/fig5_gap_forecast.png)
 
@@ -938,13 +957,15 @@ CICFlowMeter features reproduces the gap: in-domain 0.9675–0.9995, external 0.
 mean paired gap 0.5848, significant in 10 of 10 pair-seeds. Neither the gap nor its size
 depends on the NetFlow v2 choice.
 
-The decomposition does differ. Where the NetFlow quartet is ranking-dominated in 11 of 12
-pairs, the CIC pairing is **threshold**-dominated in most configurations, and RandomForest
+The decomposition does differ. Where the NetFlow quartet is ranking-dominated in nine to
+eleven of 12 pairs (§4.5), the CIC pairing is **threshold**-dominated in most configurations, and RandomForest
 retains ROC-AUC 0.9348 across it with ranking loss 0.0651 against threshold loss 0.5643.
 
 CIC-DDoS2019 and CICIDS2017 share an institution, a testbed lineage and an extractor.
-Ranking largely survives that move, leaving an operating-point failure that recalibration
-can address. Moving between independently constructed testbeds destroys the ranking
+For the tree ensembles trained on either side, ranking largely survives that move, leaving
+an operating-point failure that recalibration can address. Not for every model: logistic
+regression trained on CIC-DDoS2019 inverts on CICIDS2017 (ROC-AUC 0.2417), and random forest
+in the same direction falls to 0.5638. Moving between independently constructed testbeds destroys the ranking
 instead. The failure mode therefore depends strongly on the dataset pair. We have one
 same-lineage pairing against a cross-lineage quartet, so this is evidence consistent with a
 lineage effect rather than a demonstration of one: CIC-DDoS2019 and CICIDS2017 may be
@@ -982,8 +1003,8 @@ the original CICIDS2017 as a target should be read as optimistic.
 Validation on one network provides no empirical guarantee of behaviour on another, and the
 failure it will exhibit is not conservatism. The detector keeps issuing confident verdicts
 while its ranking is wrong or reversed, at an external ECE two orders of magnitude above its
-in-domain value, and the marginal feature-distribution measures evaluated here would not
-have raised the alarm. Monitoring the model's own
+in-domain value, and the aggregate feature-distribution measures evaluated here would not
+have raised the alarm, although the largest single-feature shift carried some signal. Monitoring the model's own
 confidence will, imperfectly.
 
 This sharpens the prior measurements in §2.1 rather than contradicting them. Read as accuracy, those numbers say the signal is gone. Read as ranking, per
@@ -1060,6 +1081,13 @@ throughout and operating-point metrics accompany F1 for this reason.
 **Non-DoS attacks are excluded from the primary analysis.** Retaining them would change the
 base rate again; the policy is explicit and the counts moved are recorded, but the primary
 numbers describe a DoS/DDoS-versus-benign task.
+
+**Some "semantic" features may be testbed fingerprints.** `MIN_TTL`, `MAX_TTL` and the TCP
+window sizes sit in the header/protocol class that §4.6 treats as describing endpoint
+behaviour. TTL and window values also encode the attacking hosts' operating systems and hop
+counts on each testbed, the kind of non-metadata contaminant D'hooge et al. [12] describe. A
+TTL-free ablation was not run, so the semantic classes of §4.6 should be read with that
+caveat.
 
 **Twelve ordered pairs is a small sample for the label-free prediction analysis.**
 Leave-one-pair-out is the right protocol for the question, but a 24% error reduction

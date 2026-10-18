@@ -229,6 +229,28 @@
       ],
       "decimals": 4,
       "where": "4.11 pooled mean"
+    },
+    {
+      "text": "eleven",
+      "file": "decomposition_rule.json",
+      "path": [
+        "per_model",
+        "LightGBM",
+        "ranking_dominated_auc_vs_f1"
+      ],
+      "fmt": "word",
+      "where": "4.5 AUC-vs-F1 rule"
+    },
+    {
+      "text": "nine",
+      "file": "decomposition_rule.json",
+      "path": [
+        "per_model",
+        "LightGBM",
+        "ranking_dominated_f1_units"
+      ],
+      "fmt": "word",
+      "where": "Abstract, 4.5 same-unit rule"
     }
   ]
 }
