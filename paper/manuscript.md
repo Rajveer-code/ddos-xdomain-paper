@@ -1028,7 +1028,8 @@ would also have been removed by our own de-duplication, but we have not re-run o
 
 **Only classical supervised learners and one shallow adaptation baseline are tested.** The
 four families are tree ensembles and logistic regression; neural detectors, unsupervised
-detectors, which [22] and [25] report generalise better on these data, and adversarial
+detectors, which generalise better on these NetFlow datasets [22] and on CIC captures [25],
+and adversarial
 domain adaptation [26], [27] are not evaluated. "Not a property of one learner" is a claim
 about these four families.
 
