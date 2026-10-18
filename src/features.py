@@ -15,10 +15,11 @@ import.
 
 `DNS_QUERY_ID` is held out in its own class. It was originally included as a null
 control on the assumption that a 16-bit DNS transaction ID is random noise, so any
-accuracy from it would be memorisation by definition. Measurement refuted that:
+accuracy from it would be memorisation by definition. Measurement refuted that
+(scripts/analyze_dns_query_id.py, after DoS-only de-duplicated preparation):
 
     dataset              P(attack | id == 0)   P(attack | id != 0)
-    NF-CSE-CIC-IDS2018          0.741                 0.000
+    NF-CSE-CIC-IDS2018          0.254                 0.000
     NF-BoT-IoT                  0.785                 0.000
     NF-UNSW-NB15                0.051                 0.001
     NF-ToN-IoT                  0.528                 0.427

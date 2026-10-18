@@ -1,0 +1,46 @@
+{
+  "preparation": "src.data.load(other_policy='drop', dedup=True)",
+  "field": "DNS_QUERY_ID",
+  "datasets": {
+    "nf_cse_cic_ids2018": {
+      "n": 8889592,
+      "n_id_zero": 1788041,
+      "n_id_nonzero": 7101551,
+      "p_attack_given_zero": 0.25356968883823133,
+      "p_attack_given_nonzero": 0.0,
+      "auc_raw_value": 0.07910244886352252,
+      "auc_nonzero_bit": 0.07910244886352252,
+      "auc_raw_value_among_nonzero": null
+    },
+    "nf_bot_iot": {
+      "n": 73907,
+      "n_id_zero": 67547,
+      "n_id_nonzero": 6360,
+      "p_attack_given_zero": 0.784712866596592,
+      "p_attack_given_nonzero": 0.0,
+      "auc_raw_value": 0.3478614486651995,
+      "auc_nonzero_bit": 0.3478614486651995,
+      "auc_raw_value_among_nonzero": null
+    },
+    "nf_ton_iot": {
+      "n": 1143060,
+      "n_id_zero": 412624,
+      "n_id_nonzero": 730436,
+      "p_attack_given_zero": 0.5284011594090504,
+      "p_attack_given_nonzero": 0.42694089557469783,
+      "auc_raw_value": 0.44818469953362916,
+      "auc_nonzero_bit": 0.4529416503893143,
+      "auc_raw_value_among_nonzero": 0.48815968909659724
+    },
+    "nf_unsw_nb15": {
+      "n": 203641,
+      "n_id_zero": 72510,
+      "n_id_nonzero": 131131,
+      "p_attack_given_zero": 0.05080678527099711,
+      "p_attack_given_nonzero": 0.0009074894571077777,
+      "auc_raw_value": 0.1874312809468228,
+      "auc_nonzero_bit": 0.1878500286257375,
+      "auc_raw_value_among_nonzero": 0.47958737887118946
+    }
+  }
+}

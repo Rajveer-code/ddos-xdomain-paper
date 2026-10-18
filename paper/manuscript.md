@@ -665,20 +665,22 @@ An earlier draft explained the ordering by supposing that a gradient-boosted ens
 own class as a null control, on the assumption that a 16-bit DNS transaction ID is random
 and any accuracy from it would be memorisation by construction. That assumption is wrong.
 
-**Table 9. `DNS_QUERY_ID` is a protocol indicator, not an identifier.**
+**Table 9. `DNS_QUERY_ID` is a protocol indicator, not an identifier.** After the paper's
+preparation (DoS-only, de-duplicated); `results/dns_query_id.json`.
 
 | dataset | P(attack \| id = 0) | P(attack \| id ≠ 0) |
 |---|---:|---:|
-| NF-CSE-CIC-IDS2018 | 0.741 | 0.000 |
+| NF-CSE-CIC-IDS2018 | 0.254 | 0.000 |
 | NF-BoT-IoT | 0.785 | 0.000 |
 | NF-UNSW-NB15 | 0.051 | 0.001 |
 | NF-ToN-IoT | 0.528 | 0.427 |
 
 The field is zero for every non-DNS flow, making it a one-bit "this flow is DNS"
 indicator; in three of four datasets DNS traffic is essentially never attack-labelled. The
-ID value itself carries nothing: AUC on the raw value equals AUC on the zero/nonzero bit
-to four decimal places in all four datasets, and conditioning on nonzero leaves AUC at
-0.48–0.49. The correct statement is therefore that a **one-bit DNS indicator out-generalises the 39-feature standard set**, and we read that as a finding about the benchmark rather than as a detector worth deploying. A field that separates the classes this well across three of four independently built testbeds, while carrying no information about attack behaviour, is a dataset-construction shortcut: DNS traffic was generated as background in these testbeds and was therefore almost never labelled as attack. Its in-domain score of 0.6711 is unusable in any case. What it establishes is that feature count and semantic quality are different things, and that the standard feature set contains at least one shortcut that transfers better than the behaviour the model is supposed to be learning.
+ID value itself carries next to nothing. In NF-CSE-CIC-IDS2018 and NF-BoT-IoT no attack
+flow has a nonzero ID, so AUC on the raw value equals AUC on the zero/nonzero bit; in
+NF-ToN-IoT and NF-UNSW-NB15 the two differ by at most 0.005 (0.4482 against 0.4529, and
+0.1874 against 0.1879), and among nonzero IDs alone the raw value reaches AUC 0.48–0.49. The correct statement is therefore that a **one-bit DNS indicator out-generalises the 39-feature standard set**, and we read that as a finding about the benchmark rather than as a detector worth deploying. A field that separates the classes this well across three of four independently built testbeds, while carrying no information about attack behaviour, is a dataset-construction shortcut: DNS traffic was generated as background in these testbeds and was therefore almost never labelled as attack. Its in-domain score of 0.6711 is unusable in any case. What it establishes is that feature count and semantic quality are different things, and that the standard feature set contains at least one shortcut that transfers better than the behaviour the model is supposed to be learning.
 
 ### 4.8 Is the strongest inversion a weak-source artefact?
 

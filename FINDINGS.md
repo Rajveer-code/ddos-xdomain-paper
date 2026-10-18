@@ -94,15 +94,16 @@ been corrected.
 
 | dataset | P(attack \| id = 0) | P(attack \| id ≠ 0) |
 |---|---:|---:|
-| NF-CSE-CIC-IDS2018 | 0.741 | 0.000 |
+| NF-CSE-CIC-IDS2018 | 0.254 | 0.000 |
 | NF-BoT-IoT | 0.785 | 0.000 |
 | NF-UNSW-NB15 | 0.051 | 0.001 |
 | NF-ToN-IoT | 0.528 | 0.427 |
 
 The field is zero for every non-DNS flow, making it a one-bit "this flow is DNS"
 indicator; DNS traffic is essentially never attack-labelled in three of four datasets.
-The ID *value* carries nothing: AUC on the raw value equals AUC on the zero/nonzero bit
-to four decimals in every dataset, and conditioning on nonzero leaves AUC at 0.48–0.49.
+The ID *value* carries next to nothing: raw-value and zero/nonzero-bit AUC are identical in
+NF-CSE-CIC-IDS2018 and NF-BoT-IoT and differ by at most 0.005 in the other two, and among
+nonzero IDs the raw value reaches AUC 0.48–0.49 (results/dns_query_id.json).
 
 The claim is therefore "one crude protocol bit out-generalises the standard 39-feature
 set", which is both true and sharper than the original framing.
