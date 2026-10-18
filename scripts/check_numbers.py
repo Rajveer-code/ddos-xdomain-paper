@@ -69,10 +69,10 @@ def main() -> int:
     print(f"Loaded {len(values):,} numeric values from {len(files)} result files\n")
 
     vals = sorted(values)
-    # AUDIT.md and OUTLINE.md are working documents about the paper, not the paper.
+    # AUDIT.md, OUTLINE.md and REFERENCES_VERIFIED.md are working documents about the paper, not the paper.
     # Their numbers are word counts, literal counts and venue fees, which correctly
     # have no backing result file.
-    META = {"AUDIT.md", "OUTLINE.md"}
+    META = {"AUDIT.md", "OUTLINE.md", "REFERENCES_VERIFIED.md"}
     docs = [d for d in sorted(PAPER.glob("*.md")) if d.name not in META]
     docs += [PROJECT / "FINDINGS.md"]
     total = matched = 0

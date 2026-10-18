@@ -137,21 +137,33 @@ chance, and traced part of it to anomalies in the data itself. The question has 
 open: Hossain et al. [3] report cross-dataset accuracy below 40% between UNSW-NB15 and
 ToN-IoT for models scoring above 95% within either one, and Elangovan et al. [4] find
 the same pattern across four datasets when generalisation is tested temporally and
-semantically rather than within a single capture.
+semantically rather than within a single capture. Apruzzese et al. [23] formalised
+cross-evaluation of NIDS across labelled datasets as a protocol in its own right, and
+Verkerken et al. [25] report that unsupervised detectors generalise across CIC captures
+better than supervised ones.
 
-Our study shares their protocol and departs on the question. Prior work establishes *that*
-the gap exists and how large it is; we ask what kind of failure it is, which only shows
-once ROC-AUC is reported per ordered pair rather than accuracy in aggregate. The remedies
-implied by the two readings differ completely, which is why we test a representative
-version of each rather than proposing a fourth.
+The closest prior study ran our primary design. Layeghy and Portmann [22] trained tree
+ensembles, feed-forward and recurrent networks and an isolation forest on the same four
+NetFlow v2 datasets, in every ordered pair, found that no model generalised across all of
+them and that transfer was strongly asymmetric, and used SHAP to attribute the failure to
+feature–label associations that hold in one dataset and not in another. Our protocol is
+theirs in its essentials, and their explanation is consistent with everything we report;
+we do not offer a competing mechanism. What we change is the instrument. They report F1;
+we report ROC-AUC per ordered pair, which separates a detector whose ranking has reversed
+from one whose ranking survives under a misplaced threshold. The two failures call for
+different repairs, which is why we test a representative version of each rather than
+proposing a new one.
 
 ### 2.2 Shared feature spaces, and what hides inside them
 
 Sarhan et al. [5] identified the absence of a common feature set as a structural
 obstacle to cross-dataset claims, and released NetFlow v2 conversions of four datasets
-sharing 43 fields. We adopt that feature set precisely so our transfer results cannot be
-attributed to ad-hoc harmonisation, and verify the shared space by assertion rather than
-assumption. The four sources are CSE-CIC-IDS2018 [6], BoT-IoT
+sharing 43 fields, and compared NetFlow and CICFlowMeter feature sets for how well models
+built on them generalise [24]. We adopt that feature set precisely so our transfer results
+cannot be attributed to ad-hoc harmonisation, and verify the shared space by assertion
+rather than assumption. NetFlow versions that add temporal features have since been
+released [30]; we use v2, the version with the largest body of prior cross-dataset results,
+and leave replication on the newer versions open. The four sources are CSE-CIC-IDS2018 [6], BoT-IoT
 [7], ToN-IoT [8] and UNSW-NB15 [9]; the secondary study uses CIC-DDoS2019 [10] and CICIDS2017
 [6].
 
@@ -181,8 +193,11 @@ regenerated target. Because the regeneration changes flow features as well as la
 comparison measures how much a cross-dataset result depends on which release is used rather
 than isolating label error, and the result runs opposite to the intuitive direction (§4.15).
 
-Our duplicate accounting (§3.3) is adjacent to this work but, to our knowledge, has not
-been reported at this scale for the NetFlow v2 datasets. It is measured on the publicly
+Flood et al. [28] catalogue design flaws across seven benchmark NIDS datasets that bias
+experiments built on them, and Layeghy et al. [29] show that the benign traffic of synthetic
+benchmarks differs statistically from real network traffic. Our duplicate accounting (§3.3)
+is adjacent to this work but, to our knowledge, has not been reported at this scale for the
+NetFlow v2 datasets. It is measured on the publicly
 mirrored copies described in §3.1, not on the original releases. That three of four are more than
 80% duplicate in the model's own feature space constrains how in-domain numbers computed on
 them should be read, and §4.9 measures how much it moves the transfer results themselves.
@@ -202,16 +217,19 @@ performance from unlabelled data the practical question. Garg et al. [19] introd
 Average Thresholded Confidence, which learns a confidence threshold on source data and
 predicts accuracy as the fraction of unlabelled target points above it. The competing
 family measures the distance between the source and target feature distributions directly,
-which is also the theoretical motivation for domain-adversarial training. Section 4.7
+which is also the theoretical motivation for domain-adversarial training. Section 4.10
 evaluates both families on the same twelve ordered pairs and finds their ordering reversed
 relative to the assumption embedded in most of that work: the distribution-distance
 measures lose to a mean baseline, and the confidence-based estimator does not.
 
 Adapting a detector to a new network is a well-populated area in its own right, including
-covariance alignment [20] and domain-invariant representation learning for
-NIDS specifically. We make no methodological contribution there and do not claim one. CORAL
-appears in §4.11 as the standard zero-label baseline, and the contribution is the
-measurement: what the available zero-label methods actually recover in this setting, which
+covariance alignment [20] and domain-invariant representation learning for NIDS
+specifically: DI-NIDS [26] learns adversarially domain-invariant features across NetFlow
+datasets and reports that earlier domain adaptation for NIDS had limited success, and
+Singla et al. [27] use adversarial adaptation to prepare a detector for a network with little
+labelled data. We make no methodological contribution there and do not claim one. We
+evaluate only one shallow adaptation baseline; CORAL appears in §4.11 as the standard
+zero-label baseline, and the contribution is the measurement: what the available zero-label methods actually recover in this setting, which
 is close to nothing, against what a handful of labelled target flows recovers, which is
 most of the gap.
 
@@ -246,7 +264,9 @@ service. That is the spurious-correlation failure Arp et al. [17] describe.
 
 The conventional CICFlowMeter pairing (CIC-DDoS2019 ↔ CICIDS2017) is retained as a
 secondary study, so the primary conclusions can be checked in the feature space the
-literature actually uses.
+literature actually uses. The same CIC pair also appears, with a different protocol and
+question, in a separate unpublished manuscript by the author; the experiments reported here
+were designed and run independently of it.
 
 **Provenance.** All seven datasets were obtained as Parquet copies from public Kaggle
 mirrors uploaded by one third party (Kaggle user `dhoogla`), not from the originators'
@@ -1080,66 +1100,55 @@ result.
 
 1. D'Hooge, L., Wauters, T., Volckaert, B., and De Turck, F. "Inter-dataset
    generalization strength of supervised machine learning methods for intrusion detection."
-   *Journal of Information Security and Applications* 54, 102564, 2020.
-
-2. Cantone, M., Marrocco, C., and Bria, A. "On the Cross-Dataset Generalization of
-   Machine Learning for Network Intrusion Detection." *IEEE Access* 12, 144489–144508,
-   2024. arXiv:2402.10974.
-
+   *Journal of Information Security and Applications* 54, 102564, 2020. doi:10.1016/j.jisa.2020.102564
+2. Cantone, M., Marrocco, C., and Bria, A. "Machine Learning in Network Intrusion Detection: A Cross-Dataset Generalization Study." *IEEE Access* 12, 144489–144508,
+   2024. arXiv:2402.10974. doi:10.1109/ACCESS.2024.3472907
 3. Hossain, M. Z., Khan, M. A. R., Islam, M. R., Islam, S. M. S., and Gedeon, T. "Assessing Generalisation Capability of Machine Learning Models for Intrusion Detection." *arXiv:2605.04407*, 2026.
-
-4. Elangovan, R., Parthasarathy, D. D., Jawahar, M., Kaliyaperumal, P., Balusamy, B., Yogarayan, S., and Venkatesan, V. "Cross-Dataset Temporal and Semantic Generalization of Intrusion Detection Models for the Future Internet." *Future Internet* 18(4), 194, 2026.
-
+4. Elangovan, R., Parthasarathy, D. D., Jawahar, M., Kaliyaperumal, P., Balusamy, B., Yogarayan, S., and Venkatesan, V. "Cross-Dataset Temporal and Semantic Generalization of Intrusion Detection Models for the Future Internet." *Future Internet* 18(4), 194, 2026. doi:10.3390/fi18040194
 5. Sarhan, M., Layeghy, S., and Portmann, M. "Towards a Standard Feature
    Set for Network Intrusion Detection System Datasets." *Mobile Networks and
-   Applications* 27, 357–370, 2022. arXiv:2101.11315.
-
+   Applications* 27, 357–370, 2022. arXiv:2101.11315. doi:10.1007/s11036-021-01843-0
 6. Sharafaldin, I., Lashkari, A. H., and Ghorbani, A. A. "Toward Generating a New
     Intrusion Detection Dataset and Intrusion Traffic Characterization." *International
-    Conference on Information Systems Security and Privacy (ICISSP)*, 2018. (CICIDS2017)
-
+    Conference on Information Systems Security and Privacy (ICISSP)*, pp. 108–116, 2018. (CICIDS2017) doi:10.5220/0006639801080116
 7. Koroniotis, N., Moustafa, N., Sitnikova, E., and Turnbull, B. "Towards the
     development of realistic botnet dataset in the Internet of Things for network forensic
-    analytics: Bot-IoT dataset." *Future Generation Computer Systems* 100, 779–796, 2019.
-
+    analytics: Bot-IoT dataset." *Future Generation Computer Systems* 100, 779–796, 2019. doi:10.1016/j.future.2019.05.041
 8. Alsaedi, A., Moustafa, N., Tari, Z., Mahmood, A., and Anwar, A. "TON_IoT telemetry
     dataset: A new generation dataset of IoT and IIoT for data-driven intrusion detection
-    systems." *IEEE Access* 8, 165130–165150, 2020.
-
+    systems." *IEEE Access* 8, 165130–165150, 2020. doi:10.1109/ACCESS.2020.3022862
 9. Moustafa, N., and Slay, J. "UNSW-NB15: a comprehensive data set for network
     intrusion detection systems." *Military Communications and Information Systems
-    Conference (MilCIS)*, 2015.
-
+    Conference (MilCIS)*, 2015. doi:10.1109/MilCIS.2015.7348942
 10. Sharafaldin, I., Lashkari, A. H., Hakak, S., and Ghorbani, A. A. "Developing
     Realistic Distributed Denial of Service (DDoS) Attack Dataset and Taxonomy."
-    *International Carnahan Conference on Security Technology (ICCST)*, 2019. (CIC-DDoS2019)
-
-11. D'hooge, L., Verkerken, M., Volckaert, B., Wauters, T., and De Turck, F. "Establishing the Contaminating Effect of Metadata Feature Inclusion in Machine-Learned Network Intrusion Detection Models." *Detection of Intrusions and Malware, and Vulnerability Assessment (DIMVA), Lecture Notes in Computer Science*, 23--41, 2022a.
-
-12. D'hooge, L., Verkerken, M., Wauters, T., Volckaert, B., and De Turck, F. "Discovering Non-Metadata Contaminant Features in Intrusion Detection Datasets." *19th Annual International Conference on Privacy, Security and Trust (PST)*, 1--11, 2022b.
-
-13. D'hooge, L., Verkerken, M., Wauters, T., Volckaert, B., and De Turck, F. "Hierarchical feature block ranking for data-efficient intrusion detection modeling." *Computer Networks* 201, 108613, 2021.
-
-14. Goldschmidt, P., and Chudá, D. "Network intrusion datasets: A survey, limitations, and recommendations." *Computers & Security* 156, 104510, 2025.
-
+    *International Carnahan Conference on Security Technology (ICCST)*, 2019. (CIC-DDoS2019) doi:10.1109/CCST.2019.8888419
+11. D'hooge, L., Verkerken, M., Volckaert, B., Wauters, T., and De Turck, F. "Establishing the Contaminating Effect of Metadata Feature Inclusion in Machine-Learned Network Intrusion Detection Models." *Detection of Intrusions and Malware, and Vulnerability Assessment (DIMVA), Lecture Notes in Computer Science*, 23--41, 2022a. doi:10.1007/978-3-031-09484-2_2
+12. D'hooge, L., Verkerken, M., Wauters, T., Volckaert, B., and De Turck, F. "Discovering Non-Metadata Contaminant Features in Intrusion Detection Datasets." *19th Annual International Conference on Privacy, Security and Trust (PST)*, 1--11, 2022b. doi:10.1109/PST55820.2022.9851974
+13. D'hooge, L., Verkerken, M., Wauters, T., Volckaert, B., and De Turck, F. "Hierarchical feature block ranking for data-efficient intrusion detection modeling." *Computer Networks* 201, 108613, 2021. doi:10.1016/j.comnet.2021.108613
+14. Goldschmidt, P., and Chudá, D. "Network intrusion datasets: A survey, limitations, and recommendations." *Computers & Security* 156, 104510, 2025. doi:10.1016/j.cose.2025.104510
 15. Engelen, G., Rimmer, V., and Joosen, W. "Troubleshooting an Intrusion Detection
-   Dataset: the CICIDS2017 Case Study." *IEEE Security and Privacy Workshops (WTMC)*, 2021.
-
+   Dataset: the CICIDS2017 Case Study." *IEEE Security and Privacy Workshops (WTMC)*, 2021. doi:10.1109/SPW53761.2021.00009
 16. Lanvin, M., Gimenez, P.-F., Han, Y., Majorczyk, F., Mé, L., and Totel, E. "Errors in
    the CICIDS2017 dataset and the significant differences in detection performances it makes."
-   *International Conference on Risks and Security of Internet and Systems (CRiSIS)*, 2022.
-
+   *Risks and Security of Internet and Systems (CRiSIS 2022)*, LNCS, pp. 18–33, 2023. doi:10.1007/978-3-031-31108-6_2
 17. Arp, D., Quiring, E., Pendlebury, F., Warnecke, A., Pierazzi, F., Wressnegger, C.,
    Cavallaro, L., and Rieck, K. "Dos and Don'ts of Machine Learning in Computer Security."
    *31st USENIX Security Symposium*, 2022.
-
 18. Axelsson, S. "The base-rate fallacy and the difficulty of intrusion detection."
-   *ACM Transactions on Information and System Security* 3(3), 186–205, 2000.
-
+   *ACM Transactions on Information and System Security* 3(3), 186–205, 2000. doi:10.1145/357830.357849
 19. Garg, S., Balakrishnan, S., Lipton, Z. C., Neyshabur, B., and Sedghi, H. "Leveraging
    Unlabeled Data to Predict Out-of-Distribution Performance." *International Conference on
    Learning Representations (ICLR)*, 2022. arXiv:2201.04234.
-
 20. Sun, B., Feng, J., and Saenko, K. "Return of Frustratingly Easy Domain Adaptation."
-   *AAAI Conference on Artificial Intelligence*, 2016.
+   *AAAI Conference on Artificial Intelligence*, 2016. doi:10.1609/aaai.v30i1.10306
 21. Liu, L., Engelen, G., Lynar, T., Essam, D., and Joosen, W. "Error Prevalence in NIDS datasets: A Case Study on CIC-IDS-2017 and CSE-CIC-IDS-2018." In *Proc. IEEE Conference on Communications and Network Security (CNS)*, pp. 254–262, 2022. doi:10.1109/CNS56114.2022.9947235
+22. Layeghy, S., and Portmann, M. "Explainable Cross-domain Evaluation of ML-based Network Intrusion Detection Systems." *Computers and Electrical Engineering* 108, 108692, 2023. doi:10.1016/j.compeleceng.2023.108692
+23. Apruzzese, G., Pajola, L., and Conti, M. "The Cross-Evaluation of Machine Learning-Based Network Intrusion Detection Systems." *IEEE Transactions on Network and Service Management* 19(4), 5152–5169, 2022. doi:10.1109/TNSM.2022.3157344
+24. Sarhan, M., Layeghy, S., and Portmann, M. "Evaluating Standard Feature Sets Towards Increased Generalisability and Explainability of ML-Based Network Intrusion Detection." *Big Data Research* 30, 100359, 2022. doi:10.1016/j.bdr.2022.100359
+25. Verkerken, M., D'hooge, L., Wauters, T., Volckaert, B., and De Turck, F. "Towards Model Generalization for Intrusion Detection: Unsupervised Machine Learning Techniques." *Journal of Network and Systems Management* 30, 12, 2022. doi:10.1007/s10922-021-09615-7
+26. Layeghy, S., Baktashmotlagh, M., and Portmann, M. "DI-NIDS: Domain invariant network intrusion detection system." *Knowledge-Based Systems* 273, 110626, 2023. doi:10.1016/j.knosys.2023.110626
+27. Singla, A., Bertino, E., and Verma, D. "Preparing Network Intrusion Detection Deep Learning Models with Minimal Data Using Adversarial Domain Adaptation." In *Proc. 15th ACM Asia Conference on Computer and Communications Security (AsiaCCS)*, pp. 127–140, 2020. doi:10.1145/3320269.3384718
+28. Flood, R., Engelen, G., Aspinall, D., and Desmet, L. "Bad Design Smells in Benchmark NIDS Datasets." In *Proc. IEEE 9th European Symposium on Security and Privacy (EuroS&P)*, pp. 658–675, 2024. doi:10.1109/EuroSP60621.2024.00042
+29. Layeghy, S., Gallagher, M., and Portmann, M. "Benchmarking the benchmark — Comparing synthetic and real-world Network IDS datasets." *Journal of Information Security and Applications* 80, 103689, 2024. doi:10.1016/j.jisa.2023.103689
+30. Luay, M., Layeghy, S., Hosseininoorbin, S., Sarhan, M., Moustafa, N., and Portmann, M. "Temporal Analysis of NetFlow Datasets for Network Intrusion Detection Systems." arXiv:2503.04404, 2025.
