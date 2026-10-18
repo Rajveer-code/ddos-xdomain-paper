@@ -287,7 +287,12 @@
   },
   "design": {
     "adaptation_pool_fraction": 0.5,
-    "draws_per_pair_k": 20,
+    "draws_per_pair_seed_k": 10,
+    "seeds": [
+      42,
+      43
+    ],
+    "n_per_class": 25000,
     "n_rows": 1224,
     "note": "disjoint adaptation pool and evaluation set; labels drawn only from pool; scored only on evaluation set"
   }

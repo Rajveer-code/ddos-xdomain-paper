@@ -655,9 +655,9 @@ That ordering cannot, on its own, tell dimensionality apart from feature identit
 | 20 | 0.9842 | 0.3993 [0.2786, 0.5111] | 0.5898 |
 | 39 | 0.9843 | 0.3997 [0.3017, 0.4406] | 0.5843 |
 
-Size matters, and less than the semantic ablation implied. Across random subsets external macro-F1 falls from 0.5046 at k=1 to 0.3997 at k=39, Spearman −0.290 [−0.369, −0.210]. That accounts for **+0.105** of the one-feature advantage. The remaining **+0.147** is identity: `DNS_QUERY_ID` alone reaches 0.6512 where a random single feature reaches 0.5046. Both components are measured inside the control, against its own median 39-feature baseline of 0.3997, whereas Table 7's +0.2763 is a mean paired difference against the full-feature runs at 0.3748. One baseline is a median over random subsets and the other a mean over the full-feature set, so the two components do not sum to +0.2763 and are not a partition of it. What survives either normalisation is that dimensionality is the smaller share: most of the one-feature advantage is the feature, not the count.
+Size matters, and less than the semantic ablation implied. Across random subsets external macro-F1 falls from 0.5046 at k=1 to 0.3997 at k=39, Spearman −0.290 [−0.369, −0.208]. That accounts for **+0.105** of the one-feature advantage. The remaining **+0.147** is identity: `DNS_QUERY_ID` alone reaches 0.6512 where a random single feature reaches 0.5046. Both components are measured inside the control, against its own median 39-feature baseline of 0.3997, whereas Table 7's +0.2763 is a mean paired difference against the full-feature runs at 0.3748. One baseline is a median over random subsets and the other a mean over the full-feature set, so the two components do not sum to +0.2763 and are not a partition of it. What survives either normalisation is that dimensionality is the smaller share: most of the one-feature advantage is the feature, not the count.
 
-**The size component is a threshold effect, not a representational one.** Feature count correlates strongly with in-domain macro-F1 (Spearman +0.626 [+0.566, +0.679]) and negatively with external macro-F1 (−0.290), but is uncorrelated with external ROC-AUC (+0.004 [−0.081, +0.088]). Adding features sharpens separation at home and leaves the target ordering unchanged; what degrades is the usefulness of the operating point chosen against that sharper separation. This connects directly to §4.5 and to §3.6: perfect in-domain separability widens the tied-optimal threshold plateau and pushes the chosen threshold into a position that does not survive a change of network.
+**The size component is a threshold effect, not a representational one.** Feature count correlates strongly with in-domain macro-F1 (Spearman +0.626 [+0.565, +0.678]) and negatively with external macro-F1 (−0.290), but is uncorrelated with external ROC-AUC (+0.004 [−0.083, +0.091]). Adding features sharpens separation at home and leaves the target ordering unchanged; what degrades is the usefulness of the operating point chosen against that sharper separation. This connects directly to §4.5 and to §3.6: perfect in-domain separability widens the tied-optimal threshold plateau and pushes the chosen threshold into a position that does not survive a change of network.
 
 An earlier draft explained the ordering by supposing that a gradient-boosted ensemble finds high-order conjunctions encoding its own testbed, which a one-feature model cannot express. The same two results that rule out a capacity account (§1) rule this out too: logistic regression inverts identically and cannot represent conjunctions, and feature count does not track external ranking. We record the discarded explanation because a reader who reaches the same intuition deserves to know it was tested.
 
@@ -903,13 +903,18 @@ balanced labelled target sample was substantially more effective than the zero-l
 
 ### 4.13 Which attacks stop being detected
 
-**Table 15. Per-family recall under transfer.**
+**Table 15. Per-family recall under transfer.** LightGBM; unweighted mean of per-run recall
+over the runs whose evaluation set contains the family. n = flows summed over those runs
+(in-domain / external).
 
-| attack family | in-domain | external | drop |
-|---|---:|---:|---:|
-| volumetric | 0.9834 | **0.0535** | 0.9299 |
-| low-rate application-layer | 1.0000 | 0.2358 | 0.7642 |
-| benign (false-positive rate) | 0.0118 | 0.0753 | +0.0634 |
+| attack family | in-domain | external | drop | n flows (runs) |
+|---|---:|---:|---:|---:|
+| volumetric | 0.9834 | **0.0535** | 0.9299 | 153,784 (20) / 2,306,721 (60) |
+| low-rate application-layer | 1.0000 | 0.2358 | 0.7642 | 21 (5) / 324 (15) |
+| benign (false-positive rate) | 0.0118 | 0.0753 | +0.0634 | — |
+
+The in-domain low-rate recall of 1.0000 rests on 21 flows and should be read as an upper
+bound with wide uncertainty, not as perfect detection.
 
 Volumetric floods, the largest and most conspicuous attacks and the class a detector is
 least expected to miss, transfer worst, retaining 5.35% recall. This follows directly from

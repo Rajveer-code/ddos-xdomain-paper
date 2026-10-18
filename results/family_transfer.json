@@ -3,19 +3,24 @@
     "in_domain_recall": 0.9834435243179497,
     "external_recall": 0.0535375399445869,
     "drop": 0.9299059843733628,
-    "n_in": 761,
-    "n_ext": 50000
+    "n_in": 153784,
+    "n_ext": 2306721,
+    "runs_in": 20,
+    "runs_ext": 60
   },
   "low_rate_application": {
     "in_domain_recall": 1.0,
     "external_recall": 0.23583612040133778,
     "drop": 0.7641638795986623,
-    "n_in": 3,
-    "n_ext": 20
+    "n_in": 21,
+    "n_ext": 324,
+    "runs_in": 5,
+    "runs_ext": 15
   },
   "benign_fpr": {
     "in_domain": 0.01183733556565415,
     "external": 0.07526992514272957,
     "increase": 0.06343258957707541
-  }
+  },
+  "aggregation": "unweighted mean of per-run values over LightGBM runs that contain the family; n_in / n_ext are flows summed over those runs"
 }
