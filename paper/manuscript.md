@@ -331,14 +331,15 @@ consecutive score levels.
 This is not a detail. In-domain AUC here routinely reaches 1.0000, so a wide interval of
 thresholds is exactly optimal. Selecting by `argmax` returns whichever endpoint the grid
 visited first, and that endpoint sits flush against the score distribution, maximally
-fragile under any shift. In our own runs the naive choice inflated apparent threshold loss
-on one pair from +0.0128 to +0.1948, an artefact of the tie-break with no relation to
-domain shift.
+fragile under any shift. We adopted the plateau-midpoint rule after a first run of the
+transfer matrix, in which the naive tie-break visibly moved the threshold loss of one pair;
+that pre-fix run was overwritten and is not reported, so we disclose the change here rather
+than quote its numbers. The rule uses source data only.
 
 ### 3.7 Metrics
 
 To quantify the gap itself rather than its endpoints, we resample both test sets jointly
-and report a **paired bootstrap** interval and p-value on the difference (2,000
+and report a **paired bootstrap** interval and p-value on the difference (1,000
 resamples). Reporting one interval for the in-domain score and another for the external
 score says nothing about the interval of their difference.
 
@@ -385,8 +386,9 @@ of the measurement survives correcting the labels.
 
 On its own source evaluation split every source reaches what this literature routinely reports.
 LightGBM averages 0.9817 macro-F1 across the four sources (0.9546–1.0000) at ROC-AUC
-0.9977–1.0000. The other three model families agree within a few points, and seed-to-seed
-standard deviations reach at most 0.0023. Nothing here suggests an unsolved problem.
+0.9973–1.0000 (per-source means). The other three model families agree within a few points.
+For LightGBM, seed-to-seed standard deviations reach at most 0.0023; across all four families
+the largest is 0.0087 (logistic regression on ToN-IoT). Nothing here suggests an unsolved problem.
 
 Two features of these numbers matter for what follows. First, they are obtained *after*
 de-duplication, so they are not inflated by the train/test contamination described in §3.3;
@@ -510,7 +512,7 @@ collapse is not an artefact of macro-F1's treatment of the two classes. The Brie
 rises by a factor between six and fifty. The number an operator would feel first is the
 last column: holding sensitivity at 95% of attacks, the false-positive rate on an
 unfamiliar network runs from 0.0066 to 0.7142 for the primary model. A detector that
-flagged two benign flows in a thousand at home flags seven in ten abroad, at the same
+flagged about seven benign flows in a thousand at home flags seven in ten abroad, at the same
 recall.
 
 ### 4.5 Representation or operating point?
@@ -780,13 +782,19 @@ tracks external AUC almost exactly (Figure 6).
 **Figure 6.** External macro-F1 under the deployed threshold, zero-label benign-quantile recalibration, and the all-labels oracle, ordered by external AUC.
 
 
-**Table 13. Zero-label recalibration by pair.**
+**Table 13. Zero-label recalibration by pair.** All 12 ordered pairs, LightGBM, mean over 3 seeds (`results/calibration.json`), sorted by headroom recovered. Headroom recovered = (benign-quantile − source threshold) / (oracle − source threshold); where the oracle barely exceeds the source threshold, a large percentage can be a small absolute gain.
 
 | pair | ext AUC | source thr | benign-quantile | oracle | headroom recovered |
 |---|---:|---:|---:|---:|---:|
 | BoT-IoT→IDS2018 | 0.967 | 0.5399 | **0.9558** | 0.9688 | **97.0%** |
+| UNSW→IDS2018 | 0.079 | 0.3263 | 0.3325 | 0.3432 | 36.9% |
 | IDS2018→UNSW | 0.792 | 0.4918 | 0.5268 | 0.6280 | 25.7% |
 | BoT-IoT→UNSW | 0.829 | 0.4820 | 0.5138 | 0.6386 | 20.3% |
+| ToN-IoT→IDS2018 | 0.414 | 0.2770 | 0.3311 | 0.5647 | 18.8% |
+| IDS2018→BoT-IoT | 0.501 | 0.3105 | 0.3605 | 0.6606 | 14.3% |
+| UNSW→ToN-IoT | 0.226 | 0.3204 | 0.3275 | 0.3704 | 14.1% |
+| ToN-IoT→UNSW | 0.284 | 0.4770 | 0.4792 | 0.5006 | 9.2% |
+| UNSW→BoT-IoT | 0.193 | 0.2135 | 0.2259 | 0.4403 | 5.5% |
 | IDS2018→ToN-IoT | 0.535 | 0.3690 | 0.3474 | 0.5890 | −9.8% |
 | BoT-IoT→ToN-IoT | 0.583 | 0.3773 | 0.3465 | 0.6421 | −11.7% |
 | ToN-IoT→BoT-IoT | 0.642 | 0.3469 | 0.2480 | 0.7220 | **−26.4%** |
@@ -808,8 +816,10 @@ detection exist and are not evaluated here.
 
 Ten balanced labelled flows outperformed every zero-label baseline evaluated here. Each budget k is drawn as k/2 benign and k/2 attack flows from the adaptation pool. That isolates the value of supervision from the difficulty of finding attacks — a controlled label-budget experiment, not a claim about live sampling.
 
-**Table 14. Label budget, leakage-free.** Median over 20 independent label draws per
-(pair, budget), 12 ordered pairs, 2 seeds; 5th and 95th percentiles in brackets.
+**Table 14. Label budget, leakage-free.** LightGBM. For k > 0, median over 240 runs per
+cell (12 ordered pairs × 2 seeds × 10 independent balanced label draws); for k = 0, over the
+24 pair-seeds. 5th and 95th percentiles in brackets. This experiment caps each domain at
+25,000 flows per class, half the 50,000 of the main matrix, to keep the refits tractable.
 
 | k labelled target flows | re-tune threshold | retrain on source + k |
 |---:|---|---|
@@ -919,8 +929,8 @@ they do.
 
 The remedy hierarchy inverts the usual order of effort. Zero-label feature alignment by
 CORAL recovers 0.0029 macro-F1; a benign-quantile threshold helps substantially in the one
-regime where ranking survived and hurts in three others; ten balanced labelled flows recover
-0.3323. For an operator the implication is to build a small labelled set from the target
+regime where ranking survived and hurts in three others; ten balanced labelled flows raise
+median macro-F1 from 0.3919 to 0.7253. For an operator the implication is to build a small labelled set from the target
 network deliberately, covering both classes, rather than to rely on zero-label recalibration:
 the ten flows of §4.12 are drawn balanced, which a live sample of ten would not be.
 
