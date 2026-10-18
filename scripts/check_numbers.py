@@ -58,7 +58,55 @@ def flatten(obj, out: set[float]) -> None:
             out.add(f)
 
 
+WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven",
+         8: "eight", 9: "nine", 10: "ten", 11: "eleven", 12: "twelve"}
+
+
+def fmt_claim(value, c: dict) -> str:
+    """Render a stored value the way the manuscript writes it."""
+    kind, d = c.get("fmt", "plain"), c.get("decimals", 0)
+    if kind == "pct_range":
+        lo, hi = value
+        return f"{lo:.{d}f}% to {hi:.{d}f}%"
+    if c.get("one_minus"):
+        value = 1 - value
+    if kind == "word":
+        return WORDS[int(value)]
+    if kind == "thousands":
+        return f"{int(value):,}"
+    if kind == "pct":
+        return f"{100 * value:.{d}f}%"
+    text = f"{value:.{d}f}"
+    if kind == "signed":
+        text = ("−" + text[1:]) if value < 0 else ("+" + text)
+    return text
+
+
+def check_claims() -> int:
+    """Keyed check: each registered claim must equal its result key at the written precision."""
+    reg = json.loads((PAPER / "claims.json").read_text(encoding="utf-8"))["claims"]
+    manuscript = (PAPER / "manuscript.md").read_text(encoding="utf-8")
+    failures = 0
+    for c in reg:
+        node = json.loads((RESULTS / c["file"]).read_text(encoding="utf-8"))
+        for key in c["path"]:
+            node = node[key]
+        expected = fmt_claim(node, c)
+        problems = []
+        if expected != c["text"]:
+            problems.append(f"result gives {expected!r}")
+        if c["text"] not in manuscript:
+            problems.append("text not found in manuscript.md")
+        status = "ok  " if not problems else "FAIL"
+        failures += bool(problems)
+        print(f"  {status} {c['text']!r:>18}  <- {c['file']}:{'/'.join(c['path'])}"
+              + (f"  [{'; '.join(problems)}]" if problems else ""))
+    print(f"\nKeyed claims: {len(reg) - failures}/{len(reg)} pass\n")
+    return failures
+
+
 def main() -> int:
+    failures = check_claims()
     values: set[float] = set()
     files = sorted(RESULTS.glob("*.json"))
     for p in files:
@@ -115,8 +163,9 @@ def main() -> int:
         for name, ln, tok in unmatched:
             print(f"  {name}:{ln}  {tok}")
     else:
-        print("\nEvery numeric literal traces to a result file.")
-    return 0
+        print("\nEvery numeric literal matches some value in results/ (a weak check; "
+              "the keyed claims above are the strong one).")
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":

@@ -5,8 +5,9 @@ Project-level rules. Extends the global `~/.claude/CLAUDE.md`; the global file w
 ## What this is
 
 A sole-author research study on cross-dataset generalisation of flow-based DDoS detectors.
-Target: **IEEE Transactions on Network and Service Management (TNSM)** (Q1, no APC under the
-subscription model) plus an arXiv preprint. Secondary shot: COMSNETS 2027 / WTMC 2027.
+Target (decided 2026-10-18): **Computer Networks (Elsevier), subscription route (no fee)**,
+plus an arXiv preprint (primary cs.LG). Fallbacks: TMLR, then IEEE TNSM (needs <=16 pp).
+Readiness audit and fix plan: `PLAN_audit_fixes.md` (gitignored).
 
 **Not Computers & Security** (Elsevier) — ruled out 2026-08-22. COSE instituted a moratorium
 on AI/ML-as-significant-component submissions in early 2024; this paper trains four ML model
@@ -37,6 +38,9 @@ Never hardcode paths outside `src/config.py`.
 ```bash
 pip install -r requirements.txt
 python scripts/download_data.py        # fetch Kaggle mirrors into data/
+python scripts/run_all.py --dry-run    # full pipeline in order, with the settings that ran
+python scripts/check_numbers.py        # keyed claims (paper/claims.json) + loose literal scan
+python scripts/build_pdf.py            # single-column proof from paper/manuscript.md
 ```
 
 ## Environment notes
