@@ -424,11 +424,10 @@ To keep the base rate visible, we report **FPR at 95% TPR**, since balanced-test
 
 The pipeline is written in Python (scikit-learn, LightGBM, XGBoost, pandas; versions pinned
 in the repository). Its code was developed with the assistance of Claude Code (Anthropic), an
-AI coding agent, using Claude models including Claude Opus 5.5 [CONFIRM: the Claude models
-used in August 2026]. Under the author's direction the agent wrote and modified the
+AI coding agent, running Claude Sonnet and Claude Opus models (versions 5 and 5.5). Under the author's direction the agent wrote and modified the
 experiment, summary and build scripts and ran them. The study design and the primary
 experiments were specified by the author; the target-only control of §4.12 was designed with
-the agent in response to a pre-submission audit and approved by the author [CONFIRM]. The
+the agent in response to a pre-submission audit and approved by the author. The
 author reviewed the code and checked every reported number against the stored result files.
 The results do not depend on the tool: a clean re-run of the full pipeline from an empty
 results directory reproduced every result file and figure.

@@ -39,7 +39,7 @@ AFFIL = ("organization={Department of Computer Science and Business Systems, Gya
          "Institute of Technology and Sciences}, city={Jabalpur}, country={India}")
 
 # Elsevier end matter. Funding confirmed by the author 2026-10-19 (no funding). The AI
-# declaration is a draft: its [CONFIRM] markers must be resolved by the author.
+# declaration was finalised with the author on 2026-10-19.
 DECLARATIONS = r"""
 \section*{CRediT authorship contribution statement}
 \textbf{Rajveer Singh Pall:} Conceptualization, Methodology, Software, Validation, Formal
