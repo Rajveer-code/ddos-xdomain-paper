@@ -3,108 +3,103 @@
 **Ranking inversion in cross-network denial-of-service detection.**
 
 Cross-dataset transfer of flow-based DoS detectors does not decay toward chance. It passes
-through chance. Across every ordered pair of four independently captured testbeds, mean
-external ROC-AUC is 0.5054 and 108 of 240 external evaluations fall *below* 0.5; the worst
-pair reaches 0.0697, which is a strong ranking with the sign reversed.
+through chance. Across every ordered pair of four independently captured testbeds, 108 of
+240 external evaluations score *below* ROC-AUC 0.5, and the worst pair reaches 0.0697: a
+strong ranking with the sign reversed.
 
-Status: **complete.** Manuscript, figures and results are in the repository. Every number
-in the paper is produced by a seeded run and written to `results/*.json` first;
-`scripts/check_numbers.py` verifies that all 1,025 numeric literals in the manuscript trace
-back to a result file, and it is expected to pass at 100%.
+**Status:** manuscript complete; preprint in preparation; not yet submitted to a journal.
+Target venue: *Computer Networks* (Elsevier). The full pipeline was re-run from an empty
+`results/` on 18–19 Oct 2026 and reproduced every result file and figure
+([`RERUN_2026-10-19.md`](RERUN_2026-10-19.md)).
 
-- Manuscript: [`paper/manuscript.pdf`](paper/manuscript.pdf) (22 pages) and
-  [`paper/manuscript.md`](paper/manuscript.md), the source of truth.
-- Target venue: Computers & Security (Elsevier), with an arXiv preprint.
+- Manuscript source of truth: [`paper/manuscript.md`](paper/manuscript.md)
+- Single-column proof: [`paper/manuscript.pdf`](paper/manuscript.pdf) (28 pages)
+- Journal build (elsarticle, pdfLaTeX): [`paper/elsarticle/`](paper/elsarticle/)
 
 ---
 
-## What this study asks, and what it found
+## What the study found
 
-The project began with a hypothesis about *which* features cause the collapse. That
-hypothesis was pre-specified in version control before the experiment ran, and the data did
-not support it. Both the original question and the answer are reported.
+1. **Transfer inverts rather than degrades.** Three of twelve ordered pairs score below
+   chance in all four model families, logistic regression included, so the inversion does
+   not need high-order feature interactions.
+2. **Most failures are in the ranking, not the threshold.** Nine to eleven of twelve pairs
+   for the primary model, depending on whether the two losses are compared in the same unit.
+   A new threshold cannot repair a reversed ordering.
+3. **The pre-specified feature hypothesis was not supported.** Removing all twenty
+   "capacity" features moves external macro-F1 by +0.0132 [−0.0084, +0.0320].
+4. **Aggregate drift monitors miss it.** Proxy A-distance, MMD and summed Wasserstein
+   distance lose to a mean baseline; the model's own confidence (ATC) and the largest
+   single-feature shift carry some signal.
+5. **A few target labels repair it, and the source model does not help.** Ten balanced
+   labelled target flows lift median macro-F1 from 0.3919 to 0.7253 when added to the source
+   data, but logistic regression trained on those ten flows alone reaches 0.7852.
+6. **The benchmarks need care.** The NetFlow copies are up to 99.7% duplicate in the
+   feature space a model sees, and swapping CICIDS2017 for its 2022 regenerated release
+   moves the cross-dataset result by close to a third.
 
-1. **Which features cause it?** Pre-specified hypothesis: features encoding *testbed
-   capacity* (throughput, packet rate, inter-arrival timing) drive in-domain accuracy and
-   destroy transfer. **Not supported.** Removing all twenty capacity features moves external
-   macro-F1 by +0.0132 [-0.0084, +0.0320], an interval spanning zero.
-2. **Can you see it coming without labels?** **Largely no.** Proxy A-distance, MMD and
-   Wasserstein-1 carry almost no information about the loss; their intervals span zero and
-   all three are worse out-of-sample than predicting the mean.
-3. **What does the failure actually look like?** Inversion, not degradation, and it appears
-   in all four model families tested. Logistic regression inverts on the same pairs as the
-   tree ensembles, which rules out any mechanism requiring high-order feature interactions.
-
-Null and negative results are reported as such. The single strongest remedy found is a
-small number of target labels, not feature engineering, distance monitoring, or threshold
-recalibration; recalibrating on clean target benign traffic helps the ranking-preserving
-pair and hurts others, so its pooled effect depends on the summary (median down, mean up).
+Null and negative results are reported as such.
 
 ## Protocol
 
-- **Feature space:** the NetFlow v2 standard feature set (Sarhan et al., 2021) — 43
-  identical features across four datasets, so cross-dataset claims do not rest on an
-  ad-hoc column intersection. The usual CICFlowMeter pairing is kept as a secondary study.
-- **Datasets:** `NF-CSE-CIC-IDS2018-v2`, `NF-BoT-IoT-v2`, `NF-ToN-IoT-v2`,
-  `NF-UNSW-NB15-v2`, plus `CIC-DDoS2019` / `CICIDS2017` and the DistriNet-corrected
-  CICIDS2017 (Engelen et al., 2021) for label-noise isolation.
-- **Transfer:** every ordered source→target pair, both directions.
-- **Statistics:** paired bootstrap CIs on the *gap* itself, over multiple seeds.
-
-## Layout
-
-```
-src/          harness: config, data loading, harmonisation, feature taxonomy, experiments
-configs/      run configurations
-results/      every metric, as JSON — the single source of truth for the paper
-figures/      regenerated from results/, never hand-edited
-paper/        manuscript
-scripts/      entry points
-```
+- **Feature space:** the NetFlow v2 standard feature set (Sarhan et al.); 39 of its features
+  after dropping labels and ports, identical across four datasets. The CICFlowMeter pairing
+  CIC-DDoS2019 ↔ CICIDS2017 is a secondary study.
+- **Datasets:** NF-CSE-CIC-IDS2018-v2, NF-BoT-IoT-v2, NF-ToN-IoT-v2, NF-UNSW-NB15-v2,
+  CIC-DDoS2019, CICIDS2017 and the DistriNet 2022 regenerated CICIDS2017 (Liu et al.). All are
+  public Kaggle mirrors by `dhoogla`; versions and row counts against the official releases
+  are in `results/provenance.json`. No data is redistributed here.
+- **Transfer:** every ordered source→target pair, four model families, five seeds.
+- **Statistics:** paired bootstrap intervals on the gap itself; the inferential unit is the
+  ordered pair.
 
 ## Reproducing
 
 ```bash
 pip install -r requirements.txt
+python scripts/download_data.py      # needs ~/.kaggle/kaggle.json (never copied into the repo)
+python scripts/run_all.py --dry-run  # the full pipeline, in order, with the settings that ran
+python scripts/run_all.py            # about 3 h on an i7-13650HX laptop CPU; no GPU needed
+python scripts/check_numbers.py      # keyed check of the headline numbers
 ```
 
-Kaggle credentials are read from `~/.kaggle/kaggle.json` and are never copied into the
-repository. Then:
-
-```bash
-python scripts/download_data.py
-```
-
-One experiment is one entry point; each writes its own file under `results/`.
+`run_all.py` passes each experiment the settings recorded in its own results file; several
+scripts have different defaults, so running them bare does not reproduce the paper.
+`check_numbers.py` pins every headline number to the exact results file and key it comes
+from (`paper/claims.json`) and fails if one drifts; a looser scan of all numeric literals is
+printed as a secondary report.
 
 | script | produces |
 |---|---|
-| `run_transfer_matrix.py` | the transfer matrix, every ordered pair x model x seed |
-| `run_feature_ablation.py` | capacity/semantic ablation with paired bootstrap CIs |
+| `characterize_data.py`, `record_provenance.py` | dataset table, label map, mirror provenance |
+| `run_transfer_matrix.py` | every ordered pair × model × seed |
+| `analyze_robustness.py`, `summarize_matrix.py`, `aggregate_operating_point.py` | model-family robustness, unit of inference, operating-point metrics |
+| `run_feature_ablation.py`, `ablation_intervals.py` | capacity/semantic ablation with paired bootstrap intervals |
 | `run_feature_count.py` | random subsets at controlled size, separating size from identity |
+| `analyze_dns_query_id.py` | what `DNS_QUERY_ID` carries in each dataset |
 | `run_inversion_controls.py` | permutation and label-reversal controls |
 | `run_unsw_robustness.py` | source-size control for the strongest inversion |
-| `run_preprocessing_sensitivity.py` | de-duplication, contradiction and clipping ablations |
-| `run_divergence.py` | proxy A-distance, MMD, Wasserstein-1, ATC |
-| `run_remedies.py` | CORAL, threshold transfer, benign-quantile recalibration |
-| `run_label_budget.py` | leakage-free label budget with disjoint adaptation and evaluation |
-| `run_cic_study.py` | the CICFlowMeter secondary study and corrected-label comparison |
-| `analyze_robustness.py` | model-family robustness and unit-of-inference analysis |
-| `make_figures.py` | all figures, regenerated from `results/` |
-| `build_pdf.py` | `paper/manuscript.pdf` from the markdown source |
-| `check_numbers.py` | verifies every numeric literal in the manuscript traces to a result |
+| `run_preprocessing_sensitivity.py` | de-duplication and clipping ablations |
+| `run_divergence.py`, `analyze_gap_forecast.py` | label-free predictors of the loss |
+| `run_remedies.py` | CORAL, threshold transfer, benign-reference recalibration |
+| `run_label_budget.py` | leakage-free label budget, disjoint adaptation and evaluation sets |
+| `run_target_only_control.py` | the same label draws used to train on the target alone |
+| `run_cic_study.py` | the CICFlowMeter secondary study and the regenerated-release comparison |
+| `summarize_all.py`, `summarize_secondary.py` | aggregate files the manuscript cites |
+| `make_figures.py` | all figures, from `results/` |
+| `build_pdf.py`, `build_pdf_ieee.py`, `build_pdf_elsarticle.py` | proof, IEEE and Elsevier builds |
 
-Long runs are checkpointed and hold a PID lock in `results/.locks/`, so an interrupted run
-resumes rather than restarting and two runs cannot race on the same output.
+Long runs checkpoint and hold a PID lock in `results/.locks/`, so an interrupted run resumes
+rather than restarting.
 
 ## Data credits
 
+- Sarhan, Layeghy and Portmann, *Towards a Standard Feature Set for NIDS Datasets* (MONET 2022) — NetFlow v2
 - Sharafaldin et al., CICIDS2017 (ICISSP 2018) and CIC-DDoS2019 (ICCST 2019)
-- Engelen et al., *Troubleshooting an Intrusion Detection Dataset* (WTMC 2021) — corrected labels
-- Lanvin et al., *Errors in the CICIDS2017 dataset* (CRiSIS 2022)
-- Sarhan et al., *Towards a Standard Feature Set for NIDS Datasets* (2021) — NetFlow v2
-- Cleaned parquet mirrors: [`dhoogla`](https://www.kaggle.com/dhoogla) on Kaggle
-- Arp et al., *Dos and Don'ts of Machine Learning in Computer Security* (USENIX Security 2022) — methodology
+- Koroniotis et al., BoT-IoT (FGCS 2019); Alsaedi et al., ToN-IoT (IEEE Access 2020); Moustafa and Slay, UNSW-NB15 (MilCIS 2015)
+- Liu, Engelen, Lynar, Essam and Joosen, *Error Prevalence in NIDS datasets* (IEEE CNS 2022) — regenerated CICIDS2017
+- Engelen et al. (WTMC 2021) and Lanvin et al. (CRiSIS 2022) — CICIDS2017 label errors
+- Parquet mirrors: [`dhoogla`](https://www.kaggle.com/dhoogla) on Kaggle (CC BY-NC-SA 4.0)
 
 ## Author
 
