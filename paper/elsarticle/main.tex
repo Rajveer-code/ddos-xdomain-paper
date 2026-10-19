@@ -191,6 +191,10 @@ Inappropriate threat model & Scope stated as DoS/DDoS detection under network ch
 \end{tabularx}
 \end{table}
 
+\subsection{Software and AI-assisted tooling}
+
+The pipeline is written in Python (scikit-learn, LightGBM, XGBoost, pandas; versions pinned in the repository). Its code was developed with the assistance of Claude Code (Anthropic), an AI coding agent, using Claude models including Claude Opus 5.5 [CONFIRM: the Claude models used in August 2026]. Under the author's direction the agent wrote and modified the experiment, summary and build scripts and ran them. The study design and the primary experiments were specified by the author; the target-only control of \S{}4.12 was designed with the agent in response to a pre-submission audit and approved by the author [CONFIRM]. The author reviewed the code and checked every reported number against the stored result files. The results do not depend on the tool: a clean re-run of the full pipeline from an empty results directory reproduced every result file and figure.
+
 
 \section{Results}
 
@@ -698,11 +702,14 @@ This research did not receive any specific grant from funding agencies in the pu
 commercial, or not-for-profit sectors.
 
 \section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
-[PLACEHOLDER: author to write this declaration before submission. Elsevier requires it
-when AI tools were used beyond grammar and spelling checks; template: ``During the
-preparation of this work the author used [TOOL] in order to [REASON]. After using this
-tool/service, the author reviewed and edited the content as needed and takes full
-responsibility for the content of the published article.'']
+During the preparation of this work the author used Claude Code (Anthropic) in order to edit
+and restructure manuscript text, check every reported number against the stored result files,
+verify bibliographic references against Crossref and arXiv, and draft revisions in response to
+an AI-assisted pre-submission audit; and ChatGPT (OpenAI) in order to obtain a critical review
+of an earlier draft. [CONFIRM: any other AI tool used on this manuscript, e.g. Gemini.] AI use
+in code development and analysis is described in Section 3.8. After using these tools, the
+author reviewed and edited the content as needed and takes full responsibility for the content
+of the published article.
 
 \begin{thebibliography}{99}
 \bibitem{ref1} D'Hooge, L., Wauters, T., Volckaert, B., and De Turck, F. ``Inter-dataset generalization strength of supervised machine learning methods for intrusion detection.'' \emph{Journal of Information Security and Applications} 54, 102564, 2020. doi:10.1016/j.jisa.2020.102564

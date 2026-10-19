@@ -38,8 +38,8 @@ EMAIL = "rajveerpall04@gmail.com"
 AFFIL = ("organization={Department of Computer Science and Business Systems, Gyan Ganga "
          "Institute of Technology and Sciences}, city={Jabalpur}, country={India}")
 
-# Elsevier end matter. Funding and the generative-AI declaration are statements of fact
-# the author must confirm; the AI declaration is left as an explicit placeholder on purpose.
+# Elsevier end matter. Funding confirmed by the author 2026-10-19 (no funding). The AI
+# declaration is a draft: its [CONFIRM] markers must be resolved by the author.
 DECLARATIONS = r"""
 \section*{CRediT authorship contribution statement}
 \textbf{Rajveer Singh Pall:} Conceptualization, Methodology, Software, Validation, Formal
@@ -55,11 +55,14 @@ This research did not receive any specific grant from funding agencies in the pu
 commercial, or not-for-profit sectors.
 
 \section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
-[PLACEHOLDER: author to write this declaration before submission. Elsevier requires it
-when AI tools were used beyond grammar and spelling checks; template: ``During the
-preparation of this work the author used [TOOL] in order to [REASON]. After using this
-tool/service, the author reviewed and edited the content as needed and takes full
-responsibility for the content of the published article.'']
+During the preparation of this work the author used Claude Code (Anthropic) in order to edit
+and restructure manuscript text, check every reported number against the stored result files,
+verify bibliographic references against Crossref and arXiv, and draft revisions in response to
+an AI-assisted pre-submission audit; and ChatGPT (OpenAI) in order to obtain a critical review
+of an earlier draft. [CONFIRM: any other AI tool used on this manuscript, e.g. Gemini.] AI use
+in code development and analysis is described in Section 3.8. After using these tools, the
+author reviewed and edited the content as needed and takes full responsibility for the content
+of the published article.
 """
 
 # pdfLaTeX has no glyphs for these by default; map each to a LaTeX equivalent.
