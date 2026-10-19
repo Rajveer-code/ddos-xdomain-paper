@@ -6,8 +6,8 @@
 
 ## Abstract
 
-Flow-based DoS detectors report accuracies above 99% and lose most of that skill on a
-different network. The loss is well documented; its character is not. Where the score
+Flow-based DoS detectors score near-perfectly on the network they were trained on and lose
+most of that skill on a different one. The loss is well documented; its character is not. Where the score
 ordering survives the move, the repair is a new threshold; where it has broken, no
 threshold is enough and the scoring function itself has to change.
 
@@ -35,8 +35,9 @@ distribution shift, calibration, evaluation methodology
 
 ## 1. Introduction
 
-Published flow-based DDoS detectors report accuracies above 99%. Deployed ones do not
-behave that way. The gap between those two facts has been measured repeatedly: models
+Flow-based DDoS detectors routinely score near-perfectly on the dataset they were trained
+on; ours reach in-domain ROC-AUC between 0.9973 and 1.0000 (§4.1). On a different network
+they do not behave that way. The gap between those two facts has been measured repeatedly: models
 trained on one intrusion-detection dataset and tested on another lose most of their
 apparent skill [1, 2]. That finding is established.
 

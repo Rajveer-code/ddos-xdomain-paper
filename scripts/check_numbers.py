@@ -120,7 +120,7 @@ def main() -> int:
     # AUDIT.md, OUTLINE.md and REFERENCES_VERIFIED.md are working documents about the paper, not the paper.
     # Their numbers are word counts, literal counts and venue fees, which correctly
     # have no backing result file.
-    META = {"AUDIT.md", "OUTLINE.md", "REFERENCES_VERIFIED.md"}
+    META = {"AUDIT.md", "OUTLINE.md", "REFERENCES_VERIFIED.md", "ARXIV_SUBMISSION.md"}
     docs = [d for d in sorted(PAPER.glob("*.md")) if d.name not in META]
     docs += [PROJECT / "FINDINGS.md"]
     total = matched = 0

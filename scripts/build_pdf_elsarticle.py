@@ -150,9 +150,16 @@ def relocate_figures(tex: str) -> str:
 
 
 def main() -> int:
+    global OUT, TEX
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--tex-only", action="store_true")
+    ap.add_argument("--arxiv", action="store_true",
+                    help="write paper/arxiv/ without the journal name or the "
+                         "'Preprint submitted to' footer, which would be false before submission")
     args = ap.parse_args()
+    if args.arxiv:
+        OUT = PAPER / "arxiv"
+        TEX = OUT / "main.tex"
 
     md = SRC.read_text(encoding="utf-8")
     title, _author, abstract, keywords, rest = extract_front_matter(md)
@@ -167,6 +174,10 @@ def main() -> int:
            + convert_references(refs_md).replace(r"\begin{thebibliography}{20}",
                                                  r"\begin{thebibliography}{99}")
            + "\n\\end{document}\n")
+    if args.arxiv:
+        tex = tex.replace(r"\documentclass[preprint,12pt]{elsarticle}",
+                          r"\documentclass[preprint,12pt,nopreprintline]{elsarticle}")
+        tex = tex.replace("\\journal{Computer Networks}\n", "")
     TEX.write_text(to_pdflatex(tex), encoding="utf-8")
     print(f"wrote {TEX}")
     if args.tex_only:
