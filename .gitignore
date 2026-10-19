@@ -40,3 +40,6 @@ results/_*.log
 
 # run locks (machine-local)
 results/.locks/
+
+# assistant project rules, kept local
+CLAUDE.md
