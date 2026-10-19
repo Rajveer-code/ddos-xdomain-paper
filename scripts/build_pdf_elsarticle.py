@@ -59,8 +59,7 @@ During the preparation of this work the author used Claude Code (Anthropic) in o
 and restructure manuscript text, check every reported number against the stored result files,
 verify bibliographic references against Crossref and arXiv, and draft revisions in response to
 an AI-assisted pre-submission audit; and ChatGPT (OpenAI) in order to obtain a critical review
-of an earlier draft. [CONFIRM: any other AI tool used on this manuscript, e.g. Gemini.] AI use
-in code development and analysis is described in Section 3.8. After using these tools, the
+of an earlier draft. AI use in code development and analysis is described in Section 3.8. After using these tools, the
 author reviewed and edited the content as needed and takes full responsibility for the content
 of the published article.
 """
