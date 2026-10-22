@@ -117,8 +117,37 @@ def main():
             "per_model": permodel,
         }
 
+    # Full adversarial transfer matrix, if present.
+    apath = R / "matrix_attack.json"
+    if apath.exists():
+        ax = json.loads(apath.read_text())
+        sh = [r["searched_hcmr"] for r in ax]
+        dangerous = [r for r in ax if r["searched_hcmr"] > 0.5
+                     and not r["atc_alarm"] and not r["conf_drop_alarm"]]
+        hi = [r for r in ax if r["searched_hcmr"] > 0.5]
+        pm = {}
+        for mdl in ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"]:
+            rs = [r for r in ax if r["model"] == mdl]
+            if rs:
+                pm[mdl] = {
+                    "mean_searched_hcmr": round(float(np.mean([r["searched_hcmr"] for r in rs])), 3),
+                    "both_monitors_silent_rate": round(float(np.mean(
+                        [(not r["atc_alarm"] and not r["conf_drop_alarm"]) for r in rs])), 2)}
+        S["matrix_attack"] = {
+            "n_configs": len(ax),
+            "n_ordered_pairs": len({(r["source"], r["target"]) for r in ax}),
+            "mean_searched_hcmr": round(float(np.mean(sh)), 3),
+            "n_dangerous_cells": len(dangerous),
+            "n_dangerous_combos": len({(r["source"], r["target"], r["model"]) for r in dangerous}),
+            "n_high_hcmr_configs": len(hi),
+            "silent_rate_among_high_hcmr": round(float(np.mean(
+                [(not r["atc_alarm"] and not r["conf_drop_alarm"]) for r in hi])), 2) if hi else 0.0,
+            "per_model": pm,
+        }
+
     (R / "summary_p1.json").write_text(json.dumps(S, indent=2))
-    print("matrix block:", json.dumps(S.get("matrix", {}), indent=2) if "matrix" in S else "none")
+    print("matrix:", json.dumps(S.get("matrix", {}), indent=2) if "matrix" in S else "none")
+    print("matrix_attack:", json.dumps(S.get("matrix_attack", {}), indent=2) if "matrix_attack" in S else "none")
 
 
 if __name__ == "__main__":

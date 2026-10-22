@@ -26,7 +26,11 @@ silent (33%), while RandomForest is the least exposed (0.524) and never silent. 
 score-only, traffic-plausible adversary adds capability only where the detector still has headroom
 — its own contribution (searched minus projected high-confidence-miss rate) ranges from +0.607 to
 +0.001 across cells and is ≈0 where the detector is already saturated; its power is not evasion
-(nearly free) but confidence, moving flows across the auto-accept threshold. The obvious
+(nearly free) but confidence, moving flows across the auto-accept threshold. Run across the full
+matrix, the adversary reaches a high-confidence-miss rate above 0.5 with both monitors silent in
+**74 of 240 configurations (16 combinations)**, and in **51% of all successful attacks the monitors
+report normal** — the dangerous pairing is a population property, worst for LogisticRegression
+(silent 58%) and absent for RandomForest (0%). The obvious
 responder-side defence — watch the features the adversary cannot freely set — fails a
 pre-registered bar everywhere (ΔHCMR ≤ 0.072 against a 0.10 bar), because those features do not
 transfer across independent testbeds either. The practical danger is therefore not a clever
@@ -296,6 +300,18 @@ RandomForest 0.219→0.011) but is **unchanged on the dangerous BoT-IoT/LogReg c
 whose misses sit at confidence ≈ 1.0 — tightening the monitor cannot recover the cell where it is
 already blind.
 
+**The adversarial quiet-monitor failure generalises across the quartet.** Running the score-only
+search over the *full* transfer matrix (all 12 ordered pairs × 4 models × 5 seeds, 240
+configurations; mean searched HCMR 0.578) and scoring the model-based monitors during each attack,
+**74 of 240 configurations — 16 distinct source→target→model combinations — pair an adversarial HCMR
+above 0.5 with both confidence monitors silent.** Of the 145 configurations where the adversary
+reaches HCMR > 0.5, **51% have both monitors silent**: roughly half the time an adversary succeeds,
+the label-free confidence monitors report normal. The model ordering from §5.2 holds under attack:
+LogisticRegression is silent in 58% of its configurations (mean searched HCMR 0.700), XGBoost 33%
+(0.604), LightGBM 32% (0.587), and RandomForest **0%** — it is never silent and the search reaches
+only 0.419 on it. So the dangerous pairing is not the single cell of Table 1 but a population
+property of the quartet, concentrated on the lower-capacity and gradient-boosted detectors.
+
 ### 5.4 The obvious responder-side defence does not transfer
 
 The pre-registered Gate 3 asked for non-trivial HCMR *and* silent model-based monitors on at least
@@ -364,13 +380,14 @@ than any zero-label monitor in this setting.
 
 ## 7. Limitations
 
-**Evidence base.** The 240-configuration generality result (§5.1–5.2) is *latent* exposure and
-monitor response only — no adversary. The **attack, budget, τ-sensitivity and defence results
-(§5.3–5.4, Table 1) are two source networks (UNSW-NB15, BoT-IoT) against one common target
-(CSE-CIC-IDS2018)**, four models, five seeds; and the headline adversarial quiet-monitor
-demonstration — high HCMR with a silent confidence monitor — is a **single (source, target, model)
-cell, BoT-IoT→CSE-CIC/LogisticRegression**. The broader claim we make is the latent one; the
-adversarial one is a bounded existence result, not a population statement.
+**Evidence base.** Both the latent result (§5.1–5.2, 240 configs) and the adversarial
+quiet-monitor result (§5.3, 240 configs: 74/240 dangerous cells across 16 combinations) are
+measured across the full 12-pair quartet. The **detailed per-cell decomposition — latent /
+projected / searched with bootstrap CIs, the τ-sensitivity, and the defence (§5.3–5.4, Table 1) —
+is the two-source (UNSW-NB15, BoT-IoT) → one common target (CSE-CIC-IDS2018) set**, four models,
+five seeds, because the lift decomposition and the defence require the per-source feasibility box
+and controllability analysis. So the generality of the phenomenon rests on 240 configurations; the
+mechanism and the defence evaluation rest on the two-pair detailed study.
 
 One feature family (NetFlow v2); both attacked sources carry a single DoS family (volumetric), so
 the per-family box is one family's. The main study is feature-space; no wire-realizability is

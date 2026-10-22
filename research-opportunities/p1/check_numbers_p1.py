@@ -62,6 +62,18 @@ def main() -> int:
     add("BoT/XGB Pdrop", f3(per["nf_bot_iot__XGBoost"]["mean_score_drop"]))
     add("BoT/XGB strong delta", f"{per['nf_bot_iot__XGBoost']['strong_minus_score']:+.3f}")
     add("BoT/RF strong delta", f"{per['nf_bot_iot__RandomForest']['strong_minus_score']:+.3f}")
+
+    # full adversarial transfer matrix (generality of the quiet-monitor failure)
+    ma = S.get("matrix_attack", {})
+    if ma:
+        add("adv dangerous cells", ma["n_dangerous_cells"])
+        add("adv dangerous combos", ma["n_dangerous_combos"])
+        add("adv high-hcmr configs", ma["n_high_hcmr_configs"])
+        add("adv silent among high", f"{ma['silent_rate_among_high_hcmr']*100:.0f}%")
+        add("adv mean searched", f3(ma["mean_searched_hcmr"]))
+        add("LogReg adv silent", f"{ma['per_model']['LogisticRegression']['both_monitors_silent_rate']*100:.0f}%")
+        add("LogReg adv searched", f3(ma["per_model"]["LogisticRegression"]["mean_searched_hcmr"]))
+        add("RF adv searched", f3(ma["per_model"]["RandomForest"]["mean_searched_hcmr"]))
     # defense drops and bar
     add("UNSW defense drop", f3(per["nf_unsw_nb15__LightGBM"]["defense_hcmr_drop"]))
     add("BoT defense drop", f3(per["nf_bot_iot__LightGBM"]["defense_hcmr_drop"]))

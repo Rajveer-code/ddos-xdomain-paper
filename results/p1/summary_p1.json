@@ -302,5 +302,32 @@
         "both_monitors_silent_rate": 0.0
       }
     }
+  },
+  "matrix_attack": {
+    "n_configs": 240,
+    "n_ordered_pairs": 12,
+    "mean_searched_hcmr": 0.578,
+    "n_dangerous_cells": 74,
+    "n_dangerous_combos": 16,
+    "n_high_hcmr_configs": 145,
+    "silent_rate_among_high_hcmr": 0.51,
+    "per_model": {
+      "LightGBM": {
+        "mean_searched_hcmr": 0.587,
+        "both_monitors_silent_rate": 0.32
+      },
+      "LogisticRegression": {
+        "mean_searched_hcmr": 0.7,
+        "both_monitors_silent_rate": 0.58
+      },
+      "XGBoost": {
+        "mean_searched_hcmr": 0.604,
+        "both_monitors_silent_rate": 0.33
+      },
+      "RandomForest": {
+        "mean_searched_hcmr": 0.419,
+        "both_monitors_silent_rate": 0.0
+      }
+    }
   }
 }
