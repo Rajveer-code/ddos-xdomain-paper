@@ -112,6 +112,21 @@ verified — further work is polish, not core results.
   scripts/build_pdf_elsarticle.py, or hand-write a short LaTeX wrapper).
 If resuming and matrix_attack.jsonl exists: re-run matrix_attack.py (it resumes), then aggregate.
 
+### COMPLETE (2026-10-22 evening) — submission-grade preliminary manuscript
+Adversarial matrix DONE (ebb7630): 240 configs, **74/240 dangerous cells / 16 combos**; 51% of
+successful attacks have silent monitors; LogReg silent 58%, RandomForest 0%. The "one cell"
+limitation is retired. fig6 added (4657c95). check_numbers 34/34. Pushed through 4657c95 (private).
+
+**Manuscript state:** MANUSCRIPT.md is submission-grade — abstract, intro, related work (9 refs),
+threat model, methods (controllability table), results (§5.1 latent matrix, §5.2 monitor blindness,
+§5.3 adversary + full adversarial matrix + budget + τ-sensitivity, §5.4 defence), Table 1 with CIs,
+6 figures, discussion, limitations (honest evidence base), ethics, reproducibility. Reviewer-audited
+twice; all findings fixed. Every number pinned + verified.
+
+**Only remaining polish (optional, not blocking):** build a PDF (pdflatex present, pandoc absent —
+adapt scripts/build_pdf_elsarticle.py or write a short LaTeX wrapper); a second DoS family needs a
+multi-family source; Phase 1-R wire check. None changes the core results.
+
 ## Resume / extend
 - Optional Phase 1-R wire-realism check (one family, nfstream) to lift "feature-space" to
   "wire-valid" for that family.
