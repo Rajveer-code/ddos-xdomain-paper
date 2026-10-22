@@ -355,6 +355,12 @@ over 4 models, 5 seeds). Exposure is high on 8 of 12 ordered pairs (0.56–1.00)
 (0.42–0.47), and near-zero on CSE-CIC→BoT-IoT (0.02); the phenomenon is not confined to the two
 attacked pairs, but it is also not universal.
 
+![Figure 6](fig6_silent_by_model.png)
+**Figure 6.** Fraction of the 240 configurations in which both model-based monitors are silent, per
+detector, with no attack (latent) and under the score-only attack. The blindness is
+model-dependent and persists under attack — worst for LogisticRegression (0.33 → 0.58), absent for
+RandomForest (0.00 / 0.00).
+
 ## 6. Discussion
 
 The uncomfortable alignment in §5.2 is the paper's core message for practice. Label-free

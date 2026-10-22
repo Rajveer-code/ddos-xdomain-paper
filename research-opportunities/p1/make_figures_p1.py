@@ -156,6 +156,30 @@ def fig5_matrix():
     fig.tight_layout(); fig.savefig(OUT / "fig5_latent_matrix.png"); plt.close(fig)
 
 
+def fig6_silent_by_model(S):
+    """Both-monitors-silent rate per model across the full matrix: latent vs under attack."""
+    mx, ma = S.get("matrix"), S.get("matrix_attack")
+    if not (mx and ma):
+        return
+    models = ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"]
+    short = ["LightGBM", "LogReg", "XGBoost", "RandForest"]
+    lat = [mx["per_model"][m]["both_monitors_silent_rate"] for m in models]
+    adv = [ma["per_model"][m]["both_monitors_silent_rate"] for m in models]
+    x = np.arange(len(models)); w = 0.38
+    fig, ax = plt.subplots(figsize=(6.4, 4))
+    ax.bar(x - w / 2, lat, w, label="latent (no attack)", color=OKABE[0])
+    ax.bar(x + w / 2, adv, w, label="under attack", color=OKABE[3])
+    ax.set_xticks(x); ax.set_xticklabels(short)
+    ax.set_ylabel("fraction of configs with both model-monitors silent")
+    ax.set_ylim(0, max(max(lat), max(adv)) * 1.25 + 0.05)
+    ax.set_title("Monitor blindness is model-dependent (240 configs)")
+    for i, (a, b) in enumerate(zip(lat, adv)):
+        ax.text(i - w / 2, a + 0.01, f"{a:.2f}", ha="center", fontsize=8)
+        ax.text(i + w / 2, b + 0.01, f"{b:.2f}", ha="center", fontsize=8)
+    ax.legend(fontsize=8)
+    fig.tight_layout(); fig.savefig(OUT / "fig6_silent_by_model.png"); plt.close(fig)
+
+
 def main():
     S = json.loads((R / "summary_p1.json").read_text())
     fig1_decomposition(S)
@@ -163,7 +187,8 @@ def main():
     fig3_budget()
     fig4_margin()
     fig5_matrix()
-    print("wrote fig1..fig5 PNGs")
+    fig6_silent_by_model(S)
+    print("wrote fig1..fig6 PNGs")
 
 
 if __name__ == "__main__":
