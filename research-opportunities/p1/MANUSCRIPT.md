@@ -209,6 +209,25 @@ seed variance is reported separately across five seeds.
 Numbers are keyed to `results/p1/summary_p1.json` (`matrix`, `per_pair_model`) and
 `matrix_latent.json`; `check_numbers_p1.py` verifies them against this text.
 
+**Table 1.** The two representative pairs × four models (mean over 5 seeds). *lat* = latent
+high-confidence-miss rate (no attack); *proj* = projected floor (project into the feasible box, no
+search); *HCMR* = searched; *lift* = HCMR − proj (the search's own contribution); *mon* = ATC /
+confidence-drop alarm during the attack (1 = fires); *def Δ* = defence HCMR reduction (bar 0.10).
+
+| source | model | ext AUC | lat | proj | HCMR | lift | mon | def Δ |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| UNSW | LightGBM | 0.236 | 0.984 | 0.679 | 0.910 | +0.232 | 1.0 | 0.072 |
+| UNSW | LogisticRegression | 0.316 | 0.953 | 0.658 | 0.909 | +0.251 | 1.0 | 0.072 |
+| UNSW | XGBoost | 0.158 | 0.974 | 0.670 | 0.912 | +0.242 | 1.0 | 0.072 |
+| UNSW | RandomForest | 0.230 | 0.983 | 0.678 | 0.903 | +0.226 | 1.0 | 0.071 |
+| BoT-IoT | LightGBM | 0.930 | 0.319 | 0.282 | 0.889 | +0.607 | 1.0 | 0.012 |
+| BoT-IoT | LogisticRegression | 0.919 | 0.999 | 0.901 | 0.902 | +0.001 | **0.0** | 0.012 |
+| BoT-IoT | XGBoost | 0.886 | 0.330 | 0.301 | 0.851 | +0.551 | 1.0 | 0.012 |
+| BoT-IoT | RandomForest | 0.904 | 0.144 | 0.024 | 0.219 | +0.195 | 1.0 | 0.006 |
+
+The one bold `mon` = 0.0 (BoT-IoT/LogisticRegression) is the dangerous cell: a strong-ranking
+detector (AUC 0.919) with 99.9% latent high-confidence misses and a silent monitor.
+
 ### 5.1 Latent high-confidence exposure is pervasive across the quartet
 
 Across the full NetFlow v2 transfer matrix — 12 ordered pairs × 4 models × 5 seeds, 240
@@ -288,6 +307,11 @@ resists (BoT-IoT/RandomForest).
 just below the auto-accept threshold; the search shifts them (orange) across it — the adversary
 buys confidence, not evasion.
 
+![Figure 5](fig5_latent_matrix.png)
+**Figure 5.** Latent high-confidence-miss rate across the full NetFlow v2 transfer matrix (mean
+over 4 models, 5 seeds). Exposure is high across most ordered pairs (0.42–1.00) with one benign
+exception (CSE-CIC→BoT-IoT, 0.02); the phenomenon is not confined to the two attacked pairs.
+
 ## 6. Discussion
 
 The uncomfortable alignment in §5.2 is the paper's core message for practice. Label-free
@@ -342,8 +366,25 @@ amendments for the pilot-vs-full scale, the strong-search ablation, and the memo
 
 ## References
 
-<!-- Bikdeli (frai.2026.1928858); Gnanaratna et al. SecureComm 2026 (LNICST 705); Jin & Apostolaki
-USENIX Sec 2025 (arXiv 2409.04691); PAVE (ScienceDirect S2667295226000450); Apruzzese et al. DTRAP
-2022 (arXiv 2106.09380); Merzouk et al. Annals of Telecom 2022 (10.1007/s12243-022-00910-1);
-elShehaby & Matrawy SoK (arXiv 2306.05494); Garg et al. ICLR 2022 (arXiv 2201.04234). Full entries
-in PREREGISTRATION.md §2. -->
+1. Bikdeli et al. *The Dashboard Says "Perfect": A Systematic Audit of Label-Free Model Monitoring
+   and Test-Time Adaptation Under Temporal Distribution Shift in Network Intrusion Detection.*
+   Frontiers in Artificial Intelligence, 2026. DOI 10.3389/frai.2026.1928858.
+2. K. Gnanaratna, J.-C. Nebel, F. Rahman, O. Omego. *Adaptive and Uncertainty-Aware Intrusion
+   Detection with Hybrid Meta-learning Under Proxy-Adversarial Exposure.* SecureComm 2026, LNICST
+   vol. 705, pp. 74–88. Springer.
+3. M. Jin, M. Apostolaki. *Robustifying ML-powered Network Classifiers with PANTS.* 34th USENIX
+   Security Symposium, 2025. arXiv:2409.04691.
+4. *PAVE: A protocol-validity-aware framework for adversarial robustness evaluation of
+   deep-learning intrusion detection in IoT networks.* ScienceDirect, 2026 (pii
+   S2667295226000450).
+5. G. Apruzzese et al. *Modeling Realistic Adversarial Attacks against Network Intrusion Detection
+   Systems.* ACM DTRAP 3(3):31, 2022. arXiv:2106.09380.
+6. M. A. Merzouk, F. Cuppens, N. Boulahia-Cuppens, R. Yaich. *Investigating the practicality of
+   adversarial evasion attacks on network intrusion detection.* Annals of Telecommunications 77,
+   763–775, 2022. DOI 10.1007/s12243-022-00910-1.
+7. M. elShehaby, A. Matrawy. *Evasion Adversarial Attacks Remain Impractical Against ML-based
+   Network Intrusion Detection Systems, Especially Dynamic Ones (SoK).* arXiv:2306.05494, v4 2025.
+8. S. Garg, S. Balakrishnan, Z. Lipton, B. Neyshabur, H. Sedghi. *Leveraging Unlabeled Data to
+   Predict Out-of-Distribution Performance (ATC).* ICLR 2022. arXiv:2201.04234.
+9. R. S. Pall. *Confidently Wrong: Cross-Network Generalisation of Flow-Based DoS Detectors* (P11,
+   this repository), 2026.

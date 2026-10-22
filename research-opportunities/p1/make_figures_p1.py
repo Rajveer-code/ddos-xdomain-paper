@@ -124,14 +124,46 @@ def fig4_margin():
     fig.tight_layout(); fig.savefig(OUT / "fig4_confidence_margin.png"); plt.close(fig)
 
 
+def fig5_matrix():
+    """Latent high-confidence-miss rate across the full NetFlow v2 transfer matrix."""
+    p = R / "matrix_latent.json"
+    if not p.exists():
+        return
+    rows = [r for r in json.loads(p.read_text()) if r.get("has_volumetric")]
+    ds = ["nf_unsw_nb15", "nf_bot_iot", "nf_ton_iot", "nf_cse_cic_ids2018"]
+    short = {"nf_unsw_nb15": "UNSW", "nf_bot_iot": "BoT-IoT", "nf_ton_iot": "ToN-IoT",
+             "nf_cse_cic_ids2018": "CSE-CIC"}
+    M = np.full((len(ds), len(ds)), np.nan)
+    for i, s in enumerate(ds):
+        for j, t in enumerate(ds):
+            if s == t:
+                continue
+            vals = [r["latent_hcm_rate"] for r in rows if r["source"] == s and r["target"] == t]
+            if vals:
+                M[i, j] = np.mean(vals)
+    fig, ax = plt.subplots(figsize=(6.2, 5))
+    im = ax.imshow(M, cmap="OrRd", vmin=0, vmax=1, aspect="auto")
+    ax.set_xticks(range(len(ds))); ax.set_xticklabels([short[d] for d in ds], fontsize=9)
+    ax.set_yticks(range(len(ds))); ax.set_yticklabels([short[d] for d in ds], fontsize=9)
+    ax.set_xlabel("target network"); ax.set_ylabel("source network (trained on)")
+    for i in range(len(ds)):
+        for j in range(len(ds)):
+            if not np.isnan(M[i, j]):
+                ax.text(j, i, f"{M[i,j]:.2f}", ha="center", va="center", fontsize=9,
+                        color="white" if M[i, j] > 0.6 else "black")
+    ax.set_title("Latent high-confidence-miss rate (mean over 4 models, 5 seeds)")
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    fig.tight_layout(); fig.savefig(OUT / "fig5_latent_matrix.png"); plt.close(fig)
+
+
 def main():
     S = json.loads((R / "summary_p1.json").read_text())
     fig1_decomposition(S)
     fig2_monitor_heatmap(S)
     fig3_budget()
     fig4_margin()
-    print("wrote fig1_hcmr_decomposition.png, fig2_monitor_alarm_heatmap.png, "
-          "fig3_hcmr_vs_budget.png, fig4_confidence_margin.png")
+    fig5_matrix()
+    print("wrote fig1..fig5 PNGs")
 
 
 if __name__ == "__main__":

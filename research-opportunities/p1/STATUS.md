@@ -80,22 +80,22 @@ updated to the honest positive-with-caveat world.
    benign 50k, attack 2,000/family. (An earlier 3-seed pilot was superseded; git history keeps it.)
    Qualitative findings are unchanged from the pilot — robust across 5 seeds.
 
-## Manuscript upgrade IN PROGRESS (2026-10-22 PM, autonomous)
-Goal: best-possible submission-quality manuscript. Steps + state:
-1. DONE (commit f93f978): extended to 4 models (LightGBM, LogReg, XGBoost, RandomForest) on the
-   2 pairs. 8 cells in summary_p1.json. Model-dependence spectrum sharp (RandomForest resists;
-   LogReg/bot is the dangerous quiet-monitor cell).
-2. RUNNING: `matrix_latent.py` → results/p1/matrix_latent.json — full NetFlow v2 quartet, all 12
-   ordered pairs × 4 models × 5 seeds, latent HCMR + external AUC + ATC/conf-drop alarms (no
-   search). The generality backbone.
-3. TODO: `budget_curve.py` → budget_curve.json (HCMR at {50,100,200}).
-4. TODO: `make_figures_p1.py` → fig1..fig4 PNGs in research-opportunities/p1/.
-5. TODO: rewrite PAPER_DRAFT.md to full submission quality (abstract, intro, related work from
-   the 7 verified works, threat model, methods, results with matrix+figures, discussion,
-   limitations, ethics, reproducibility); update check_numbers_p1.py to cover new claims.
-6. TODO: self-review, commit granularly, push to the (now private) remote.
-If resuming: re-read summary_p1.json + matrix_latent.json (if present) + this file; continue at the
-first TODO whose output file is missing.
+## Manuscript upgrade (2026-10-22 PM, autonomous) — mostly DONE
+Goal: best-possible submission-quality manuscript. The canonical paper is now **MANUSCRIPT.md**
+(PAPER_DRAFT.md is superseded). State:
+1. DONE (f93f978): 4 models (LightGBM, LogReg, XGBoost, RandomForest) on the 2 pairs. 8 cells.
+2. DONE (fb6b9ad): full NetFlow v2 transfer matrix (matrix_latent.json) — 240 configs, 12 pairs.
+   Mean latent HCMR 0.679; 36/240 dangerous cells across 9 combos. summary_p1.json has a `matrix`
+   block. MANUSCRIPT.md written (all sections).
+3. DONE (c2dbaa8): budget_curve.json (budget matters only with headroom); 4 figures.
+4. DONE (this commit): fig5 transfer-matrix heatmap; Table 1 (8 cells); real references.
+   check_numbers_p1.py verifies MANUSCRIPT.md.
+5. Remote: private, pushed through c2dbaa8 (push again after this commit).
+Remaining polish ideas (optional): τ_accept=5% sensitivity; controllability-R² table; convert
+MANUSCRIPT.md to the repo's elsarticle/IEEE PDF pipeline; a second DoS family if a multi-family
+source is added. All findings robust across 5 seeds and 4 models.
+If resuming: re-read summary_p1.json + MANUSCRIPT.md + this file; the manuscript is complete and
+verified — further work is polish, not core results.
 
 ## Resume / extend
 - Optional Phase 1-R wire-realism check (one family, nfstream) to lift "feature-space" to
