@@ -103,7 +103,7 @@ def fig4_margin():
     from p1common import build_fit, read_capped, score_flows
     from run_phase3 import tau_accept_from
     bounds = json.loads((R / "constraints.json").read_text())
-    source, target, model, seed = "nf_bot_iot", "nf_cse_cic_ids2018", "LightGBM", 42
+    source, target, model, seed = "nf_bot_iot", "nf_cse_cic_ids2018", "XGBoost", 42
     b = C.Bounds.from_json(bounds[source]["volumetric"])
     Xa, _, _ = read_capped(target, 0, 2000, seed, family="volumetric")
     Xatk = Xa.to_numpy(float)

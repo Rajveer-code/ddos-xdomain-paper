@@ -249,9 +249,13 @@ One model resists outright: on BoT-IoT→CSE-CIC, **RandomForest holds the searc
 auto-accept threshold. The per-flow P(attack) drop is small throughout (mean 0.003–0.048) and the
 strong upper-bound search adds ≤ 0.01 over the score-only search; the flows sit a thin margin from
 the confidence threshold, so where the search helps, a feasible nudge suffices. Consistent with
-this, HCMR is essentially flat in the query budget (Figure 3): search power is not the lever.
-Figure 4 shows the mechanism — the search shifts the benign-confidence distribution across
-τ_accept.
+this, the query budget matters only where the detector has headroom: on BoT-IoT→CSE-CIC, HCMR for
+LightGBM rises from 0.685 at 50 queries to 0.889 at 200, and for XGBoost from 0.697 to 0.851, while
+it is flat for LogisticRegression (≈0.902, already saturated) and stays low for RandomForest
+(0.136→0.219) regardless of budget (Figure 3). Where the detector is saturated or the model
+resists, more queries do nothing; where there is headroom, they help, but the per-flow P(attack)
+drop remains small because the flows begin near the threshold. Figure 4 shows the mechanism — the
+search shifts the benign-confidence distribution across τ_accept.
 
 ### 5.4 The obvious responder-side defence does not transfer
 
@@ -262,6 +266,27 @@ by 0.072 (UNSW pairs) and 0.012 (BoT-IoT pairs) against a 0.10 bar, catching ≤
 the low-controllability features do not transfer either, so a source-fitted novelty detector on
 them cannot separate an adversarial target flow from benign target traffic. We report this negative
 as a result, not a footnote.
+
+### Figures
+
+![Figure 1](fig1_hcmr_decomposition.png)
+**Figure 1.** Latent / projected / searched high-confidence-miss rate for the two representative
+pairs × four models. Latent exposure (blue) dominates; the search (orange) adds only where the
+detector has headroom, and RandomForest on BoT-IoT resists outright.
+
+![Figure 2](fig2_monitor_alarm_heatmap.png)
+**Figure 2.** ATC / confidence-drop alarm rate (1 = fires). The monitors are silent (green) only on
+BoT-IoT→CSE-CIC / LogisticRegression — the cell where the detector is already fully exposed.
+
+![Figure 3](fig3_hcmr_vs_budget.png)
+**Figure 3.** HCMR vs score-only query budget. More queries help only where the detector has
+headroom (BoT-IoT/LightGBM, XGBoost); flat where saturated (BoT-IoT/LogReg) or where the model
+resists (BoT-IoT/RandomForest).
+
+![Figure 4](fig4_confidence_margin.png)
+**Figure 4.** Mechanism (BoT-IoT→CSE-CIC / XGBoost, τ_accept = 0.968). Natural flows (blue) sit
+just below the auto-accept threshold; the search shifts them (orange) across it — the adversary
+buys confidence, not evasion.
 
 ## 6. Discussion
 
