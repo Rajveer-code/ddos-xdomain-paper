@@ -28,7 +28,7 @@ from p1common import build_fit, read_capped, external_metrics, FEATURES  # noqa:
 
 PAIRS = [("nf_unsw_nb15", "nf_cse_cic_ids2018"),
          ("nf_bot_iot", "nf_cse_cic_ids2018")]
-MODELS = ["LightGBM", "LogisticRegression"]
+MODELS = ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"]
 SEEDS = [42, 43, 44, 45, 46]            # full frozen spec
 TGT_BENIGN = 50_000
 TGT_ATTACK = 50_000

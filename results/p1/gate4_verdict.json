@@ -14,6 +14,18 @@
       "n_gate4_pass": 0,
       "n": 5
     },
+    "nf_unsw_nb15|XGBoost": {
+      "mean_hcmr_drop": 0.07179943498083215,
+      "mean_benign_cost": 0.0014207160989080931,
+      "n_gate4_pass": 0,
+      "n": 5
+    },
+    "nf_unsw_nb15|RandomForest": {
+      "mean_hcmr_drop": 0.0710489659376802,
+      "mean_benign_cost": 0.0014207160989080931,
+      "n_gate4_pass": 0,
+      "n": 5
+    },
     "nf_bot_iot|LightGBM": {
       "mean_hcmr_drop": 0.012143627176906114,
       "mean_benign_cost": 0.010226668057265126,
@@ -22,6 +34,18 @@
     },
     "nf_bot_iot|LogisticRegression": {
       "mean_hcmr_drop": 0.012143627176906114,
+      "mean_benign_cost": 0.010226668057265126,
+      "n_gate4_pass": 0,
+      "n": 5
+    },
+    "nf_bot_iot|XGBoost": {
+      "mean_hcmr_drop": 0.012143627176906136,
+      "mean_benign_cost": 0.010226668057265126,
+      "n_gate4_pass": 0,
+      "n": 5
+    },
+    "nf_bot_iot|RandomForest": {
+      "mean_hcmr_drop": 0.006004177171734504,
       "mean_benign_cost": 0.010226668057265126,
       "n_gate4_pass": 0,
       "n": 5

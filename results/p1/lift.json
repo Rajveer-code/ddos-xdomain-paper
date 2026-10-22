@@ -19,6 +19,24 @@
   },
   {
     "source": "nf_unsw_nb15",
+    "model": "XGBoost",
+    "seed": 42,
+    "latent_hcm_rate": 0.9586578789694428,
+    "projected_hcmr": 0.6530856800479329,
+    "searched_hcmr": 0.914319952067106,
+    "search_lift": 0.26123427201917315
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "RandomForest",
+    "seed": 42,
+    "latent_hcm_rate": 0.9784301977231875,
+    "projected_hcmr": 0.6734571599760335,
+    "searched_hcmr": 0.8969442780107849,
+    "search_lift": 0.2234871180347514
+  },
+  {
+    "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 43,
     "latent_hcm_rate": 0.9856160100062539,
@@ -34,6 +52,24 @@
     "projected_hcmr": 0.6522826766729206,
     "searched_hcmr": 0.9105691056910569,
     "search_lift": 0.25828642901813625
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "XGBoost",
+    "seed": 43,
+    "latent_hcm_rate": 0.9849906191369606,
+    "projected_hcmr": 0.6716697936210131,
+    "searched_hcmr": 0.9111944965603502,
+    "search_lift": 0.23952470293933714
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "RandomForest",
+    "seed": 43,
+    "latent_hcm_rate": 0.9874921826141339,
+    "projected_hcmr": 0.6754221388367729,
+    "searched_hcmr": 0.8993120700437773,
+    "search_lift": 0.2238899312070044
   },
   {
     "source": "nf_unsw_nb15",
@@ -55,6 +91,24 @@
   },
   {
     "source": "nf_unsw_nb15",
+    "model": "XGBoost",
+    "seed": 44,
+    "latent_hcm_rate": 0.9841752891052952,
+    "projected_hcmr": 0.6755934266585514,
+    "searched_hcmr": 0.9062690200852099,
+    "search_lift": 0.23067559342665855
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "RandomForest",
+    "seed": 44,
+    "latent_hcm_rate": 0.9841752891052952,
+    "projected_hcmr": 0.6755934266585514,
+    "searched_hcmr": 0.9020085209981741,
+    "search_lift": 0.2264150943396227
+  },
+  {
+    "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 45,
     "latent_hcm_rate": 0.9851301115241635,
@@ -73,6 +127,24 @@
   },
   {
     "source": "nf_unsw_nb15",
+    "model": "XGBoost",
+    "seed": 45,
+    "latent_hcm_rate": 0.9609665427509294,
+    "projected_hcmr": 0.6747211895910781,
+    "searched_hcmr": 0.9144981412639405,
+    "search_lift": 0.2397769516728624
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "RandomForest",
+    "seed": 45,
+    "latent_hcm_rate": 0.983271375464684,
+    "projected_hcmr": 0.6920693928128873,
+    "searched_hcmr": 0.9101610904584883,
+    "search_lift": 0.218091697645601
+  },
+  {
+    "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 46,
     "latent_hcm_rate": 0.9872727272727273,
@@ -88,6 +160,24 @@
     "projected_hcmr": 0.6606060606060606,
     "searched_hcmr": 0.9121212121212121,
     "search_lift": 0.25151515151515147
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "XGBoost",
+    "seed": 46,
+    "latent_hcm_rate": 0.9836363636363636,
+    "projected_hcmr": 0.6751515151515152,
+    "searched_hcmr": 0.9139393939393939,
+    "search_lift": 0.23878787878787877
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "RandomForest",
+    "seed": 46,
+    "latent_hcm_rate": 0.9812121212121212,
+    "projected_hcmr": 0.6715151515151515,
+    "searched_hcmr": 0.9078787878787878,
+    "search_lift": 0.23636363636363633
   },
   {
     "source": "nf_bot_iot",
@@ -109,6 +199,24 @@
   },
   {
     "source": "nf_bot_iot",
+    "model": "XGBoost",
+    "seed": 42,
+    "latent_hcm_rate": 0.33493109646494906,
+    "projected_hcmr": 0.3091671659676453,
+    "searched_hcmr": 0.8849610545236669,
+    "search_lift": 0.5757938885560216
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "RandomForest",
+    "seed": 42,
+    "latent_hcm_rate": 0.19772318753744758,
+    "projected_hcmr": 0.056920311563810666,
+    "searched_hcmr": 0.20311563810665068,
+    "search_lift": 0.14619532654284
+  },
+  {
+    "source": "nf_bot_iot",
     "model": "LightGBM",
     "seed": 43,
     "latent_hcm_rate": 0.3233270794246404,
@@ -124,6 +232,24 @@
     "projected_hcmr": 0.900562851782364,
     "searched_hcmr": 0.900562851782364,
     "search_lift": 0.0
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "XGBoost",
+    "seed": 43,
+    "latent_hcm_rate": 0.3239524702939337,
+    "projected_hcmr": 0.29205753595997497,
+    "searched_hcmr": 0.685428392745466,
+    "search_lift": 0.393370856785491
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "RandomForest",
+    "seed": 43,
+    "latent_hcm_rate": 0.03689806128830519,
+    "projected_hcmr": 0.017510944340212633,
+    "searched_hcmr": 0.18323952470293933,
+    "search_lift": 0.1657285803627267
   },
   {
     "source": "nf_bot_iot",
@@ -145,6 +271,24 @@
   },
   {
     "source": "nf_bot_iot",
+    "model": "XGBoost",
+    "seed": 44,
+    "latent_hcm_rate": 0.33962264150943394,
+    "projected_hcmr": 0.31101643335362145,
+    "searched_hcmr": 0.9013998782714546,
+    "search_lift": 0.5903834449178331
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "RandomForest",
+    "seed": 44,
+    "latent_hcm_rate": 0.13877054169202677,
+    "projected_hcmr": 0.018259281801582473,
+    "searched_hcmr": 0.17589774802191113,
+    "search_lift": 0.15763846622032865
+  },
+  {
+    "source": "nf_bot_iot",
     "model": "LightGBM",
     "seed": 45,
     "latent_hcm_rate": 0.29739776951672864,
@@ -163,6 +307,24 @@
   },
   {
     "source": "nf_bot_iot",
+    "model": "XGBoost",
+    "seed": 45,
+    "latent_hcm_rate": 0.3159851301115242,
+    "projected_hcmr": 0.29615861214374223,
+    "searched_hcmr": 0.8841387856257745,
+    "search_lift": 0.5879801734820322
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "RandomForest",
+    "seed": 45,
+    "latent_hcm_rate": 0.16666666666666666,
+    "projected_hcmr": 0.013630731102850062,
+    "searched_hcmr": 0.16728624535315986,
+    "search_lift": 0.1536555142503098
+  },
+  {
+    "source": "nf_bot_iot",
     "model": "LightGBM",
     "seed": 46,
     "latent_hcm_rate": 0.32484848484848483,
@@ -178,5 +340,23 @@
     "projected_hcmr": 0.9012121212121212,
     "searched_hcmr": 0.9012121212121212,
     "search_lift": 0.0
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "XGBoost",
+    "seed": 46,
+    "latent_hcm_rate": 0.3333333333333333,
+    "projected_hcmr": 0.29454545454545455,
+    "searched_hcmr": 0.9012121212121212,
+    "search_lift": 0.6066666666666667
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "RandomForest",
+    "seed": 46,
+    "latent_hcm_rate": 0.17757575757575758,
+    "projected_hcmr": 0.011515151515151515,
+    "searched_hcmr": 0.3654545454545455,
+    "search_lift": 0.35393939393939394
   }
 ]

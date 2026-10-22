@@ -30,7 +30,7 @@ def main():
         return float(np.mean(xs))
 
     pairs = [("nf_unsw_nb15", "nf_cse_cic_ids2018"), ("nf_bot_iot", "nf_cse_cic_ids2018")]
-    models = ["LightGBM", "LogisticRegression"]
+    models = ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"]
     S = {"config": {"seeds": [42, 43, 44], "budget": 200, "attack_cap": 2000,
                     "source_cap_per_class": 50000, "target_benign": 20000,
                     "tau_accept_benign_review_budget": 0.01, "scale": "pilot"}}

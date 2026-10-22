@@ -82,6 +82,86 @@
   {
     "source": "nf_unsw_nb15",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 42,
+    "external_auc": 0.14381449132245847,
+    "external_macro_f1": 0.30441989149008375,
+    "source_acc": 0.9886828041496385,
+    "threshold": 0.8340167757123723,
+    "n_target": 62443,
+    "target_base_rate": 0.3831013884662812,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.1701603116364665,
+        "threshold": 0.006513674944985861,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.09300482273101807,
+        "threshold": 0.0023471152782440184,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8221718238470139,
+        "threshold": 0.042904746934926116,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.992,
+        "threshold": 0.06677333333333324,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.48438031914893614,
+        "threshold": 0.01658023200699423,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 42,
+    "external_auc": 0.2142935911224212,
+    "external_macro_f1": 0.3596771920844627,
+    "source_acc": 0.9847532222571519,
+    "threshold": 0.4614125000000013,
+    "n_target": 62443,
+    "target_base_rate": 0.3831013884662812,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.09520595514954977,
+        "threshold": 0.008330713612071716,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.15787612129360384,
+        "threshold": 0.004318641936498209,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8454224581645874,
+        "threshold": 0.02416221314052185,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.992,
+        "threshold": 0.06677333333333324,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.48438031914893614,
+        "threshold": 0.01658023200699423,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 43,
     "external_auc": 0.20671520006538632,
@@ -144,6 +224,86 @@
       "ks_score": {
         "statistic": 0.4200125686218179,
         "threshold": 0.03948632830363009,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.992,
+        "threshold": 0.052799999999999986,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.48064743589743597,
+        "threshold": 0.020219012345679015,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 43,
+    "external_auc": 0.18413112710139423,
+    "external_macro_f1": 0.3066592791587118,
+    "source_acc": 0.9865729898516784,
+    "threshold": 0.7069378364086154,
+    "n_target": 62786,
+    "target_base_rate": 0.3858344216863632,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.13802395025686431,
+        "threshold": 0.005617635496386497,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.07283061742782593,
+        "threshold": 0.002127665281295776,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8201361312243294,
+        "threshold": 0.036118834173848965,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.992,
+        "threshold": 0.052799999999999986,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.48064743589743597,
+        "threshold": 0.020219012345679015,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 43,
+    "external_auc": 0.13906964503107658,
+    "external_macro_f1": 0.35576176598584847,
+    "source_acc": 0.9834504293520687,
+    "threshold": 0.39498333333333446,
+    "n_target": 62786,
+    "target_base_rate": 0.3858344216863632,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.06993467743285109,
+        "threshold": 0.007715181147260716,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.16517655575714996,
+        "threshold": 0.0038834054569259232,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8480842885438669,
+        "threshold": 0.025528011586576686,
         "alarm": true
       },
       "proxy_a_distance": {
@@ -242,6 +402,86 @@
   {
     "source": "nf_unsw_nb15",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 44,
+    "external_auc": 0.13354872085609698,
+    "external_macro_f1": 0.33470394411754445,
+    "source_acc": 0.9896013864818024,
+    "threshold": 0.7609064598381521,
+    "n_target": 62771,
+    "target_base_rate": 0.38815695145847606,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.1827160413383444,
+        "threshold": 0.006614618995980148,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.08493673801422119,
+        "threshold": 0.0020701956748962404,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8240425757808895,
+        "threshold": 0.03408335850436228,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9935,
+        "threshold": 0.03772000000000003,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.46413563829787235,
+        "threshold": 0.021635453400436704,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 44,
+    "external_auc": 0.33882245338423006,
+    "external_macro_f1": 0.34825897735285816,
+    "source_acc": 0.9880258389790452,
+    "threshold": 0.5376916666666678,
+    "n_target": 62771,
+    "target_base_rate": 0.38815695145847606,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.050698092089558,
+        "threshold": 0.006614370800091196,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.1795348835732492,
+        "threshold": 0.0030905932571561423,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8497690544443691,
+        "threshold": 0.02364867121790644,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9935,
+        "threshold": 0.03772000000000003,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.46413563829787235,
+        "threshold": 0.021635453400436704,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 45,
     "external_auc": 0.412865948392814,
@@ -322,6 +562,86 @@
   {
     "source": "nf_unsw_nb15",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 45,
+    "external_auc": 0.17730142257665313,
+    "external_macro_f1": 0.34577832520436846,
+    "source_acc": 0.9890282131661442,
+    "threshold": 0.8952511727809933,
+    "n_target": 62497,
+    "target_base_rate": 0.38342640446741444,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.21055884663655078,
+        "threshold": 0.00936677115987464,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.10316091775894165,
+        "threshold": 0.002793223857879638,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8310627599779962,
+        "threshold": 0.037040752351097175,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.994,
+        "threshold": 0.06245333333333336,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.4724529837830907,
+        "threshold": 0.03280062066644573,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 45,
+    "external_auc": 0.27707809424739405,
+    "external_macro_f1": 0.3533092846380432,
+    "source_acc": 0.985423197492163,
+    "threshold": 0.38666666666666666,
+    "n_target": 62497,
+    "target_base_rate": 0.38342640446741444,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.10141276499140295,
+        "threshold": 0.007322884012539186,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.17726753003266404,
+        "threshold": 0.0036539602925809355,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.851909611410564,
+        "threshold": 0.02535423197492163,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.994,
+        "threshold": 0.06245333333333336,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.4724529837830907,
+        "threshold": 0.03280062066644573,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 46,
     "external_auc": 0.1805143919758293,
@@ -384,6 +704,86 @@
       "ks_score": {
         "statistic": 0.4367301760687436,
         "threshold": 0.03785095408209454,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9955,
+        "threshold": 0.028666666666666618,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.47983012820512816,
+        "threshold": 0.0304167901234568,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 46,
+    "external_auc": 0.15304193923296477,
+    "external_macro_f1": 0.35471682828148826,
+    "source_acc": 0.9899069547390001,
+    "threshold": 0.858613754808903,
+    "n_target": 62301,
+    "target_base_rate": 0.3873774096723969,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.12340400936091633,
+        "threshold": 0.007661606268486156,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.06693583726882935,
+        "threshold": 0.002479658126831055,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8252742285766852,
+        "threshold": 0.03868035737912688,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9955,
+        "threshold": 0.028666666666666618,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.47983012820512816,
+        "threshold": 0.0304167901234568,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 46,
+    "external_auc": 0.18211178721357693,
+    "external_macro_f1": 0.3666807185123655,
+    "source_acc": 0.9886453240813752,
+    "threshold": 0.5450833333333351,
+    "n_target": 62301,
+    "target_base_rate": 0.3873774096723969,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.08809798134209335,
+        "threshold": 0.006217068010734976,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.18722214938345916,
+        "threshold": 0.0031661052366992945,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8487403593404117,
+        "threshold": 0.021591437385533527,
         "alarm": true
       },
       "proxy_a_distance": {
@@ -482,6 +882,86 @@
   {
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 42,
+    "external_auc": 0.9275657463775868,
+    "external_macro_f1": 0.6853202707095067,
+    "source_acc": 0.9990070921985815,
+    "threshold": 0.5384382697287939,
+    "n_target": 62443,
+    "target_base_rate": 0.3831013884662812,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.05464183108044174,
+        "threshold": 0.0018042553191489085,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.025867998600006104,
+        "threshold": 0.0004138815402984619,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.40510638297872337,
+        "threshold": 0.04260425531914893,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9875,
+        "threshold": 0.06144000000000005,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7418703703703704,
+        "threshold": 0.017839961506202824,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 42,
+    "external_auc": 0.8900566938211294,
+    "external_macro_f1": 0.4339394569496833,
+    "source_acc": 0.9987234042553191,
+    "threshold": 0.5395833333333333,
+    "n_target": 62443,
+    "target_base_rate": 0.3831013884662812,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.19429376442379276,
+        "threshold": 0.002371631205673783,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.12287913260960182,
+        "threshold": 0.0007268463356973508,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.40579958823155937,
+        "threshold": 0.032385815602836876,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9875,
+        "threshold": 0.06144000000000005,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7418703703703704,
+        "threshold": 0.017839961506202824,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 43,
     "external_auc": 0.9462695828134369,
@@ -558,6 +1038,86 @@
       }
     },
     "n_alarm": 3
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 43,
+    "external_auc": 0.8910083959825196,
+    "external_macro_f1": 0.6678403582506588,
+    "source_acc": 0.9992940844275024,
+    "threshold": 0.6058435776829738,
+    "n_target": 62786,
+    "target_base_rate": 0.3858344216863632,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.02082754730139158,
+        "threshold": 0.0032918258165482005,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.022899389266967773,
+        "threshold": 0.0006542694568634033,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.40856800624405964,
+        "threshold": 0.038546614786438956,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.982,
+        "threshold": 0.05811999999999991,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.721138888888889,
+        "threshold": 0.034453771409749596,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 43,
+    "external_auc": 0.9414470059888491,
+    "external_macro_f1": 0.3807099968932811,
+    "source_acc": 0.999435267542002,
+    "threshold": 0.5950333333333386,
+    "n_target": 62786,
+    "target_base_rate": 0.3858344216863632,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.1671796691601971,
+        "threshold": 0.001976204865547948,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.10813538570668768,
+        "threshold": 0.0008983390981280603,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4093513964610156,
+        "threshold": 0.03264685635448009,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.982,
+        "threshold": 0.05811999999999991,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.721138888888889,
+        "threshold": 0.034453771409749596,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
   },
   {
     "source": "nf_bot_iot",
@@ -642,6 +1202,86 @@
   {
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 44,
+    "external_auc": 0.8389569063481823,
+    "external_macro_f1": 0.6685444777924483,
+    "source_acc": 0.9990075145328229,
+    "threshold": 0.5517311058193466,
+    "n_target": 62771,
+    "target_base_rate": 0.38815695145847606,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.1485988863446468,
+        "threshold": 0.002409839454852958,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.03775203227996826,
+        "threshold": 0.0003982043266296387,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4062101233517652,
+        "threshold": 0.039891228849450976,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9865,
+        "threshold": 0.03410666666666662,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7362592592592592,
+        "threshold": 0.021925898675027297,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 44,
+    "external_auc": 0.888579150649376,
+    "external_macro_f1": 0.38216604551876243,
+    "source_acc": 0.9990075145328229,
+    "threshold": 0.5561499999999993,
+    "n_target": 62771,
+    "target_base_rate": 0.38815695145847606,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.19395422559366304,
+        "threshold": 0.002370145664095935,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.08783778176420531,
+        "threshold": 0.0005183667489479804,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4063359760664178,
+        "threshold": 0.03187653272277179,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9865,
+        "threshold": 0.03410666666666662,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7362592592592592,
+        "threshold": 0.021925898675027297,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 45,
     "external_auc": 0.9244587241371347,
@@ -722,6 +1362,86 @@
   {
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 45,
+    "external_auc": 0.8545374643454375,
+    "external_macro_f1": 0.7159488741978893,
+    "source_acc": 0.9990110200621645,
+    "threshold": 0.5498910292610495,
+    "n_target": 62497,
+    "target_base_rate": 0.38342640446741444,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.048117377167305464,
+        "threshold": 0.0020796835264199464,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.01967090368270874,
+        "threshold": 0.0006360161304473877,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4078675821649951,
+        "threshold": 0.03899971743430348,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.98,
+        "threshold": 0.05983999999999991,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7399074074074073,
+        "threshold": 0.027562583992094884,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 45,
+    "external_auc": 0.8941461642606355,
+    "external_macro_f1": 0.3829075367753144,
+    "source_acc": 0.9988697372139023,
+    "threshold": 0.5539166666666673,
+    "n_target": 62497,
+    "target_base_rate": 0.38342640446741444,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.19158298744991364,
+        "threshold": 0.0030291042667420615,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.1016253901483305,
+        "threshold": 0.0007609305830273305,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.40802486578129415,
+        "threshold": 0.03558067250635773,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.98,
+        "threshold": 0.05983999999999991,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7399074074074073,
+        "threshold": 0.027562583992094884,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 46,
     "external_auc": 0.9203996974221813,
@@ -798,5 +1518,85 @@
       }
     },
     "n_alarm": 3
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 46,
+    "external_auc": 0.9167870238193258,
+    "external_macro_f1": 0.7246160859720369,
+    "source_acc": 0.9990093405038211,
+    "threshold": 0.2252985568717062,
+    "n_target": 62301,
+    "target_base_rate": 0.3873774096723969,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.04286096407326623,
+        "threshold": 0.002405887347862956,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.023998379707336426,
+        "threshold": 0.0005495798587799072,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4068780073591848,
+        "threshold": 0.03133880554769318,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.987,
+        "threshold": 0.03354666666666662,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.743462962962963,
+        "threshold": 0.022918701980434247,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 46,
+    "external_auc": 0.9065918187908794,
+    "external_macro_f1": 0.3798921049488394,
+    "source_acc": 0.9988678177186527,
+    "threshold": 0.6365208333333279,
+    "n_target": 62301,
+    "target_base_rate": 0.3873774096723969,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.20679385421886942,
+        "threshold": 0.0024681573733371783,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.0863674616571295,
+        "threshold": 0.0005000849136710838,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4072223201810711,
+        "threshold": 0.029034814605151428,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.987,
+        "threshold": 0.03354666666666662,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.743462962962963,
+        "threshold": 0.022918701980434247,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
   }
 ]

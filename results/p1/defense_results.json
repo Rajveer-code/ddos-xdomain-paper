@@ -52,6 +52,56 @@
   {
     "source": "nf_unsw_nb15",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 42,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.914319952067106,
+    "hcmr_before_ci": [
+      0.8999400838825644,
+      0.9275014979029359
+    ],
+    "hcmr_after": 0.8382264829239066,
+    "hcmr_after_ci": [
+      0.8196375074895147,
+      0.8550029958058718
+    ],
+    "hcmr_drop": 0.07609346914319948,
+    "defence_catch_rate_of_misses": 0.08322411533420708,
+    "added_benign_review_cost": 0.0017652708912022014,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 42,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.8969442780107849,
+    "hcmr_before_ci": [
+      0.8813660874775314,
+      0.9113391252246853
+    ],
+    "hcmr_after": 0.8208508088675854,
+    "hcmr_after_ci": [
+      0.8016776512881966,
+      0.8382264829239066
+    ],
+    "hcmr_drop": 0.07609346914319948,
+    "defence_catch_rate_of_misses": 0.08483633934535738,
+    "added_benign_review_cost": 0.0017652708912022014,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 43,
     "low_controllability_features": [
@@ -94,6 +144,56 @@
     ],
     "hcmr_drop": 0.07442151344590364,
     "defence_catch_rate_of_misses": 0.08173076923076923,
+    "added_benign_review_cost": 0.0011151163092243458,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 43,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9111944965603502,
+    "hcmr_before_ci": [
+      0.8961851156973109,
+      0.9255784865540964
+    ],
+    "hcmr_after": 0.8367729831144465,
+    "hcmr_after_ci": [
+      0.817385866166354,
+      0.8542839274546592
+    ],
+    "hcmr_drop": 0.07442151344590375,
+    "defence_catch_rate_of_misses": 0.08167467398764584,
+    "added_benign_review_cost": 0.0011151163092243458,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 43,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.8993120700437773,
+    "hcmr_before_ci": [
+      0.8836772983114447,
+      0.9143214509068167
+    ],
+    "hcmr_after": 0.8286429018136335,
+    "hcmr_after_ci": [
+      0.809255784865541,
+      0.8467792370231395
+    ],
+    "hcmr_drop": 0.0706691682301438,
+    "defence_catch_rate_of_misses": 0.07858136300417246,
     "added_benign_review_cost": 0.0011151163092243458,
     "gate4_security": false,
     "gate4_cost_ok": true,
@@ -152,6 +252,56 @@
   {
     "source": "nf_unsw_nb15",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 44,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9062690200852099,
+    "hcmr_before_ci": [
+      0.8928788800973828,
+      0.9202678027997565
+    ],
+    "hcmr_after": 0.8320146074254413,
+    "hcmr_after_ci": [
+      0.8137553256238588,
+      0.8496652465003043
+    ],
+    "hcmr_drop": 0.07425441265976862,
+    "defence_catch_rate_of_misses": 0.0819341840161182,
+    "added_benign_review_cost": 0.0011716919231370099,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 44,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9020085209981741,
+    "hcmr_before_ci": [
+      0.8880097382836275,
+      0.9160073037127207
+    ],
+    "hcmr_after": 0.8277541083384053,
+    "hcmr_after_ci": [
+      0.8094948265368229,
+      0.8454047474132684
+    ],
+    "hcmr_drop": 0.07425441265976873,
+    "defence_catch_rate_of_misses": 0.08232118758434548,
+    "added_benign_review_cost": 0.0011716919231370099,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 45,
     "low_controllability_features": [
@@ -202,6 +352,56 @@
   {
     "source": "nf_unsw_nb15",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 45,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9144981412639405,
+    "hcmr_before_ci": [
+      0.9008674101610905,
+      0.9281288723667905
+    ],
+    "hcmr_after": 0.845724907063197,
+    "hcmr_after_ci": [
+      0.828996282527881,
+      0.8636926889714994
+    ],
+    "hcmr_drop": 0.06877323420074344,
+    "defence_catch_rate_of_misses": 0.07520325203252033,
+    "added_benign_review_cost": 0.0014532620542897182,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 45,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9101610904584883,
+    "hcmr_before_ci": [
+      0.895910780669145,
+      0.9244114002478315
+    ],
+    "hcmr_after": 0.8413878562577447,
+    "hcmr_after_ci": [
+      0.8240396530359355,
+      0.8593556381660471
+    ],
+    "hcmr_drop": 0.06877323420074355,
+    "defence_catch_rate_of_misses": 0.07556160653505786,
+    "added_benign_review_cost": 0.0014532620542897182,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 46,
     "low_controllability_features": [
@@ -244,6 +444,56 @@
     ],
     "hcmr_drop": 0.06545454545454543,
     "defence_catch_rate_of_misses": 0.07176079734219269,
+    "added_benign_review_cost": 0.0015982393166871906,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 46,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9139393939393939,
+    "hcmr_before_ci": [
+      0.9005909090909091,
+      0.926681818181818
+    ],
+    "hcmr_after": 0.8484848484848485,
+    "hcmr_after_ci": [
+      0.8315151515151515,
+      0.8654696969696969
+    ],
+    "hcmr_drop": 0.06545454545454543,
+    "defence_catch_rate_of_misses": 0.07161803713527852,
+    "added_benign_review_cost": 0.0015982393166871906,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 46,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9078787878787878,
+    "hcmr_before_ci": [
+      0.8939393939393939,
+      0.9212121212121213
+    ],
+    "hcmr_after": 0.8424242424242424,
+    "hcmr_after_ci": [
+      0.8254545454545454,
+      0.8593939393939394
+    ],
+    "hcmr_drop": 0.06545454545454543,
+    "defence_catch_rate_of_misses": 0.07209612817089453,
     "added_benign_review_cost": 0.0015982393166871906,
     "gate4_security": false,
     "gate4_cost_ok": true,
@@ -306,6 +556,60 @@
   {
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 42,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.8849610545236669,
+    "hcmr_before_ci": [
+      0.8687837028160575,
+      0.8999550629119232
+    ],
+    "hcmr_after": 0.8813660874775314,
+    "hcmr_after_ci": [
+      0.8651887357699221,
+      0.8969442780107849
+    ],
+    "hcmr_drop": 0.003594967046135489,
+    "defence_catch_rate_of_misses": 0.004062288422477996,
+    "added_benign_review_cost": 0.0005711170530360064,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 42,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.20311563810665068,
+    "hcmr_before_ci": [
+      0.18454164170161774,
+      0.22288795686039545
+    ],
+    "hcmr_after": 0.201318154583583,
+    "hcmr_after_ci": [
+      0.18274415817855003,
+      0.22109047333732773
+    ],
+    "hcmr_drop": 0.0017974835230676889,
+    "defence_catch_rate_of_misses": 0.008849557522123894,
+    "added_benign_review_cost": 0.0005711170530360064,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 43,
     "low_controllability_features": [
@@ -352,6 +656,60 @@
     ],
     "hcmr_drop": 0.013133208255159401,
     "defence_catch_rate_of_misses": 0.014583333333333334,
+    "added_benign_review_cost": 0.010347242032104976,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 43,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.685428392745466,
+    "hcmr_before_ci": [
+      0.6629143214509068,
+      0.7091932457786116
+    ],
+    "hcmr_after": 0.6722951844903065,
+    "hcmr_after_ci": [
+      0.649155722326454,
+      0.6960600375234521
+    ],
+    "hcmr_drop": 0.013133208255159512,
+    "defence_catch_rate_of_misses": 0.01916058394160584,
+    "added_benign_review_cost": 0.010347242032104976,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 43,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.18323952470293933,
+    "hcmr_before_ci": [
+      0.1651031894934334,
+      0.2032520325203252
+    ],
+    "hcmr_after": 0.17886178861788618,
+    "hcmr_after_ci": [
+      0.16135084427767354,
+      0.19824890556597874
+    ],
+    "hcmr_drop": 0.004377736085053152,
+    "defence_catch_rate_of_misses": 0.023890784982935155,
     "added_benign_review_cost": 0.010347242032104976,
     "gate4_security": false,
     "gate4_cost_ok": true,
@@ -414,6 +772,60 @@
   {
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 44,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.9013998782714546,
+    "hcmr_before_ci": [
+      0.887401095556908,
+      0.9153986609860012
+    ],
+    "hcmr_after": 0.8849665246500305,
+    "hcmr_after_ci": [
+      0.8697352404138771,
+      0.9001825928180158
+    ],
+    "hcmr_drop": 0.016433353621424174,
+    "defence_catch_rate_of_misses": 0.01823092505064146,
+    "added_benign_review_cost": 0.013669739103265115,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 44,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.17589774802191113,
+    "hcmr_before_ci": [
+      0.15824710894704808,
+      0.19476567255021301
+    ],
+    "hcmr_after": 0.16798539257455875,
+    "hcmr_after_ci": [
+      0.1503347534996957,
+      0.1862446743761412
+    ],
+    "hcmr_drop": 0.007912355447352387,
+    "defence_catch_rate_of_misses": 0.04498269896193772,
+    "added_benign_review_cost": 0.013669739103265115,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 45,
     "low_controllability_features": [
@@ -468,6 +880,60 @@
   {
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 45,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.8841387856257745,
+    "hcmr_before_ci": [
+      0.8680297397769516,
+      0.9002478314745973
+    ],
+    "hcmr_after": 0.8711276332094176,
+    "hcmr_after_ci": [
+      0.8537794299876085,
+      0.8878562577447335
+    ],
+    "hcmr_drop": 0.013011152416356975,
+    "defence_catch_rate_of_misses": 0.014716187806587245,
+    "added_benign_review_cost": 0.013209114029169045,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 45,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.16728624535315986,
+    "hcmr_before_ci": [
+      0.14869888475836432,
+      0.18587360594795538
+    ],
+    "hcmr_after": 0.15923172242874845,
+    "hcmr_after_ci": [
+      0.1412639405204461,
+      0.177819083023544
+    ],
+    "hcmr_drop": 0.008054522924411417,
+    "defence_catch_rate_of_misses": 0.04814814814814815,
+    "added_benign_review_cost": 0.013209114029169045,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 46,
     "low_controllability_features": [
@@ -514,6 +980,60 @@
     ],
     "hcmr_drop": 0.014545454545454528,
     "defence_catch_rate_of_misses": 0.01613987895090787,
+    "added_benign_review_cost": 0.01333612806875049,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "XGBoost",
+    "seed": 46,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.9012121212121212,
+    "hcmr_before_ci": [
+      0.8866666666666667,
+      0.9145454545454546
+    ],
+    "hcmr_after": 0.8866666666666667,
+    "hcmr_after_ci": [
+      0.8715151515151515,
+      0.9012121212121212
+    ],
+    "hcmr_drop": 0.014545454545454528,
+    "defence_catch_rate_of_misses": 0.01613987895090787,
+    "added_benign_review_cost": 0.01333612806875049,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "RandomForest",
+    "seed": 46,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.3654545454545455,
+    "hcmr_before_ci": [
+      0.3424242424242424,
+      0.3884848484848485
+    ],
+    "hcmr_after": 0.3575757575757576,
+    "hcmr_after_ci": [
+      0.3339242424242424,
+      0.3800303030303029
+    ],
+    "hcmr_drop": 0.007878787878787874,
+    "defence_catch_rate_of_misses": 0.02155887230514096,
     "added_benign_review_cost": 0.01333612806875049,
     "gate4_security": false,
     "gate4_cost_ok": true,

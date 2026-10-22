@@ -35,7 +35,7 @@ from run_phase3 import tau_accept_from, boot_rate_ci  # noqa: E402
 
 PAIRS = [("nf_unsw_nb15", "nf_cse_cic_ids2018"),
          ("nf_bot_iot", "nf_cse_cic_ids2018")]
-MODELS = ["LightGBM", "LogisticRegression"]
+MODELS = ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"]
 SEEDS = [42, 43, 44, 45, 46]
 FAMILY = "volumetric"
 BUDGET = 200

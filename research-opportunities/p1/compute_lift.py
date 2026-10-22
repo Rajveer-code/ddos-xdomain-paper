@@ -35,7 +35,7 @@ from p1common import build_fit, read_capped, score_flows  # noqa: E402
 from run_phase3 import tau_accept_from  # noqa: E402
 
 PAIRS = [("nf_unsw_nb15", "nf_cse_cic_ids2018"), ("nf_bot_iot", "nf_cse_cic_ids2018")]
-MODELS = ["LightGBM", "LogisticRegression"]
+MODELS = ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"]
 SEEDS = [42, 43, 44, 45, 46]
 FAMILY = "volumetric"
 ATTACK_CAP = 2000
