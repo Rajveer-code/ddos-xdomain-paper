@@ -17,27 +17,28 @@ Pair it with P11 described as a *preprint with a preliminary result*, not a publ
 
 ## After Phase 3 — FILLED from the pilot (2026-10-22). Honest, with caveats.
 
-The pilot landed in a mixed world: the adversary is powerful, the monitors are *model-dependently*
-blind, and the obvious defence fails. SOP sentence (use this):
+The pilot (corrected after an own-code audit; see STATUS) landed on a latent-exposure-dominant
+finding, which is stronger and more honest than a big-adversary claim. SOP sentence (use this):
 
-> In preliminary work, I showed that cross-testbed DoS detectors already misclassify almost all
-> target attacks as benign but at low confidence, where a label-free confidence monitor would flag
-> them; a score-only adversary limited to traffic-plausible feature changes converts these into
-> **high-confidence** misses in ~90% of transferred attack flows (from a ~0.3–2.3% natural rate),
-> and for a well-transferring detector the confidence monitor stays silent throughout. The obvious
-> responder-side defence does not close the gap, because the features it would watch do not
-> transfer across networks either — which is itself the deeper problem my thesis targets.
+> In preliminary work I found that cross-testbed DoS detectors are already *high-confidence* wrong
+> on 33–100% of real target attack flows — exactly the operating point that label-free monitors
+> (such as Average Thresholded Confidence) are meant to protect — and that those monitors are
+> model-dependently blind to it. A traffic-plausibly-constrained, score-only adversary widens this
+> hole where the detector still has headroom but adds nothing where it is already saturated, and
+> the obvious responder-side defence does not close the gap because the features it would watch do
+> not transfer across networks either.
 
-Caveats to carry with it: **pilot** (3 seeds, one dataset family, feature-space, two pairs); the
-quiet-monitor failure is clean for one of four (model, pair) cells (LogisticRegression on
-BoT-IoT→CSE-CIC-IDS2018); for LightGBM the confidence monitors do fire. Do not round "~90%" up or
-drop the "pilot/feature-space" qualifier. Numbers: `results/p1/summary_p1.json`.
+Caveats to carry with it: **pilot** (3 seeds, one NetFlow v2 family, feature-space, two pairs);
+the quiet-monitor failure is clearest for LogisticRegression on BoT-IoT→CSE-CIC-IDS2018, which is
+also where the adversary is redundant (detector already fully open); for LightGBM the confidence
+monitors do fire. Lead with the *latent* failure, not the adversary. Numbers:
+`results/p1/summary_p1.json`.
 
 Shorter variant (one line):
 
-> For my thesis I am studying how a traffic-plausibly-constrained adversary turns the low-confidence
-> false negatives of a cross-network DoS detector into high-confidence ones that label-free monitors
-> wave through, and why the obvious responder-side defence fails to transfer.
+> For my thesis I am studying why label-free monitors stay silent while cross-network DoS detectors
+> already wave through most real attacks at high confidence, how far a traffic-plausibly-constrained
+> adversary can widen that blind spot, and why the obvious responder-side defence fails to transfer.
 
 ## Faculty framing (verify before naming anyone in an SOP)
 

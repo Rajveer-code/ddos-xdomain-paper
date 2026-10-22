@@ -3,96 +3,108 @@
     "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 42,
-    "natural_hcmr": 0.016776512881965248,
-    "attack_hcmr": 0.902336728579988,
-    "adversarial_lift": 0.8855602156980228
+    "latent_hcm_rate": 0.6375074895146795,
+    "projected_hcmr": 0.3768723786698622,
+    "searched_hcmr": 0.902336728579988,
+    "search_lift": 0.5254643499101259
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LogisticRegression",
     "seed": 42,
-    "natural_hcmr": 0.020970641102456562,
-    "attack_hcmr": 0.9005392450569203,
-    "adversarial_lift": 0.8795686039544637
+    "latent_hcm_rate": 0.9430796884361894,
+    "projected_hcmr": 0.6500898741761534,
+    "searched_hcmr": 0.9005392450569203,
+    "search_lift": 0.2504493708807669
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 43,
-    "natural_hcmr": 0.020637898686679174,
-    "attack_hcmr": 0.906816760475297,
-    "adversarial_lift": 0.8861788617886178
+    "latent_hcm_rate": 0.6679174484052532,
+    "projected_hcmr": 0.38586616635397125,
+    "searched_hcmr": 0.906816760475297,
+    "search_lift": 0.5209505941213257
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LogisticRegression",
     "seed": 43,
-    "natural_hcmr": 0.025015634771732333,
-    "attack_hcmr": 0.908692933083177,
-    "adversarial_lift": 0.8836772983114447
+    "latent_hcm_rate": 0.9549718574108818,
+    "projected_hcmr": 0.651031894934334,
+    "searched_hcmr": 0.908692933083177,
+    "search_lift": 0.257661038148843
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 44,
-    "natural_hcmr": 0.023128423615337797,
-    "attack_hcmr": 0.9026171637248935,
-    "adversarial_lift": 0.8794887401095557
+    "latent_hcm_rate": 0.7078514911746805,
+    "projected_hcmr": 0.443700547778454,
+    "searched_hcmr": 0.9026171637248935,
+    "search_lift": 0.4589166159464395
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LogisticRegression",
     "seed": 44,
-    "natural_hcmr": 0.023128423615337797,
-    "attack_hcmr": 0.9026171637248935,
-    "adversarial_lift": 0.8794887401095557
+    "latent_hcm_rate": 0.9482653682288497,
+    "projected_hcmr": 0.6512477175897748,
+    "searched_hcmr": 0.9026171637248935,
+    "search_lift": 0.2513694461351187
   },
   {
     "source": "nf_bot_iot",
     "model": "LightGBM",
     "seed": 42,
-    "natural_hcmr": 0.004194128220491312,
-    "attack_hcmr": 0.9011384062312762,
-    "adversarial_lift": 0.8969442780107848
+    "latent_hcm_rate": 0.33493109646494906,
+    "projected_hcmr": 0.30317555422408626,
+    "searched_hcmr": 0.9011384062312762,
+    "search_lift": 0.5979628520071899
   },
   {
     "source": "nf_bot_iot",
     "model": "LogisticRegression",
     "seed": 42,
-    "natural_hcmr": 0.007189934092270821,
-    "attack_hcmr": 0.9017375674056322,
-    "adversarial_lift": 0.8945476333133613
+    "latent_hcm_rate": 1.0,
+    "projected_hcmr": 0.9017375674056322,
+    "searched_hcmr": 0.9017375674056322,
+    "search_lift": 0.0
   },
   {
     "source": "nf_bot_iot",
     "model": "LightGBM",
     "seed": 43,
-    "natural_hcmr": 0.0031269543464665416,
-    "attack_hcmr": 0.8993120700437773,
-    "adversarial_lift": 0.8961851156973107
+    "latent_hcm_rate": 0.3258286429018136,
+    "projected_hcmr": 0.3076923076923077,
+    "searched_hcmr": 0.8993120700437773,
+    "search_lift": 0.5916197623514696
   },
   {
     "source": "nf_bot_iot",
     "model": "LogisticRegression",
     "seed": 43,
-    "natural_hcmr": 0.0075046904315197,
-    "attack_hcmr": 0.900562851782364,
-    "adversarial_lift": 0.8930581613508443
+    "latent_hcm_rate": 1.0,
+    "projected_hcmr": 0.8999374609130707,
+    "searched_hcmr": 0.900562851782364,
+    "search_lift": 0.0006253908692932519
   },
   {
     "source": "nf_bot_iot",
     "model": "LightGBM",
     "seed": 44,
-    "natural_hcmr": 0.002434570906877663,
-    "attack_hcmr": 0.9013998782714546,
-    "adversarial_lift": 0.8989653073645769
+    "latent_hcm_rate": 0.3292757151552039,
+    "projected_hcmr": 0.3146682897139379,
+    "searched_hcmr": 0.9013998782714546,
+    "search_lift": 0.5867315885575167
   },
   {
     "source": "nf_bot_iot",
     "model": "LogisticRegression",
     "seed": 44,
-    "natural_hcmr": 0.00426049908703591,
-    "attack_hcmr": 0.9020085209981741,
-    "adversarial_lift": 0.8977480219111381
+    "latent_hcm_rate": 0.9993913572732805,
+    "projected_hcmr": 0.9013998782714546,
+    "searched_hcmr": 0.9020085209981741,
+    "search_lift": 0.000608642726719455
   }
 ]

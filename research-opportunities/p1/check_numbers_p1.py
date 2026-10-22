@@ -38,9 +38,10 @@ def main() -> int:
                        ("nf_bot_iot__LightGBM", "BoT/LGBM"),
                        ("nf_bot_iot__LogisticRegression", "BoT/LogReg")]:
         p = per[key]
-        add(f"{short} HCMR", f3(p["hcmr"]))
-        add(f"{short} natural_hcmr", f3(p["natural_hcmr"]))
-        add(f"{short} lift", f"{p['adversarial_lift']:+.3f}")
+        add(f"{short} searched HCMR", f3(p["hcmr"]))
+        add(f"{short} latent", f3(p["latent_hcm_rate"]))
+        add(f"{short} projected", f3(p["projected_hcmr"]))
+        add(f"{short} search_lift", f"{p['search_lift']:+.3f}")
 
     # defense drops and bar
     add("UNSW defense drop", f3(per["nf_unsw_nb15__LightGBM"]["defense_hcmr_drop"]))

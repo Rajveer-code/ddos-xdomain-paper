@@ -1,11 +1,21 @@
 """
-Honesty metric: how much of the high-confidence-miss rate is LATENT (present with no attack)
-versus EARNED by the adaptive search. Natural HCMR evaluates the original target attack flows
-through the same success definition; adversarial lift = HCMR(after search) - natural HCMR.
+Honesty decomposition of the high-confidence-miss rate into three apples-to-apples pieces, so
+the paper never conflates "clip a real flow into the source box" with "adversarial evasion"
+(the defect an audit caught in the first draft).
 
-Saves results/p1/lift.json. This is the number that keeps the paper honest: if the lift is
-small, the finding is "the monitored detector is already wide open", not "the adversary is
-powerful".
+For each config, on the real target DoS flows:
+  * latent_hcm_rate  real flows, NO attacker constraints: fraction already predicted benign at
+                     confidence >= tau. The detector's default exposure. Feasibility is an
+                     attacker constraint, NOT a validity test for real wire-valid traffic, so it
+                     is deliberately omitted here.
+  * projected_hcmr   project real flows into the source box with NO search, then apply the full
+                     (feasible+functional) success test. The attacker's floor: what merely
+                     producing a feasible flow already achieves.
+  * searched_hcmr    the full score-only search (from attack_results.json).
+  * search_lift      searched_hcmr - projected_hcmr: the search's OWN contribution, isolated
+                     from the projection step. This is the only honest "lift".
+
+Saves results/p1/lift.json.
 """
 from __future__ import annotations
 
@@ -32,10 +42,19 @@ ATTACK_CAP = 2000
 OUT = RESULTS / "p1"
 
 
-def nat_hcmr(fit, X, b, thr, tau):
+def latent_rate(fit, X, thr, tau):
+    """Real flows, no attacker box: already benign at high confidence."""
     p = score_flows(fit, X)
     conf = np.maximum(p, 1 - p)
-    return float(((p < thr) & (conf >= tau) & C.feasible(X, X, b) & C.functional(X, b)).mean())
+    return float(((p < thr) & (conf >= tau)).mean())
+
+
+def projected_hcmr(fit, X, b, thr, tau):
+    """Project into the source box, no search, then the full success test."""
+    best = C.project(X, X, b)
+    bp = score_flows(fit, best)
+    sf = E.success_flags(best, bp, X, b, thr, tau)
+    return float(sf["high_conf_miss"].mean())
 
 
 def main():
@@ -49,22 +68,26 @@ def main():
             Xatk = Xa.to_numpy(float)
             for model in MODELS:
                 F = build_fit(source, model, seed)
+                thr = F.fit.threshold
                 tau = tau_accept_from(F.srcval_proba, F.srcval_y)
-                nat = nat_hcmr(F.fit, Xatk, b, F.fit.threshold, tau)
+                lat = latent_rate(F.fit, Xatk, thr, tau)
+                proj = projected_hcmr(F.fit, Xatk, b, thr, tau)
                 rec = [r for r in atk if r["source"] == source and r["model"] == model
                        and r["seed"] == seed][0]
+                searched = rec["score"]["hcmr"]
                 out.append({"source": source, "model": model, "seed": seed,
-                            "natural_hcmr": nat, "attack_hcmr": rec["score"]["hcmr"],
-                            "adversarial_lift": rec["score"]["hcmr"] - nat})
+                            "latent_hcm_rate": lat, "projected_hcmr": proj,
+                            "searched_hcmr": searched, "search_lift": searched - proj})
     (OUT / "lift.json").write_text(json.dumps(out, indent=2))
-    print("source/model: natural_HCMR -> attack_HCMR  (lift)")
     by = {}
     for r in out:
         by.setdefault((r["source"], r["model"]), []).append(r)
+    print("source/model: latent | projected | searched | search_lift")
     for (s, m), rs in by.items():
-        nat = np.mean([x["natural_hcmr"] for x in rs])
-        att = np.mean([x["attack_hcmr"] for x in rs])
-        print(f"  {s[:11]:11s} {m:18s} {nat:.3f} -> {att:.3f}  (lift {att-nat:+.3f})")
+        lat = np.mean([x["latent_hcm_rate"] for x in rs])
+        proj = np.mean([x["projected_hcmr"] for x in rs])
+        se = np.mean([x["searched_hcmr"] for x in rs])
+        print(f"  {s[:11]:11s} {m:18s} {lat:.3f} | {proj:.3f} | {se:.3f} | {se-proj:+.3f}")
 
 
 if __name__ == "__main__":

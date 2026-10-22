@@ -51,10 +51,11 @@ def main():
             per[key] = {
                 "baseline_external_auc": round(mean([r["external_auc"] for r in B]), 3),
                 "natural_pred_benign_rate": round(mean([r["natural_pred_benign_rate"] for r in A]), 3),
-                "natural_hcmr": round(mean([r["natural_hcmr"] for r in L]), 3),
+                "latent_hcm_rate": round(mean([r["latent_hcm_rate"] for r in L]), 3),
+                "projected_hcmr": round(mean([r["projected_hcmr"] for r in L]), 3),
                 "hcmr": round(mean([r["score"]["hcmr"] for r in A]), 3),
                 "hcmr_strong": round(mean([r["strong"]["hcmr"] for r in A]), 3),
-                "adversarial_lift": round(mean([r["adversarial_lift"] for r in L]), 3),
+                "search_lift": round(mean([r["search_lift"] for r in L]), 3),
                 "plain_evasion_rate": round(mean([r["score"]["plain_evasion_rate"] for r in A]), 3),
                 "feasible_rate": round(mean([r["score"]["feasible_rate"] for r in A]), 3),
                 "functional_rate": round(mean([r["score"]["functional_rate"] for r in A]), 3),

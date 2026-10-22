@@ -15,25 +15,34 @@
 Flow-based DoS detectors that score ~99% in-domain collapse on independently captured
 networks (P11, this repository). Operators are told to watch for this with *label-free*
 monitors — Average Thresholded Confidence (ATC), confidence drift, distribution distances —
-that need no target labels. We ask whether an adversary, constrained to traffic-plausible
-changes it can actually make, can drive malicious flows into the **high-confidence benign**
-region where those monitors stay silent, after cross-testbed transfer, and whether watching
-the features the adversary cannot freely set restores the warning.
+that need no target labels. We ask whether these monitors see a detector that has already
+failed, and whether an adversary constrained to traffic-plausible changes can make matters worse
+in the region the monitors trust.
 
-Three findings, on NetFlow v2 (UNSW-NB15, BoT-IoT → CSE-CIC-IDS2018). (1) Natural
-cross-testbed misses are **low-confidence**: the detector already calls 96–100% of target DoS
-flows benign, but at confidence below the 1%-review operating point, so a confidence monitor's
-review region would catch them (natural high-confidence-miss rate 0.3–2.3%). (2) A constrained,
-score-only adversary **converts** these into high-confidence misses: HCMR rises to 90.1–90.4%
-(adversarial lift +0.88 to +0.90) with only a small push on P(attack) (mean 0.003–0.048),
-because the flows sit a thin margin from the confidence threshold. (3) Whether the label-free
-monitors catch this is **model-dependent and tracks natural shift, not the attack**: for
-LightGBM the confidence monitors fire (they fire on benign shift too), but for
-LogisticRegression on the strong-transfer pair they stay **completely silent** while HCMR is
-90.1% — the quiet-monitor failure, realised. The obvious responder-side defence (watch the
-low-controllability features) does **not** close the gap (ΔHCMR ≤ 0.075 against a pre-registered
-0.10 bar), because across independent testbeds those features do not transfer either, so a
-source-fitted monitor on them is blind. We report this negative as a result, not a footnote.
+Four findings, on NetFlow v2 (UNSW-NB15, BoT-IoT → CSE-CIC-IDS2018), reported honestly with a
+baseline that is apples-to-apples with the attack. (1) **Latent exposure is already large and
+model-dependent:** before any attack, the cross-testbed detector classifies **33.0–100.0%** of
+real target DoS flows as benign *at high confidence* (latent high-confidence-miss rate
+0.330/0.671/0.949/1.000 across the four pair×model cells). The detector is, by default, wide open
+at exactly the operating point the monitors protect. (2) **A constrained, score-only adversary
+adds capability only where there is headroom.** Isolated from the feasibility-projection step
+(baseline = the projected real flow with no search), the search's own contribution is
+**+0.00 to +0.59** (bot/LightGBM +0.592, unsw/LightGBM +0.502, unsw/LogReg +0.253, bot/LogReg
++0.000); the searched high-confidence-miss rate converges to ~0.90, which is the
+feasibility ceiling, not a measure of search power. For the already-saturated bot/LogReg cell the
+search earns nothing. (3) **The monitors are model-dependently blind, and blindest where the
+detector is already worst.** For LightGBM the confidence monitors fire (they fire on benign shift
+too); for LogisticRegression on the strong-transfer pair they stay **completely silent** (alarm
+0.0, attack or no attack) while 100% of real target DoS flows are high-confidence misses — the
+quiet-monitor failure, on the cell where the adversary is irrelevant because the detector is
+already defenceless. (4) **The obvious responder-side defence does not transfer:** watching the
+low-controllability features cuts HCMR by ≤ 0.075 against a pre-registered 0.10 bar, because
+across independent testbeds those features do not transfer either, so a source-fitted monitor on
+them is blind. We report this negative as a result.
+
+The headline is therefore not "a powerful adversary defeats the monitor" but the sharper and more
+uncomfortable "the monitored detector is already defeated, the adversary merely widens the hole
+where it can, and the recommended fix does not survive the move between networks."
 
 ## 1. Introduction
 
@@ -89,19 +98,34 @@ sets them. Only `DST_TO_SRC_SECOND_BYTES` (UNSW) and additionally `RETRANSMITTED
 *something* to watch), but narrowly — a finding in itself: the responder-side features offer
 thin defensive material.
 
-## 5. The attack buys high confidence, not evasion (Phase 3)
+## 5. Latent exposure, and what the search actually adds (Phase 3)
 
-Evasion is nearly free before the attack: natural `pred_benign` on target volumetric flows is
-0.957–1.000 (`summary_p1.json` → `per_pair_model.*.natural_pred_benign_rate`). But those misses
-are **low-confidence** — natural HCMR is 0.020/0.023 (UNSW, LightGBM/LogReg) and 0.003/0.006
-(BoT-IoT) — so a confidence monitor's review region would escalate them.
+We measure three apples-to-apples quantities on the real target DoS flows (`compute_lift.py`,
+keyed in `summary_p1.json`). A **naming caution that an audit of our own first draft forced**:
+feasibility is an *attacker* constraint, not a validity test for real wire-captured traffic, so
+the latent baseline must be computed on the real flows **without** the source-box filter;
+measuring the "natural" rate through that filter understated it by ~50–140× and manufactured a
+spurious lift. We correct that here.
 
-The constrained score-only search converts them: **HCMR = 0.904 / 0.904 (UNSW) and 0.901 / 0.901
-(BoT-IoT)**, adversarial lift **+0.884 / +0.881 / +0.897 / +0.895**, with feasible rate ≈ 0.90,
-functional rate ≥ 0.99, and mean confidence of the successful misses ≈ 1.0. The push on P(attack)
-is small (mean drop 0.003–0.048): the flows sit a thin margin below the confidence threshold, and
-a feasible nudge carries them over. The strong (upper-bound) search adds essentially nothing
-(≤ +0.01), confirming the margin, not search power, is what matters.
+1. **Latent high-confidence-miss rate** (real flows, no attacker constraint): the fraction already
+   predicted benign at confidence ≥ τ_accept. It is **0.671 / 0.949 / 0.330 / 1.000** for
+   unsw/LightGBM, unsw/LogReg, bot/LightGBM, bot/LogReg. One third to all of real target DoS flows
+   are already high-confidence misses before any adversary acts.
+2. **Projected floor** (project the real flow into the source feasible box, no search): 0.402 /
+   0.651 / 0.309 / 0.901. This is what merely producing a feasible flow achieves.
+3. **Searched HCMR** (full score-only search): 0.904 / 0.904 / 0.901 / 0.901 — it converges to the
+   ~0.90 feasibility ceiling (`feasible_rate` ≈ `hcmr` in every cell), so this number reflects the
+   constraint geometry, not search strength.
+
+The **search's own contribution** is searched − projected = **+0.502 / +0.253 / +0.592 / +0.000**.
+So the adaptive search genuinely buys high-confidence misses where the detector still has
+headroom (both LightGBM cells, +0.50 and +0.59; unsw/LogReg +0.25), and buys **nothing** on
+bot/LogReg, where the detector already assigns high-confidence-benign to the entire feasible region
+(latent 1.000). The push on P(attack) is small throughout (mean drop 0.003–0.048) and the strong
+upper-bound search adds ≤ 0.01 over the score-only search: the flows sit a thin margin from the
+confidence threshold, so where the search helps, a feasible nudge is enough. We do **not** claim a
+large adversarial lift; the dominant effect is the latent exposure, and the adversary's role is to
+widen it where it can.
 
 ## 6. The monitors are model-dependently blind (Phases 2–3)
 
@@ -119,6 +143,13 @@ a strong-ranking detector (external AUC 0.757), a label-free confidence monitor 
 and 90% of target DoS flows waved through at high confidence. The distribution monitors fire on
 everything, so they do not distinguish the attack from benign drift — they are not a specific
 alarm.
+
+The uncomfortable alignment: the cell where the confidence monitors are silent (bot/LogReg) is
+exactly the cell where the latent high-confidence-miss rate is already 1.000 and the adversarial
+search adds nothing (§5). Where the adversary contributes most (the LightGBM cells, search lift
++0.50/+0.59) the confidence monitors do fire. So the monitors are blindest precisely where the
+detector is already fully compromised and the adversary is redundant — the worst possible pairing
+for an operator who is relying on them.
 
 ## 7. The obvious defence does not transfer (Phase 4)
 
@@ -144,10 +175,14 @@ numbers. The finding is a measurement for the tested system, not a general claim
 
 ## 9. What this establishes (honest summary)
 
-Under traffic-plausible, score-only constraints, cross-testbed DoS detectors do not just fail —
-their label-free safety nets fail *with* them, and the obvious responder-side patch does not
-transfer. The adversary's power is not in evading the classifier (that is nearly free) but in
-buying **confidence**, moving flows from the monitor's review region into its trust region. This
-extends P11 from "the detector is wrong" to "the detector is confidently wrong *and unwatched*",
-and answers the evasion-practicality SoK: in the monitored setting, high-confidence evasion is
-not impractical — it is a thin margin away by default.
+The dominant effect is not the adversary: cross-testbed DoS detectors are **already** high-confidence
+wrong on 33–100% of real target DoS flows, at the operating point the label-free monitors are
+supposed to protect, and the monitors are model-dependently blind to it. A constrained,
+score-only adversary **widens** this hole where the detector still has headroom (search lift up to
++0.59) and is redundant where it does not (bot/LogReg, +0.00). The obvious responder-side patch —
+watch the features the adversary cannot freely set — does not survive the move between networks,
+because those features do not transfer either. This extends P11 from "the detector is wrong" to
+"the detector is confidently wrong, unwatched, and not fixable by the obvious monitor", and
+answers the evasion-practicality SoK on its own terms: in the monitored cross-testbed setting, the
+practical danger is not a clever adversary but a detector that is a thin margin from waving
+everything through and a safety net calibrated on the wrong network.

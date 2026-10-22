@@ -32,10 +32,22 @@ Under natural transfer the distribution monitors (KS, A-distance, Wasserstein) f
 model-based monitors (ATC, conf-drop) ~0.75. Natural shift is loud. 12 configs.
 
 ### Phase 3 — adaptive high-confidence-miss search — DONE (`attack_results.json`, `lift.json`)
-HCMR 0.901–0.904 on both pairs (bootstrap CIs tight). **Natural HCMR 0.3–2.3%** → adversarial
-**lift +0.88 to +0.90**: natural misses are low-confidence; the constrained score-only adversary
-pushes them over the confidence threshold with a small P-drop (0.003–0.048). feasible ≈0.90,
-functional ≥0.99. Strong search adds ≤0.01 (margin, not search power, is the lever).
+**CORRECTED after an own-code audit (see below).** Honest decomposition on real target flows:
+- **Latent high-confidence-miss rate** (real flows, NO attacker box): 0.671/0.949/0.330/1.000
+  (unsw-LGBM / unsw-LogReg / bot-LGBM / bot-LogReg). The detector is already high-confidence wrong
+  on 33–100% of real target DoS flows — the dominant effect.
+- Projected floor (project into box, no search): 0.402/0.651/0.309/0.901.
+- Searched HCMR: 0.904/0.904/0.901/0.901 (≈ feasibility ceiling).
+- **Search's own contribution** = searched − projected: **+0.502/+0.253/+0.592/+0.000**. The search
+  buys misses where the detector has headroom (LightGBM cells) and nothing on the saturated
+  bot/LogReg. Small P-drop (0.003–0.048); strong search adds ≤0.01.
+
+**AUDIT CORRECTION (2026-10-22):** the first draft reported a "+0.88 lift" by computing the natural
+baseline with the SOURCE-box feasibility filter applied to raw target flows (which never satisfy
+it), conflating "clip into box" with "evasion". A read-only correctness audit caught it. Fixed:
+`compute_lift.py` now reports latent (no filter) / projected / searched separately; lift =
+searched − projected. The honest finding is latent-exposure-dominant, which is stronger and closer
+to P11. No arithmetic/leakage bug was found; the flaw was the comparison definition only.
 - **Ruling (Gate 3 world):** monitor alarm tracks natural shift, not the attack. For LightGBM the
   model-based monitors fire (ATC usable → F-monitor-already-works there). For **BoT-IoT→IDS2018 +
   LogisticRegression** they stay silent (0.0 natural & adversarial) while HCMR=0.901 — the genuine
