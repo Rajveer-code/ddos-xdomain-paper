@@ -132,3 +132,6 @@ multi-family source; Phase 1-R wire check. None changes the core results.
   "wire-valid" for that family.
 - Add a second DoS family if a source with reflection/low-rate families is used.
 - Compile the draft to the repo's figure/PDF pipeline for submission.
+
+### REFRAME (2026-10-22 eve) — recall certification
+Title retired overclaim -> "A Shift Alarm Is Not a Safety Certificate". Added recall-invisibility theorem (4.5), deployment-gate corollary + pilot (5.5: score-only false-assurance 15%% -> 0.03%% with a 10-flow audit), DECISION.md (GO NARROWED + closest-work vs PPRM/RiskGate-IDS/Podkopaev-Ramdas; gate mechanism not novel, theorem+budget is). Kept feature-space. check_numbers 40/40. Pushed f4d5ec6.
