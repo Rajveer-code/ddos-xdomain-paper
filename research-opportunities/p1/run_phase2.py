@@ -29,9 +29,9 @@ from p1common import build_fit, read_capped, external_metrics, FEATURES  # noqa:
 PAIRS = [("nf_unsw_nb15", "nf_cse_cic_ids2018"),
          ("nf_bot_iot", "nf_cse_cic_ids2018")]
 MODELS = ["LightGBM", "LogisticRegression"]
-SEEDS = [42, 43, 44]            # pilot; frozen full spec is (42..46)
-TGT_BENIGN = 30_000
-TGT_ATTACK = 30_000
+SEEDS = [42, 43, 44, 45, 46]            # full frozen spec
+TGT_BENIGN = 50_000
+TGT_ATTACK = 50_000
 OUT = RESULTS / "p1"
 
 

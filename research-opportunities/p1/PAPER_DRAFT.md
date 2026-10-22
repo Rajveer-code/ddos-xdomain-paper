@@ -1,14 +1,14 @@
 # Hiding in the Shift: Adversarial High-Confidence False Negatives against Label-Free NIDS Monitoring under Cross-Testbed Transfer
 
-**Rajveer Singh Pall** (sole author). Preliminary draft — pilot results, 2026-10-22.
+**Rajveer Singh Pall** (sole author). Draft — full frozen-spec run, 2026-10-22.
 
-> **Scale note (read first).** Every number below is from a **pilot**: 3 seeds (42–44), a
-> 50k-per-class source cap, 2,000 target attack flows per family, a 200-query score-only
-> budget, two source→target pairs, two models. The frozen full specification
-> (`research-opportunities/p1/PREREGISTRATION.md`) is 5 seeds and the larger caps; it is the
-> December–February extension. Claims are sized to one dataset family (NetFlow v2) and the
-> tested pairs — "suggests", not "demonstrates". Every headline number is keyed to
-> `results/p1/summary_p1.json` and checked by `check_numbers_p1.py`.
+> **Scale note (read first).** Every number below is from the **full frozen specification**
+> (`research-opportunities/p1/PREREGISTRATION.md`): 5 seeds (42–46), a 200k-per-class source cap,
+> 50k target benign flows, 2,000 target attack flows per family, a 200-query score-only budget,
+> two source→target pairs, two models. Claims are still sized to one dataset family (NetFlow v2)
+> and the two tested pairs — "suggests", not "demonstrates"; the feature-space scope and the
+> optional wire-realism check (Phase 1-R, not run) are the remaining limits. Every headline number
+> is keyed to `results/p1/summary_p1.json` and checked by `check_numbers_p1.py` (23/23).
 
 ## Abstract
 
@@ -21,24 +21,24 @@ in the region the monitors trust.
 
 Four findings, on NetFlow v2 (UNSW-NB15, BoT-IoT → CSE-CIC-IDS2018), reported honestly with a
 baseline that is apples-to-apples with the attack. (1) **Latent exposure is already large and
-model-dependent:** before any attack, the cross-testbed detector classifies **33.0–100.0%** of
+model-dependent:** before any attack, the cross-testbed detector classifies **31.9–99.9%** of
 real target DoS flows as benign *at high confidence* (latent high-confidence-miss rate
-0.330/0.671/0.949/1.000 across the four pair×model cells). The detector is, by default, wide open
-at exactly the operating point the monitors protect. (2) **A constrained, score-only adversary
-adds capability only where there is headroom.** Isolated from the feasibility-projection step
-(baseline = the projected real flow with no search), the search's own contribution is
-**+0.00 to +0.59** (bot/LightGBM +0.592, unsw/LightGBM +0.502, unsw/LogReg +0.253, bot/LogReg
-+0.000); the searched high-confidence-miss rate converges to ~0.90, which is the
-feasibility ceiling, not a measure of search power. For the already-saturated bot/LogReg cell the
-search earns nothing. (3) **The monitors are model-dependently blind, and blindest where the
-detector is already worst.** For LightGBM the confidence monitors fire (they fire on benign shift
-too); for LogisticRegression on the strong-transfer pair they stay **completely silent** (alarm
-0.0, attack or no attack) while 100% of real target DoS flows are high-confidence misses — the
-quiet-monitor failure, on the cell where the adversary is irrelevant because the detector is
-already defenceless. (4) **The obvious responder-side defence does not transfer:** watching the
-low-controllability features cuts HCMR by ≤ 0.075 against a pre-registered 0.10 bar, because
-across independent testbeds those features do not transfer either, so a source-fitted monitor on
-them is blind. We report this negative as a result.
+0.984/0.953/0.319/0.999 for unsw/LightGBM, unsw/LogReg, bot/LightGBM, bot/LogReg). The detector
+is, by default, wide open at exactly the operating point the monitors protect. (2) **A
+constrained, score-only adversary adds capability only where there is headroom.** Isolated from
+the feasibility-projection step (baseline = the projected real flow with no search), the search's
+own contribution is **+0.001 to +0.607** (bot/LightGBM +0.607, unsw/LogReg +0.251, unsw/LightGBM
++0.232, bot/LogReg +0.001); the searched high-confidence-miss rate converges to ~0.90, which is
+the feasibility ceiling, not a measure of search power. For the already-saturated bot/LogReg cell
+the search earns essentially nothing. (3) **The monitors are model-dependently blind, and
+blindest where the detector is already worst.** For LightGBM the confidence monitors fire (they
+fire on benign shift too); for LogisticRegression on the strong-transfer pair they stay
+**completely silent** (alarm 0.0, attack or no attack) while 99.9% of real target DoS flows are
+high-confidence misses — the quiet-monitor failure, on the cell where the adversary is irrelevant
+because the detector is already defenceless. (4) **The obvious responder-side defence does not
+transfer:** watching the low-controllability features cuts HCMR by ≤ 0.072 against a
+pre-registered 0.10 bar, because across independent testbeds those features do not transfer
+either, so a source-fitted monitor on them is blind. We report this negative as a result.
 
 The headline is therefore not "a powerful adversary defeats the monitor" but the sharper and more
 uncomfortable "the monitored detector is already defeated, the adversary merely widens the hole
@@ -108,24 +108,24 @@ measuring the "natural" rate through that filter understated it by ~50–140× a
 spurious lift. We correct that here.
 
 1. **Latent high-confidence-miss rate** (real flows, no attacker constraint): the fraction already
-   predicted benign at confidence ≥ τ_accept. It is **0.671 / 0.949 / 0.330 / 1.000** for
-   unsw/LightGBM, unsw/LogReg, bot/LightGBM, bot/LogReg. One third to all of real target DoS flows
-   are already high-confidence misses before any adversary acts.
-2. **Projected floor** (project the real flow into the source feasible box, no search): 0.402 /
-   0.651 / 0.309 / 0.901. This is what merely producing a feasible flow achieves.
-3. **Searched HCMR** (full score-only search): 0.904 / 0.904 / 0.901 / 0.901 — it converges to the
+   predicted benign at confidence ≥ τ_accept. It is **0.984 / 0.953 / 0.319 / 0.999** for
+   unsw/LightGBM, unsw/LogReg, bot/LightGBM, bot/LogReg. A third to essentially all real target DoS
+   flows are already high-confidence misses before any adversary acts.
+2. **Projected floor** (project the real flow into the source feasible box, no search): 0.679 /
+   0.658 / 0.282 / 0.901. This is what merely producing a feasible flow achieves.
+3. **Searched HCMR** (full score-only search): 0.910 / 0.909 / 0.889 / 0.902 — it converges to the
    ~0.90 feasibility ceiling (`feasible_rate` ≈ `hcmr` in every cell), so this number reflects the
    constraint geometry, not search strength.
 
-The **search's own contribution** is searched − projected = **+0.502 / +0.253 / +0.592 / +0.000**.
+The **search's own contribution** is searched − projected = **+0.232 / +0.251 / +0.607 / +0.001**.
 So the adaptive search genuinely buys high-confidence misses where the detector still has
-headroom (both LightGBM cells, +0.50 and +0.59; unsw/LogReg +0.25), and buys **nothing** on
-bot/LogReg, where the detector already assigns high-confidence-benign to the entire feasible region
-(latent 1.000). The push on P(attack) is small throughout (mean drop 0.003–0.048) and the strong
-upper-bound search adds ≤ 0.01 over the score-only search: the flows sit a thin margin from the
-confidence threshold, so where the search helps, a feasible nudge is enough. We do **not** claim a
-large adversarial lift; the dominant effect is the latent exposure, and the adversary's role is to
-widen it where it can.
+headroom (bot/LightGBM +0.607, unsw/LogReg +0.251, unsw/LightGBM +0.232), and buys **essentially
+nothing** on bot/LogReg (+0.001), where the detector already assigns high-confidence-benign to the
+entire feasible region (latent 0.999). The push on P(attack) is small throughout (mean drop
+0.003–0.048) and the strong upper-bound search adds ≤ 0.01 over the score-only search: the flows
+sit a thin margin from the confidence threshold, so where the search helps, a feasible nudge is
+enough. We do **not** claim a large adversarial lift; the dominant effect is the latent exposure,
+and the adversary's role is to widen it where it can.
 
 ## 6. The monitors are model-dependently blind (Phases 2–3)
 
@@ -139,25 +139,25 @@ So where natural shift already lights the model-based monitors — LightGBM, bot
 (a contrast with Bikdeli's benign-shift finding). But on **BoT-IoT → CSE-CIC-IDS2018 with
 LogisticRegression**, both model-based monitors stay **silent** (natural and adversarial alarm
 0.0) while the adversary reaches **HCMR 0.901**. That is the quiet-monitor failure in the clear:
-a strong-ranking detector (external AUC 0.757), a label-free confidence monitor reporting normal,
-and 90% of target DoS flows waved through at high confidence. The distribution monitors fire on
+a strong-ranking detector (external AUC 0.919), a label-free confidence monitor reporting normal,
+and ~90% of target DoS flows waved through at high confidence. The distribution monitors fire on
 everything, so they do not distinguish the attack from benign drift — they are not a specific
 alarm.
 
 The uncomfortable alignment: the cell where the confidence monitors are silent (bot/LogReg) is
-exactly the cell where the latent high-confidence-miss rate is already 1.000 and the adversarial
-search adds nothing (§5). Where the adversary contributes most (the LightGBM cells, search lift
-+0.50/+0.59) the confidence monitors do fire. So the monitors are blindest precisely where the
-detector is already fully compromised and the adversary is redundant — the worst possible pairing
-for an operator who is relying on them.
+exactly the cell where the latent high-confidence-miss rate is already 0.999 and the adversarial
+search adds essentially nothing (+0.001, §5). Where the adversary contributes most (the LightGBM
+cells, search lift +0.232 and +0.607) the confidence monitors do fire. So the monitors are
+blindest precisely where the detector is already fully compromised and the adversary is redundant
+— the worst possible pairing for an operator who is relying on them.
 
 ## 7. The obvious defence does not transfer (Phase 4)
 
 A one-class novelty detector (IsolationForest) on the low-controllability features, fitted on
 source benign and thresholded at the 1% budget, is the obvious responder-side defence: the
 adversary froze those features at the original attack values, so a successful miss still carries
-the attack's responder signature. It **fails** the pre-registered bar everywhere: ΔHCMR = 0.075
-(UNSW) and 0.006 (BoT-IoT) against a 0.10 bar, catching ≤ 8% of misses at ≤ 0.3% benign cost
+the attack's responder signature. It **fails** the pre-registered bar everywhere: ΔHCMR = 0.072
+(UNSW) and 0.012 (BoT-IoT) against a 0.10 bar, catching ≤ 8% of misses at ≤ 1.0% benign cost
 (`summary_p1.json` → `defense_*`, `gate4`). The reason is P11's reason: across independently
 built testbeds the low-controllability features themselves do not transfer, so a source-fitted
 monitor on them cannot tell an adversarial target flow from benign target traffic. We report the
@@ -165,7 +165,7 @@ negative as the result.
 
 ## 8. Limitations
 
-Pilot scale (3 seeds, capped samples); one dataset family (NetFlow v2); two pairs, two models;
+Full frozen spec (5 seeds, 200k/50k caps); one dataset family (NetFlow v2); two pairs, two models;
 feature-space only — no wire-realizability is claimed (the optional Phase 1-R check was not run).
 Both sources carry a single DoS family (volumetric), so the per-family box is one family's. The
 monitor thresholds are calibrated by two-half source-validation resampling; the defence is

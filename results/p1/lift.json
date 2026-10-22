@@ -3,108 +3,180 @@
     "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 42,
-    "latent_hcm_rate": 0.6375074895146795,
-    "projected_hcmr": 0.3768723786698622,
-    "searched_hcmr": 0.902336728579988,
-    "search_lift": 0.5254643499101259
+    "latent_hcm_rate": 0.9772318753744758,
+    "projected_hcmr": 0.6728579988016776,
+    "searched_hcmr": 0.9041342121030557,
+    "search_lift": 0.23127621330137804
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LogisticRegression",
     "seed": 42,
-    "latent_hcm_rate": 0.9430796884361894,
-    "projected_hcmr": 0.6500898741761534,
-    "searched_hcmr": 0.9005392450569203,
-    "search_lift": 0.2504493708807669
+    "latent_hcm_rate": 0.9442780107849011,
+    "projected_hcmr": 0.6488915518274416,
+    "searched_hcmr": 0.9053325344517675,
+    "search_lift": 0.2564409826243259
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 43,
-    "latent_hcm_rate": 0.6679174484052532,
-    "projected_hcmr": 0.38586616635397125,
-    "searched_hcmr": 0.906816760475297,
-    "search_lift": 0.5209505941213257
+    "latent_hcm_rate": 0.9856160100062539,
+    "projected_hcmr": 0.6729205753595997,
+    "searched_hcmr": 0.9118198874296435,
+    "search_lift": 0.23889931207004378
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LogisticRegression",
     "seed": 43,
     "latent_hcm_rate": 0.9549718574108818,
-    "projected_hcmr": 0.651031894934334,
-    "searched_hcmr": 0.908692933083177,
-    "search_lift": 0.257661038148843
+    "projected_hcmr": 0.6522826766729206,
+    "searched_hcmr": 0.9105691056910569,
+    "search_lift": 0.25828642901813625
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LightGBM",
     "seed": 44,
-    "latent_hcm_rate": 0.7078514911746805,
-    "projected_hcmr": 0.443700547778454,
-    "searched_hcmr": 0.9026171637248935,
-    "search_lift": 0.4589166159464395
+    "latent_hcm_rate": 0.9829580036518564,
+    "projected_hcmr": 0.6755934266585514,
+    "searched_hcmr": 0.9111381618989653,
+    "search_lift": 0.23554473524041397
   },
   {
     "source": "nf_unsw_nb15",
     "model": "LogisticRegression",
     "seed": 44,
-    "latent_hcm_rate": 0.9482653682288497,
-    "projected_hcmr": 0.6512477175897748,
-    "searched_hcmr": 0.9026171637248935,
-    "search_lift": 0.2513694461351187
+    "latent_hcm_rate": 0.9513085818624467,
+    "projected_hcmr": 0.6524650030432136,
+    "searched_hcmr": 0.9062690200852099,
+    "search_lift": 0.2538040170419963
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "LightGBM",
+    "seed": 45,
+    "latent_hcm_rate": 0.9851301115241635,
+    "projected_hcmr": 0.6933085501858736,
+    "searched_hcmr": 0.9089219330855018,
+    "search_lift": 0.21561338289962828
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "LogisticRegression",
+    "seed": 45,
+    "latent_hcm_rate": 0.9566294919454771,
+    "projected_hcmr": 0.6747211895910781,
+    "searched_hcmr": 0.9114002478314746,
+    "search_lift": 0.23667905824039648
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "LightGBM",
+    "seed": 46,
+    "latent_hcm_rate": 0.9872727272727273,
+    "projected_hcmr": 0.6787878787878788,
+    "searched_hcmr": 0.9163636363636364,
+    "search_lift": 0.23757575757575755
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "model": "LogisticRegression",
+    "seed": 46,
+    "latent_hcm_rate": 0.9587878787878787,
+    "projected_hcmr": 0.6606060606060606,
+    "searched_hcmr": 0.9121212121212121,
+    "search_lift": 0.25151515151515147
   },
   {
     "source": "nf_bot_iot",
     "model": "LightGBM",
     "seed": 42,
-    "latent_hcm_rate": 0.33493109646494906,
-    "projected_hcmr": 0.30317555422408626,
-    "searched_hcmr": 0.9011384062312762,
-    "search_lift": 0.5979628520071899
+    "latent_hcm_rate": 0.3121629718394248,
+    "projected_hcmr": 0.2965847813061714,
+    "searched_hcmr": 0.8711803475134812,
+    "search_lift": 0.5745955662073098
   },
   {
     "source": "nf_bot_iot",
     "model": "LogisticRegression",
     "seed": 42,
-    "latent_hcm_rate": 1.0,
-    "projected_hcmr": 0.9017375674056322,
+    "latent_hcm_rate": 0.9970041941282205,
+    "projected_hcmr": 0.8993409227082085,
     "searched_hcmr": 0.9017375674056322,
+    "search_lift": 0.002396644697423622
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "LightGBM",
+    "seed": 43,
+    "latent_hcm_rate": 0.3233270794246404,
+    "projected_hcmr": 0.2926829268292683,
+    "searched_hcmr": 0.8955597248280175,
+    "search_lift": 0.6028767979987493
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "LogisticRegression",
+    "seed": 43,
+    "latent_hcm_rate": 1.0,
+    "projected_hcmr": 0.900562851782364,
+    "searched_hcmr": 0.900562851782364,
     "search_lift": 0.0
   },
   {
     "source": "nf_bot_iot",
     "model": "LightGBM",
-    "seed": 43,
-    "latent_hcm_rate": 0.3258286429018136,
-    "projected_hcmr": 0.3076923076923077,
-    "searched_hcmr": 0.8993120700437773,
-    "search_lift": 0.5916197623514696
+    "seed": 44,
+    "latent_hcm_rate": 0.33901399878271454,
+    "projected_hcmr": 0.24284844796104688,
+    "searched_hcmr": 0.8971393791844188,
+    "search_lift": 0.6542909312233719
   },
   {
     "source": "nf_bot_iot",
     "model": "LogisticRegression",
-    "seed": 43,
+    "seed": 44,
     "latent_hcm_rate": 1.0,
-    "projected_hcmr": 0.8999374609130707,
-    "searched_hcmr": 0.900562851782364,
-    "search_lift": 0.0006253908692932519
+    "projected_hcmr": 0.9013998782714546,
+    "searched_hcmr": 0.9020085209981741,
+    "search_lift": 0.000608642726719455
   },
   {
     "source": "nf_bot_iot",
     "model": "LightGBM",
-    "seed": 44,
-    "latent_hcm_rate": 0.3292757151552039,
-    "projected_hcmr": 0.3146682897139379,
-    "searched_hcmr": 0.9013998782714546,
-    "search_lift": 0.5867315885575167
+    "seed": 45,
+    "latent_hcm_rate": 0.29739776951672864,
+    "projected_hcmr": 0.2812887236679058,
+    "searched_hcmr": 0.8822800495662949,
+    "search_lift": 0.6009913258983891
   },
   {
     "source": "nf_bot_iot",
     "model": "LogisticRegression",
-    "seed": 44,
-    "latent_hcm_rate": 0.9993913572732805,
-    "projected_hcmr": 0.9013998782714546,
-    "searched_hcmr": 0.9020085209981741,
-    "search_lift": 0.000608642726719455
+    "seed": 45,
+    "latent_hcm_rate": 1.0,
+    "projected_hcmr": 0.90272614622057,
+    "searched_hcmr": 0.90272614622057,
+    "search_lift": 0.0
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "LightGBM",
+    "seed": 46,
+    "latent_hcm_rate": 0.32484848484848483,
+    "projected_hcmr": 0.29757575757575755,
+    "searched_hcmr": 0.8981818181818182,
+    "search_lift": 0.6006060606060606
+  },
+  {
+    "source": "nf_bot_iot",
+    "model": "LogisticRegression",
+    "seed": 46,
+    "latent_hcm_rate": 1.0,
+    "projected_hcmr": 0.9012121212121212,
+    "searched_hcmr": 0.9012121212121212,
+    "search_lift": 0.0
   }
 ]

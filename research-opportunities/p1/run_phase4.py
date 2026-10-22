@@ -36,11 +36,11 @@ from run_phase3 import tau_accept_from, boot_rate_ci  # noqa: E402
 PAIRS = [("nf_unsw_nb15", "nf_cse_cic_ids2018"),
          ("nf_bot_iot", "nf_cse_cic_ids2018")]
 MODELS = ["LightGBM", "LogisticRegression"]
-SEEDS = [42, 43, 44]
+SEEDS = [42, 43, 44, 45, 46]
 FAMILY = "volumetric"
 BUDGET = 200
 ATTACK_CAP = 2000
-TGT_BENIGN = 20_000
+TGT_BENIGN = 50_000
 HCMR_DROP_BAR = 0.10
 FPR_CEILING = 0.02
 OUT = RESULTS / "p1"

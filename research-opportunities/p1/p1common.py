@@ -34,7 +34,7 @@ from src.pipeline import make_models, make_scaler  # noqa: E402
 import constraints as C  # noqa: E402
 
 FEATURES = C.FEATURES
-CAP_PER_CLASS = 50_000
+CAP_PER_CLASS = 200_000      # full frozen spec (pilot used 50_000)
 _BATCH = 300_000
 
 

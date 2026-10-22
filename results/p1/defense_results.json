@@ -7,19 +7,19 @@
     "low_controllability_features": [
       "DST_TO_SRC_SECOND_BYTES"
     ],
-    "hcmr_before": 0.902336728579988,
+    "hcmr_before": 0.9041342121030557,
     "hcmr_before_ci": [
-      0.8873576992210904,
-      0.9167165967645297
+      0.8897393648891552,
+      0.9179298981426002
     ],
-    "hcmr_after": 0.8262432594367884,
+    "hcmr_after": 0.8280407429598562,
     "hcmr_after_ci": [
-      0.8076692630317556,
-      0.8436339125224684
+      0.8088675853804673,
+      0.8454164170161773
     ],
-    "hcmr_drop": 0.07609346914319959,
-    "defence_catch_rate_of_misses": 0.08432934926958831,
-    "added_benign_review_cost": 0.002059233238447096,
+    "hcmr_drop": 0.07609346914319948,
+    "defence_catch_rate_of_misses": 0.08416169648774023,
+    "added_benign_review_cost": 0.0017652708912022014,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -32,19 +32,19 @@
     "low_controllability_features": [
       "DST_TO_SRC_SECOND_BYTES"
     ],
-    "hcmr_before": 0.9005392450569203,
+    "hcmr_before": 0.9053325344517675,
     "hcmr_before_ci": [
-      0.8855602156980228,
-      0.9149191132414619
+      0.89035350509287,
+      0.9191132414619533
     ],
-    "hcmr_after": 0.8244457759137208,
+    "hcmr_after": 0.8292390653085681,
     "hcmr_after_ci": [
-      0.8058717795086878,
-      0.8418214499700419
+      0.8106650689035351,
+      0.8460155781905333
     ],
     "hcmr_drop": 0.07609346914319948,
-    "defence_catch_rate_of_misses": 0.08449767132401863,
-    "added_benign_review_cost": 0.002059233238447096,
+    "defence_catch_rate_of_misses": 0.08405029781601589,
+    "added_benign_review_cost": 0.0017652708912022014,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -57,19 +57,19 @@
     "low_controllability_features": [
       "DST_TO_SRC_SECOND_BYTES"
     ],
-    "hcmr_before": 0.906816760475297,
+    "hcmr_before": 0.9118198874296435,
     "hcmr_before_ci": [
-      0.8918073796122576,
-      0.9212007504690432
+      0.8968105065666041,
+      0.9262038774233896
     ],
-    "hcmr_after": 0.8323952470293934,
+    "hcmr_after": 0.8373983739837398,
     "hcmr_after_ci": [
-      0.8130081300813008,
-      0.8505315822388994
+      0.8186366479049406,
+      0.8549093183239524
     ],
     "hcmr_drop": 0.07442151344590364,
-    "defence_catch_rate_of_misses": 0.08206896551724138,
-    "added_benign_review_cost": 0.0013435935018932454,
+    "defence_catch_rate_of_misses": 0.08161865569272976,
+    "added_benign_review_cost": 0.0011151163092243458,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -82,19 +82,19 @@
     "low_controllability_features": [
       "DST_TO_SRC_SECOND_BYTES"
     ],
-    "hcmr_before": 0.908692933083177,
+    "hcmr_before": 0.9105691056910569,
     "hcmr_before_ci": [
-      0.8936835522201376,
-      0.9230769230769231
+      0.8955597248280175,
+      0.924953095684803
     ],
-    "hcmr_after": 0.8342714196372732,
+    "hcmr_after": 0.8361475922451532,
     "hcmr_after_ci": [
-      0.8148843026891808,
-      0.8524233896185115
+      0.8167604752970606,
+      0.8542839274546592
     ],
-    "hcmr_drop": 0.07442151344590375,
-    "defence_catch_rate_of_misses": 0.08189951823812801,
-    "added_benign_review_cost": 0.0013435935018932454,
+    "hcmr_drop": 0.07442151344590364,
+    "defence_catch_rate_of_misses": 0.08173076923076923,
+    "added_benign_review_cost": 0.0011151163092243458,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -107,19 +107,19 @@
     "low_controllability_features": [
       "DST_TO_SRC_SECOND_BYTES"
     ],
-    "hcmr_before": 0.9026171637248935,
+    "hcmr_before": 0.9111381618989653,
     "hcmr_before_ci": [
-      0.888618381010347,
-      0.91661594643944
+      0.8977480219111381,
+      0.9251369446135118
     ],
-    "hcmr_after": 0.8289713937918441,
+    "hcmr_after": 0.8368837492391966,
     "hcmr_after_ci": [
-      0.8101034692635423,
-      0.8466220328667072
+      0.8186092513694461,
+      0.8539257455873402
     ],
-    "hcmr_drop": 0.07364576993304939,
-    "defence_catch_rate_of_misses": 0.0815913688469319,
-    "added_benign_review_cost": 0.0009681127851394688,
+    "hcmr_drop": 0.07425441265976873,
+    "defence_catch_rate_of_misses": 0.08149632598530394,
+    "added_benign_review_cost": 0.0011716919231370099,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -132,19 +132,119 @@
     "low_controllability_features": [
       "DST_TO_SRC_SECOND_BYTES"
     ],
-    "hcmr_before": 0.9026171637248935,
+    "hcmr_before": 0.9062690200852099,
     "hcmr_before_ci": [
-      0.888618381010347,
-      0.91661594643944
+      0.8922702373706635,
+      0.9202678027997565
     ],
-    "hcmr_after": 0.8283627510651248,
+    "hcmr_after": 0.8320146074254413,
     "hcmr_after_ci": [
-      0.8094948265368229,
-      0.8460133901399878
+      0.8131466828971394,
+      0.8496652465003043
     ],
-    "hcmr_drop": 0.07425441265976873,
-    "defence_catch_rate_of_misses": 0.08226567768037761,
-    "added_benign_review_cost": 0.0009681127851394688,
+    "hcmr_drop": 0.07425441265976862,
+    "defence_catch_rate_of_misses": 0.0819341840161182,
+    "added_benign_review_cost": 0.0011716919231370099,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 45,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9089219330855018,
+    "hcmr_before_ci": [
+      0.8946716232961586,
+      0.9231722428748451
+    ],
+    "hcmr_after": 0.8401486988847584,
+    "hcmr_after_ci": [
+      0.8234200743494424,
+      0.8587360594795539
+    ],
+    "hcmr_drop": 0.06877323420074344,
+    "defence_catch_rate_of_misses": 0.07566462167689161,
+    "added_benign_review_cost": 0.0014532620542897182,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 45,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9114002478314746,
+    "hcmr_before_ci": [
+      0.8977695167286245,
+      0.9250309789343246
+    ],
+    "hcmr_after": 0.8426270136307311,
+    "hcmr_after_ci": [
+      0.8246592317224287,
+      0.8605947955390335
+    ],
+    "hcmr_drop": 0.06877323420074344,
+    "defence_catch_rate_of_misses": 0.07545887151597552,
+    "added_benign_review_cost": 0.0014532620542897182,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 46,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9163636363636364,
+    "hcmr_before_ci": [
+      0.9030303030303031,
+      0.9290909090909091
+    ],
+    "hcmr_after": 0.850909090909091,
+    "hcmr_after_ci": [
+      0.833939393939394,
+      0.8678787878787879
+    ],
+    "hcmr_drop": 0.06545454545454543,
+    "defence_catch_rate_of_misses": 0.07142857142857142,
+    "added_benign_review_cost": 0.0015982393166871906,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 46,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9121212121212121,
+    "hcmr_before_ci": [
+      0.8981818181818182,
+      0.9248636363636362
+    ],
+    "hcmr_after": 0.8466666666666667,
+    "hcmr_after_ci": [
+      0.8296969696969697,
+      0.8642424242424243
+    ],
+    "hcmr_drop": 0.06545454545454543,
+    "defence_catch_rate_of_misses": 0.07176079734219269,
+    "added_benign_review_cost": 0.0015982393166871906,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -159,19 +259,19 @@
       "DST_TO_SRC_SECOND_BYTES",
       "RETRANSMITTED_OUT_PKTS"
     ],
-    "hcmr_before": 0.9011384062312762,
+    "hcmr_before": 0.8711803475134812,
     "hcmr_before_ci": [
-      0.8861593768723787,
-      0.9155182744158179
+      0.8544038346315159,
+      0.8873576992210904
     ],
-    "hcmr_after": 0.9011384062312762,
+    "hcmr_after": 0.8675853804673457,
     "hcmr_after_ci": [
-      0.8861593768723787,
-      0.9155182744158179
+      0.8508088675853804,
+      0.8843618933493109
     ],
-    "hcmr_drop": 0.0,
-    "defence_catch_rate_of_misses": 0.0,
-    "added_benign_review_cost": 0.00018169705045121434,
+    "hcmr_drop": 0.003594967046135489,
+    "defence_catch_rate_of_misses": 0.0041265474552957355,
+    "added_benign_review_cost": 0.0005711170530360064,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -191,14 +291,14 @@
       0.8873576992210904,
       0.9161174355901738
     ],
-    "hcmr_after": 0.9017375674056322,
+    "hcmr_after": 0.8981426003594967,
     "hcmr_after_ci": [
-      0.8873576992210904,
-      0.9161174355901738
+      0.8831635710005992,
+      0.9131216297183943
     ],
-    "hcmr_drop": 0.0,
-    "defence_catch_rate_of_misses": 0.0,
-    "added_benign_review_cost": 0.00018169705045121434,
+    "hcmr_drop": 0.003594967046135489,
+    "defence_catch_rate_of_misses": 0.003986710963455149,
+    "added_benign_review_cost": 0.0005711170530360064,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -213,19 +313,19 @@
       "DST_TO_SRC_SECOND_BYTES",
       "RETRANSMITTED_OUT_PKTS"
     ],
-    "hcmr_before": 0.8993120700437773,
+    "hcmr_before": 0.8955597248280175,
     "hcmr_before_ci": [
-      0.884302689180738,
-      0.9143214509068167
+      0.8799249530956847,
+      0.9111944965603502
     ],
-    "hcmr_after": 0.8980612883051907,
+    "hcmr_after": 0.8824265165728581,
     "hcmr_after_ci": [
-      0.8830362726704191,
-      0.9130706691682301
+      0.866166353971232,
+      0.898076923076923
     ],
-    "hcmr_drop": 0.001250781738586615,
-    "defence_catch_rate_of_misses": 0.0013908205841446453,
-    "added_benign_review_cost": 0.00030536215952119215,
+    "hcmr_drop": 0.013133208255159401,
+    "defence_catch_rate_of_misses": 0.014664804469273743,
+    "added_benign_review_cost": 0.010347242032104976,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -245,14 +345,14 @@
       0.8855534709193246,
       0.9155722326454033
     ],
-    "hcmr_after": 0.8993120700437773,
+    "hcmr_after": 0.8874296435272045,
     "hcmr_after_ci": [
-      0.8842870544090057,
-      0.9143214509068167
+      0.8711694809255784,
+      0.9030644152595372
     ],
-    "hcmr_drop": 0.001250781738586615,
-    "defence_catch_rate_of_misses": 0.001388888888888889,
-    "added_benign_review_cost": 0.00030536215952119215,
+    "hcmr_drop": 0.013133208255159401,
+    "defence_catch_rate_of_misses": 0.014583333333333334,
+    "added_benign_review_cost": 0.010347242032104976,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -267,19 +367,19 @@
       "DST_TO_SRC_SECOND_BYTES",
       "RETRANSMITTED_OUT_PKTS"
     ],
-    "hcmr_before": 0.9013998782714546,
+    "hcmr_before": 0.8971393791844188,
     "hcmr_before_ci": [
-      0.8867924528301887,
-      0.9160073037127207
+      0.8831405964698722,
+      0.9117468046256847
     ],
-    "hcmr_after": 0.8849665246500305,
+    "hcmr_after": 0.8807060255629945,
     "hcmr_after_ci": [
-      0.8697504564820451,
-      0.9007912355447353
+      0.8648813146682898,
+      0.8959220937309799
     ],
-    "hcmr_drop": 0.016433353621424174,
-    "defence_catch_rate_of_misses": 0.01823092505064146,
-    "added_benign_review_cost": 0.009197071458824953,
+    "hcmr_drop": 0.016433353621424285,
+    "defence_catch_rate_of_misses": 0.018317503392130258,
+    "added_benign_review_cost": 0.013669739103265115,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false
@@ -306,7 +406,115 @@
     ],
     "hcmr_drop": 0.016433353621424285,
     "defence_catch_rate_of_misses": 0.018218623481781375,
-    "added_benign_review_cost": 0.009197071458824953,
+    "added_benign_review_cost": 0.013669739103265115,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 45,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.8822800495662949,
+    "hcmr_before_ci": [
+      0.8667905824039653,
+      0.8990086741016109
+    ],
+    "hcmr_after": 0.869268897149938,
+    "hcmr_after_ci": [
+      0.8531598513011153,
+      0.8866171003717472
+    ],
+    "hcmr_drop": 0.013011152416356864,
+    "defence_catch_rate_of_misses": 0.014747191011235955,
+    "added_benign_review_cost": 0.013209114029169045,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 45,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.90272614622057,
+    "hcmr_before_ci": [
+      0.8884603469640644,
+      0.9175960346964065
+    ],
+    "hcmr_after": 0.8897149938042132,
+    "hcmr_after_ci": [
+      0.8748296158612143,
+      0.9052044609665427
+    ],
+    "hcmr_drop": 0.013011152416356864,
+    "defence_catch_rate_of_misses": 0.014413177762525738,
+    "added_benign_review_cost": 0.013209114029169045,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 46,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.8981818181818182,
+    "hcmr_before_ci": [
+      0.8836363636363637,
+      0.9121212121212121
+    ],
+    "hcmr_after": 0.8836363636363637,
+    "hcmr_after_ci": [
+      0.8684848484848485,
+      0.8981818181818182
+    ],
+    "hcmr_drop": 0.014545454545454528,
+    "defence_catch_rate_of_misses": 0.016194331983805668,
+    "added_benign_review_cost": 0.01333612806875049,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 46,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.9012121212121212,
+    "hcmr_before_ci": [
+      0.8866666666666667,
+      0.9145454545454546
+    ],
+    "hcmr_after": 0.8866666666666667,
+    "hcmr_after_ci": [
+      0.8715151515151515,
+      0.9012121212121212
+    ],
+    "hcmr_drop": 0.014545454545454528,
+    "defence_catch_rate_of_misses": 0.01613987895090787,
+    "added_benign_review_cost": 0.01333612806875049,
     "gate4_security": false,
     "gate4_cost_ok": true,
     "gate4_pass": false

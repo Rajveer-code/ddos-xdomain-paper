@@ -3,28 +3,28 @@
   "fpr_ceiling": 0.02,
   "by_source_model": {
     "nf_unsw_nb15|LightGBM": {
-      "mean_hcmr_drop": 0.07472025084071754,
-      "mean_benign_cost": 0.0014569798418266032,
+      "mean_hcmr_drop": 0.07179943498083215,
+      "mean_benign_cost": 0.0014207160989080931,
       "n_gate4_pass": 0,
-      "n": 3
+      "n": 5
     },
     "nf_unsw_nb15|LogisticRegression": {
-      "mean_hcmr_drop": 0.07492313174962399,
-      "mean_benign_cost": 0.0014569798418266032,
+      "mean_hcmr_drop": 0.07179943498083212,
+      "mean_benign_cost": 0.0014207160989080931,
       "n_gate4_pass": 0,
-      "n": 3
+      "n": 5
     },
     "nf_bot_iot|LightGBM": {
-      "mean_hcmr_drop": 0.005894711786670263,
-      "mean_benign_cost": 0.003228043556265787,
+      "mean_hcmr_drop": 0.012143627176906114,
+      "mean_benign_cost": 0.010226668057265126,
       "n_gate4_pass": 0,
-      "n": 3
+      "n": 5
     },
     "nf_bot_iot|LogisticRegression": {
-      "mean_hcmr_drop": 0.0058947117866703,
-      "mean_benign_cost": 0.003228043556265787,
+      "mean_hcmr_drop": 0.012143627176906114,
+      "mean_benign_cost": 0.010226668057265126,
       "n_gate4_pass": 0,
-      "n": 3
+      "n": 5
     }
   }
 }

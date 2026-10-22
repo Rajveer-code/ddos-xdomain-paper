@@ -15,7 +15,7 @@ fit) · `monitors.py` (battery, source-val null calibration) · `evade.py` (scor
 · `defend.py` (low-controllability novelty monitor) · runners `run_phase1/2/3/4.py`,
 `compute_lift.py`, `aggregate_p1.py`. Each module has a runnable self-check.
 
-## Phase log — ALL PHASES COMPLETE (pilot scale), 2026-10-22
+## Phase log — ALL PHASES COMPLETE (full frozen spec: 5 seeds, 200k/50k caps), 2026-10-22
 
 ### Phase 0 — pre-registration + novelty gate — DONE (commit be3345e)
 Seven works verified; Gate 0 (novelty) PASS; frozen choices committed before code.
@@ -32,13 +32,14 @@ Under natural transfer the distribution monitors (KS, A-distance, Wasserstein) f
 model-based monitors (ATC, conf-drop) ~0.75. Natural shift is loud. 12 configs.
 
 ### Phase 3 — adaptive high-confidence-miss search — DONE (`attack_results.json`, `lift.json`)
-**CORRECTED after an own-code audit (see below).** Honest decomposition on real target flows:
-- **Latent high-confidence-miss rate** (real flows, NO attacker box): 0.671/0.949/0.330/1.000
+**CORRECTED after an own-code audit (see below). Full frozen spec, 5 seeds.** Honest decomposition
+on real target flows:
+- **Latent high-confidence-miss rate** (real flows, NO attacker box): 0.984/0.953/0.319/0.999
   (unsw-LGBM / unsw-LogReg / bot-LGBM / bot-LogReg). The detector is already high-confidence wrong
-  on 33–100% of real target DoS flows — the dominant effect.
-- Projected floor (project into box, no search): 0.402/0.651/0.309/0.901.
-- Searched HCMR: 0.904/0.904/0.901/0.901 (≈ feasibility ceiling).
-- **Search's own contribution** = searched − projected: **+0.502/+0.253/+0.592/+0.000**. The search
+  on 32–100% of real target DoS flows — the dominant effect.
+- Projected floor (project into box, no search): 0.679/0.658/0.282/0.901.
+- Searched HCMR: 0.910/0.909/0.889/0.902 (≈ feasibility ceiling).
+- **Search's own contribution** = searched − projected: **+0.232/+0.251/+0.607/+0.001**. The search
   buys misses where the detector has headroom (LightGBM cells) and nothing on the saturated
   bot/LogReg. Small P-drop (0.003–0.048); strong search adds ≤0.01.
 
@@ -58,7 +59,7 @@ to P11. No arithmetic/leakage bug was found; the flaw was the comparison definit
 
 ### Phase 4 — low-controllability defence — DONE (`defense_results.json`) — NEGATIVE
 IsolationForest on low-controllability features, source-benign fit, 1% budget. **Fails Gate 4
-everywhere:** ΔHCMR 0.075 (UNSW) / 0.006 (BoT-IoT) vs the 0.10 bar; catches ≤8% of misses.
+everywhere:** ΔHCMR 0.072 (UNSW) / 0.012 (BoT-IoT) vs the 0.10 bar; catches ≤8% of misses.
 Reason (ties to P11): the low-controllability features do not transfer across independent
 testbeds, so a source-fitted monitor on them cannot separate adversarial target flows from
 benign target traffic. Reported as the result, per Gate 4's negative branch.
@@ -75,10 +76,12 @@ updated to the honest positive-with-caveat world.
 2. **White-box ablation → strong upper bound.** Tree ensembles are non-differentiable; the
    pre-registered white-box mode is realised as a high-budget coordinate-descent upper bound,
    labelled as such, never claimed as gradients.
-3. **Pilot scale.** 3 seeds (not 5), caps 50k/2k/20k. Full spec deferred to Dec–Feb.
+3. **Scale.** Full frozen spec ran 2026-10-22: 5 seeds (42–46), source cap 200k/class, target
+   benign 50k, attack 2,000/family. (An earlier 3-seed pilot was superseded; git history keeps it.)
+   Qualitative findings are unchanged from the pilot — robust across 5 seeds.
 
-## Resume / extend (full spec, Dec–Feb)
-- Bump SEEDS to (42..46) and caps in run_phase2/3/4.py; re-run; re-aggregate; re-check.
+## Resume / extend
 - Optional Phase 1-R wire-realism check (one family, nfstream) to lift "feature-space" to
   "wire-valid" for that family.
 - Add a second DoS family if a source with reflection/low-rate families is used.
+- Compile the draft to the repo's figure/PDF pipeline for submission.

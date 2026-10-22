@@ -4,36 +4,36 @@
     "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 42,
-    "external_auc": 0.23473053638561905,
-    "external_macro_f1": 0.2842142877412368,
-    "source_acc": 0.9906646751306946,
-    "threshold": 0.6203514275981485,
-    "n_target": 39891,
-    "target_base_rate": 0.400165450853576,
+    "external_auc": 0.20789543205348412,
+    "external_macro_f1": 0.3168756990995556,
+    "source_acc": 0.9880540710468406,
+    "threshold": 0.5803137726742698,
+    "n_target": 62443,
+    "target_base_rate": 0.3831013884662812,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.17820071082796962,
-        "threshold": 0.016489917849141184,
+        "statistic": 0.1565917774350667,
+        "threshold": 0.00790946243319714,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.05905252853932674,
-        "threshold": 0.0026690774126226957,
+        "statistic": 0.05396019184265688,
+        "threshold": 0.0023684334268178286,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.6866882156789874,
-        "threshold": 0.06061239731142644,
+        "statistic": 0.8126571521250014,
+        "threshold": 0.035077019805092736,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9898173105720276,
-        "threshold": 0.05314413741598215,
+        "statistic": 1.992,
+        "threshold": 0.06677333333333324,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.4125762159795396,
-        "threshold": 0.044425635493596655,
+        "statistic": 0.48438031914893614,
+        "threshold": 0.01658023200699423,
         "alarm": true
       }
     },
@@ -44,36 +44,36 @@
     "target": "nf_cse_cic_ids2018",
     "model": "LogisticRegression",
     "seed": 42,
-    "external_auc": 0.540099301433294,
-    "external_macro_f1": 0.35695401105674174,
-    "source_acc": 0.9656460044809559,
-    "threshold": 0.7334945803349144,
-    "n_target": 39891,
-    "target_base_rate": 0.400165450853576,
+    "external_auc": 0.24352060593179228,
+    "external_macro_f1": 0.3694575539837844,
+    "source_acc": 0.959132348318139,
+    "threshold": 0.8429656024856684,
+    "n_target": 62443,
+    "target_base_rate": 0.3831013884662812,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.20091210460379072,
-        "threshold": 0.013442867811799819,
+        "statistic": 0.21509378514852828,
+        "threshold": 0.009701351776171081,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.06807520333867201,
-        "threshold": 0.003821137091825799,
+        "statistic": 0.046161841156729944,
+        "threshold": 0.0019745617242143167,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.23284094227719,
-        "threshold": 0.06670649738610902,
+        "statistic": 0.42511655131208675,
+        "threshold": 0.03916378497327884,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9898173105720276,
-        "threshold": 0.05314413741598215,
+        "statistic": 1.992,
+        "threshold": 0.06677333333333324,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.4125762159795396,
-        "threshold": 0.044425635493596655,
+        "statistic": 0.48438031914893614,
+        "threshold": 0.01658023200699423,
         "alarm": true
       }
     },
@@ -84,36 +84,36 @@
     "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 43,
-    "external_auc": 0.25331172395253176,
-    "external_macro_f1": 0.26413814335959646,
-    "source_acc": 0.9868766404199475,
-    "threshold": 0.04622127997219262,
-    "n_target": 40059,
-    "target_base_rate": 0.4034549040165756,
+    "external_auc": 0.20671520006538632,
+    "external_macro_f1": 0.31867307212852586,
+    "source_acc": 0.9865729898516784,
+    "threshold": 0.7062318656314415,
+    "n_target": 62786,
+    "target_base_rate": 0.3858344216863632,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.10462795722765617,
-        "threshold": 0.009365396042136376,
+        "statistic": 0.13069747620213867,
+        "threshold": 0.00677904667340806,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.021381800099704917,
-        "threshold": 0.0019501398745576746,
+        "statistic": 0.04644104815786809,
+        "threshold": 0.002088205176521587,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.6838461918838442,
-        "threshold": 0.06182761207543265,
+        "statistic": 0.7995385363260002,
+        "threshold": 0.03487975338547969,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9946002699865006,
-        "threshold": 0.0912185976752906,
+        "statistic": 1.992,
+        "threshold": 0.052799999999999986,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.46259163397844505,
-        "threshold": 0.04263057770850259,
+        "statistic": 0.48064743589743597,
+        "threshold": 0.020219012345679015,
         "alarm": true
       }
     },
@@ -124,36 +124,36 @@
     "target": "nf_cse_cic_ids2018",
     "model": "LogisticRegression",
     "seed": 43,
-    "external_auc": 0.2990078351406824,
-    "external_macro_f1": 0.36167237759408455,
-    "source_acc": 0.9692538432695913,
-    "threshold": 0.7387697246936041,
-    "n_target": 40059,
-    "target_base_rate": 0.4034549040165756,
+    "external_auc": 0.5337152706383027,
+    "external_macro_f1": 0.3630068073948343,
+    "source_acc": 0.956440281030445,
+    "threshold": 0.8349549715821023,
+    "n_target": 62786,
+    "target_base_rate": 0.3858344216863632,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.19269926127802883,
-        "threshold": 0.01487603217513847,
+        "statistic": 0.1483461199117242,
+        "threshold": 0.012381586056982611,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.04742018803116521,
-        "threshold": 0.004382236478579902,
+        "statistic": 0.03752680604402725,
+        "threshold": 0.0017983761365405492,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.3809307593010096,
-        "threshold": 0.057736671799134186,
+        "statistic": 0.4200125686218179,
+        "threshold": 0.03948632830363009,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9946002699865006,
-        "threshold": 0.0912185976752906,
+        "statistic": 1.992,
+        "threshold": 0.052799999999999986,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.46259163397844505,
-        "threshold": 0.04263057770850259,
+        "statistic": 0.48064743589743597,
+        "threshold": 0.020219012345679015,
         "alarm": true
       }
     },
@@ -164,36 +164,36 @@
     "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 44,
-    "external_auc": 0.2566489449322302,
-    "external_macro_f1": 0.28640724675612705,
-    "source_acc": 0.9897881996974282,
-    "threshold": 0.4146587221772753,
-    "n_target": 40207,
-    "target_base_rate": 0.4036113114631781,
+    "external_auc": 0.1716567860045724,
+    "external_macro_f1": 0.38064884250740183,
+    "source_acc": 0.9889711674806996,
+    "threshold": 0.7071149470976636,
+    "n_target": 62771,
+    "target_base_rate": 0.38815695145847606,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.21027219502162542,
-        "threshold": 0.013131618759455387,
+        "statistic": 0.14695813598526375,
+        "threshold": 0.006797254437221278,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.07303117263754155,
-        "threshold": 0.0028283869983214546,
+        "statistic": 0.05467029795438327,
+        "threshold": 0.0019602276016654585,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.6787969835526265,
-        "threshold": 0.0659304084720121,
+        "statistic": 0.7997517024884999,
+        "threshold": 0.03597427570488314,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9951836243226972,
-        "threshold": 0.08753403933434187,
+        "statistic": 1.9935,
+        "threshold": 0.03772000000000003,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.44074338124054757,
-        "threshold": 0.03886927774976188,
+        "statistic": 0.46413563829787235,
+        "threshold": 0.021635453400436704,
         "alarm": true
       }
     },
@@ -204,36 +204,196 @@
     "target": "nf_cse_cic_ids2018",
     "model": "LogisticRegression",
     "seed": 44,
-    "external_auc": 0.2969795956639942,
-    "external_macro_f1": 0.36879305019478015,
-    "source_acc": 0.9739031770045385,
-    "threshold": 0.8366082586452729,
-    "n_target": 40207,
-    "target_base_rate": 0.4036113114631781,
+    "external_auc": 0.3277346063747244,
+    "external_macro_f1": 0.36169165776637335,
+    "source_acc": 0.9596659839294155,
+    "threshold": 0.8518121245455238,
+    "n_target": 62771,
+    "target_base_rate": 0.38815695145847606,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.20304238162065014,
-        "threshold": 0.013888048411497659,
+        "statistic": 0.20170450490247627,
+        "threshold": 0.009716393507235303,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.04864359822300646,
-        "threshold": 0.0037761611113086334,
+        "statistic": 0.04148786146218142,
+        "threshold": 0.0022615239749075177,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.37918363053648196,
-        "threshold": 0.058245083207261725,
+        "statistic": 0.42758995043811127,
+        "threshold": 0.0397923544017328,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9951836243226972,
-        "threshold": 0.08753403933434187,
+        "statistic": 1.9935,
+        "threshold": 0.03772000000000003,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.44074338124054757,
-        "threshold": 0.03886927774976188,
+        "statistic": 0.46413563829787235,
+        "threshold": 0.021635453400436704,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 45,
+    "external_auc": 0.412865948392814,
+    "external_macro_f1": 0.36956155816493746,
+    "source_acc": 0.9879310344827587,
+    "threshold": 0.7796684280894319,
+    "n_target": 62497,
+    "target_base_rate": 0.38342640446741444,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.2213982409086671,
+        "threshold": 0.008758620689655225,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.06619496336217112,
+        "threshold": 0.002360712440905195,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8123177649204277,
+        "threshold": 0.036815047021943575,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.994,
+        "threshold": 0.06245333333333336,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.4724529837830907,
+        "threshold": 0.03280062066644573,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 45,
+    "external_auc": 0.28823717740781585,
+    "external_macro_f1": 0.3663770276630326,
+    "source_acc": 0.9612852664576802,
+    "threshold": 0.8210955489173501,
+    "n_target": 62497,
+    "target_base_rate": 0.38342640446741444,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.21641751280550492,
+        "threshold": 0.010457680250783604,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.045272199709104455,
+        "threshold": 0.0026867776862170324,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4230271316346068,
+        "threshold": 0.03981818181818182,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.994,
+        "threshold": 0.06245333333333336,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.4724529837830907,
+        "threshold": 0.03280062066644573,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 46,
+    "external_auc": 0.1805143919758293,
+    "external_macro_f1": 0.34518073542622096,
+    "source_acc": 0.9905377700678126,
+    "threshold": 0.8321366338516045,
+    "n_target": 62301,
+    "target_base_rate": 0.3873774096723969,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.1339062553248711,
+        "threshold": 0.005542500436781425,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.05658969386326074,
+        "threshold": 0.0018364568480833143,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.8023024445617847,
+        "threshold": 0.038799550739300456,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9955,
+        "threshold": 0.028666666666666618,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.47983012820512816,
+        "threshold": 0.0304167901234568,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 46,
+    "external_auc": 0.18903897805422767,
+    "external_macro_f1": 0.3571648086369445,
+    "source_acc": 0.9597855227882037,
+    "threshold": 0.8003251017458073,
+    "n_target": 62301,
+    "target_base_rate": 0.3873774096723969,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.20984571443841804,
+        "threshold": 0.011819581444778904,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.04406218854239152,
+        "threshold": 0.0026598588588670146,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4367301760687436,
+        "threshold": 0.03785095408209454,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9955,
+        "threshold": 0.028666666666666618,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.47983012820512816,
+        "threshold": 0.0304167901234568,
         "alarm": true
       }
     },
@@ -244,36 +404,36 @@
     "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
     "seed": 42,
-    "external_auc": 0.8541179171375766,
-    "external_macro_f1": 0.37936060020978724,
-    "source_acc": 0.9994284081166047,
-    "threshold": 0.5013819403333445,
-    "n_target": 39891,
-    "target_base_rate": 0.400165450853576,
+    "external_auc": 0.9398919605546076,
+    "external_macro_f1": 0.7208291952789144,
+    "source_acc": 0.9984397163120567,
+    "threshold": 0.5012270932908418,
+    "n_target": 62443,
+    "target_base_rate": 0.3831013884662812,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.1233160018094176,
-        "threshold": 0.0044912652594618335,
+        "statistic": 0.14745561881513958,
+        "threshold": 0.002695035460992923,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.0071698680752992905,
-        "threshold": 0.0002279811898471462,
+        "statistic": 0.012063621306252714,
+        "threshold": 0.0002811132780807313,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.47325301114012386,
-        "threshold": 0.0587719545862942,
+        "statistic": 0.4056577442599282,
+        "threshold": 0.03996595744680851,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9813308441125483,
-        "threshold": 0.08310945984567018,
+        "statistic": 1.9875,
+        "threshold": 0.06144000000000005,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.7554882929514252,
-        "threshold": 0.032829866714189214,
+        "statistic": 0.7418703703703704,
+        "threshold": 0.017839961506202824,
         "alarm": true
       }
     },
@@ -284,36 +444,116 @@
     "target": "nf_cse_cic_ids2018",
     "model": "LogisticRegression",
     "seed": 42,
-    "external_auc": 0.7972950885063468,
-    "external_macro_f1": 0.37512875534158735,
-    "source_acc": 0.9957130608745356,
-    "threshold": 0.5813270273346904,
-    "n_target": 39891,
-    "target_base_rate": 0.400165450853576,
+    "external_auc": 0.926511238322485,
+    "external_macro_f1": 0.3816680595729654,
+    "source_acc": 0.9924822695035461,
+    "threshold": 0.6525023238097953,
+    "n_target": 62443,
+    "target_base_rate": 0.3831013884662812,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": -0.003760504591359015,
-        "threshold": 0.005998775160249825,
+        "statistic": -0.001768487186555201,
+        "threshold": 0.004964539007092261,
         "alarm": false
       },
       "mean_conf_drop": {
-        "statistic": -0.029092922814637046,
-        "threshold": 0.005095889289300439,
-        "alarm": false
+        "statistic": 0.009002794431624883,
+        "threshold": 0.0028574069027591828,
+        "alarm": true
       },
       "ks_score": {
-        "statistic": 0.5869702641899806,
-        "threshold": 0.055150972800784126,
+        "statistic": 0.47527402409437125,
+        "threshold": 0.03821843971631206,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9813308441125483,
-        "threshold": 0.08310945984567018,
+        "statistic": 1.9875,
+        "threshold": 0.06144000000000005,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.7554882929514252,
-        "threshold": 0.032829866714189214,
+        "statistic": 0.7418703703703704,
+        "threshold": 0.017839961506202824,
+        "alarm": true
+      }
+    },
+    "n_alarm": 4
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 43,
+    "external_auc": 0.9462695828134369,
+    "external_macro_f1": 0.6778243016741113,
+    "source_acc": 0.9990117181985034,
+    "threshold": 0.6902391336232717,
+    "n_target": 62786,
+    "target_base_rate": 0.3858344216863632,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.09409660973483314,
+        "threshold": 0.0034894144153300474,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.01803776493729614,
+        "threshold": 0.00044520308803170034,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4092898489340675,
+        "threshold": 0.038191365134503275,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.982,
+        "threshold": 0.05811999999999991,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.721138888888889,
+        "threshold": 0.034453771409749596,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 43,
+    "external_auc": 0.8915715753488722,
+    "external_macro_f1": 0.38053633502018924,
+    "source_acc": 0.9946350416490187,
+    "threshold": 0.6219406294269575,
+    "n_target": 62786,
+    "target_base_rate": 0.3858344216863632,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": -0.0051738329408580475,
+        "threshold": 0.004115561129538209,
+        "alarm": false
+      },
+      "mean_conf_drop": {
+        "statistic": -0.009136913384224066,
+        "threshold": 0.0028232096931227633,
+        "alarm": false
+      },
+      "ks_score": {
+        "statistic": 0.475492049553065,
+        "threshold": 0.03695725366685424,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.982,
+        "threshold": 0.05811999999999991,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.721138888888889,
+        "threshold": 0.034453771409749596,
         "alarm": true
       }
     },
@@ -323,37 +563,37 @@
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
-    "seed": 43,
-    "external_auc": 0.9513682296765751,
-    "external_macro_f1": 0.37434274459849687,
-    "source_acc": 0.9994332672145083,
-    "threshold": 0.4979044748081963,
-    "n_target": 40059,
-    "target_base_rate": 0.4034549040165756,
+    "seed": 44,
+    "external_auc": 0.9166372462644595,
+    "external_macro_f1": 0.6715202719836961,
+    "source_acc": 0.9988657308946548,
+    "threshold": 0.501822147932817,
+    "n_target": 62771,
+    "target_base_rate": 0.38815695145847606,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.11256639584977135,
-        "threshold": 0.0028327006422703693,
+        "statistic": 0.17848689353345293,
+        "threshold": 0.0022283620259278547,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.008765850572511336,
-        "threshold": 9.647220267821498e-05,
+        "statistic": 0.02635713697937614,
+        "threshold": 0.00015762069298753012,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.47775573816945305,
-        "threshold": 0.05381761769863753,
+        "statistic": 0.4062101233517652,
+        "threshold": 0.03613044722174825,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9824677912073316,
-        "threshold": 0.05841881552847828,
+        "statistic": 1.9865,
+        "threshold": 0.03410666666666662,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.7785293992632474,
-        "threshold": 0.030637726927245954,
+        "statistic": 0.7362592592592592,
+        "threshold": 0.021925898675027297,
         "alarm": true
       }
     },
@@ -363,37 +603,37 @@
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
     "model": "LogisticRegression",
-    "seed": 43,
-    "external_auc": 0.7046344100294266,
-    "external_macro_f1": 0.3740641828941701,
-    "source_acc": 0.9957495041088127,
-    "threshold": 0.6617046243741425,
-    "n_target": 40059,
-    "target_base_rate": 0.4034549040165756,
+    "seed": 44,
+    "external_auc": 0.8924078969251792,
+    "external_macro_f1": 0.3795876510743841,
+    "source_acc": 0.9943286544732738,
+    "threshold": 0.6867563393501993,
+    "n_target": 62771,
+    "target_base_rate": 0.38815695145847606,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": -0.0036014532291138712,
-        "threshold": 0.00748888087935098,
+        "statistic": -0.005384588903444731,
+        "threshold": 0.004779462525442757,
         "alarm": false
       },
       "mean_conf_drop": {
-        "statistic": -0.024266615804574232,
-        "threshold": 0.004394961271513095,
+        "statistic": -0.010473656893605243,
+        "threshold": 0.0027884228850160193,
         "alarm": false
       },
       "ks_score": {
-        "statistic": 0.7327430280630771,
-        "threshold": 0.05180590083058719,
+        "statistic": 0.4708683051042135,
+        "threshold": 0.03633380834438038,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9824677912073316,
-        "threshold": 0.05841881552847828,
+        "statistic": 1.9865,
+        "threshold": 0.03410666666666662,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.7785293992632474,
-        "threshold": 0.030637726927245954,
+        "statistic": 0.7362592592592592,
+        "threshold": 0.021925898675027297,
         "alarm": true
       }
     },
@@ -403,37 +643,37 @@
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
     "model": "LightGBM",
-    "seed": 44,
-    "external_auc": 0.85787107460298,
-    "external_macro_f1": 0.38969338190649666,
-    "source_acc": 0.9991455425804614,
-    "threshold": 0.5311329270435569,
-    "n_target": 40207,
-    "target_base_rate": 0.4036113114631781,
+    "seed": 45,
+    "external_auc": 0.9244587241371347,
+    "external_macro_f1": 0.698578872897526,
+    "source_acc": 0.9987284543656401,
+    "threshold": 0.5007657987390023,
+    "n_target": 62497,
+    "target_base_rate": 0.38342640446741444,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": 0.14725408089468528,
-        "threshold": 0.0025623990724887857,
+        "statistic": 0.1800971600635135,
+        "threshold": 0.0032099463125176975,
         "alarm": true
       },
       "mean_conf_drop": {
-        "statistic": 0.024962786968159345,
-        "threshold": 0.00045296136972438505,
+        "statistic": 0.013501523749433364,
+        "threshold": 0.00029364412365136207,
         "alarm": true
       },
       "ks_score": {
-        "statistic": 0.4767872401025349,
-        "threshold": 0.05345688530654362,
+        "statistic": 0.4081501478615195,
+        "threshold": 0.03806725063577282,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9850885368126747,
-        "threshold": 0.07826829962973514,
+        "statistic": 1.98,
+        "threshold": 0.05983999999999991,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.7914647167104444,
-        "threshold": 0.028187257164648323,
+        "statistic": 0.7399074074074073,
+        "threshold": 0.027562583992094884,
         "alarm": true
       }
     },
@@ -443,37 +683,117 @@
     "source": "nf_bot_iot",
     "target": "nf_cse_cic_ids2018",
     "model": "LogisticRegression",
-    "seed": 44,
-    "external_auc": 0.7702398336528195,
-    "external_macro_f1": 0.3736761582777995,
-    "source_acc": 0.9962973511819995,
-    "threshold": 0.6529875777208305,
-    "n_target": 40207,
-    "target_base_rate": 0.4036113114631781,
+    "seed": 45,
+    "external_auc": 0.9139856819063071,
+    "external_macro_f1": 0.3813502188458856,
+    "source_acc": 0.9947725346142978,
+    "threshold": 0.6820561492285959,
+    "n_target": 62497,
+    "target_base_rate": 0.38342640446741444,
     "monitors": {
       "atc_acc_drop": {
-        "statistic": -0.0033544507430384174,
-        "threshold": 0.005329241842591719,
+        "statistic": -0.004923450793001716,
+        "threshold": 0.0037355185080530924,
         "alarm": false
       },
       "mean_conf_drop": {
-        "statistic": -0.026302168463877118,
-        "threshold": 0.0035136438700163514,
+        "statistic": -0.010164144492701976,
+        "threshold": 0.0029850680162685104,
         "alarm": false
       },
       "ks_score": {
-        "statistic": 0.6789640596526476,
-        "threshold": 0.05248277943266554,
+        "statistic": 0.4739448991149767,
+        "threshold": 0.03423565979090139,
         "alarm": true
       },
       "proxy_a_distance": {
-        "statistic": 1.9850885368126747,
-        "threshold": 0.07826829962973514,
+        "statistic": 1.98,
+        "threshold": 0.05983999999999991,
         "alarm": true
       },
       "max_wasserstein": {
-        "statistic": 0.7914647167104444,
-        "threshold": 0.028187257164648323,
+        "statistic": 0.7399074074074073,
+        "threshold": 0.027562583992094884,
+        "alarm": true
+      }
+    },
+    "n_alarm": 3
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 46,
+    "external_auc": 0.9203996974221813,
+    "external_macro_f1": 0.6639520816701112,
+    "source_acc": 0.9985847721483159,
+    "threshold": 0.4986637158543519,
+    "n_target": 62301,
+    "target_base_rate": 0.3873774096723969,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.17452095294798198,
+        "threshold": 0.003521086894990035,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.034035877934419645,
+        "threshold": 0.0004420250732590092,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.40758562128502684,
+        "threshold": 0.03267478063968299,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.987,
+        "threshold": 0.03354666666666662,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.743462962962963,
+        "threshold": 0.022918701980434247,
+        "alarm": true
+      }
+    },
+    "n_alarm": 5
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 46,
+    "external_auc": 0.9728911210970492,
+    "external_macro_f1": 0.3799380798725911,
+    "source_acc": 0.995188225304274,
+    "threshold": 0.7175037761049935,
+    "n_target": 62301,
+    "target_base_rate": 0.3873774096723969,
+    "monitors": {
+      "atc_acc_drop": {
+        "statistic": -0.004201832640221337,
+        "threshold": 0.0042060571752052306,
+        "alarm": false
+      },
+      "mean_conf_drop": {
+        "statistic": -0.0048353189879278835,
+        "threshold": 0.0029288825014845555,
+        "alarm": false
+      },
+      "ks_score": {
+        "statistic": 0.474981140403919,
+        "threshold": 0.03133880554769318,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.987,
+        "threshold": 0.03354666666666662,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.743462962962963,
+        "threshold": 0.022918701980434247,
         "alarm": true
       }
     },

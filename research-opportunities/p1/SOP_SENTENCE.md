@@ -21,18 +21,18 @@ The pilot (corrected after an own-code audit; see STATUS) landed on a latent-exp
 finding, which is stronger and more honest than a big-adversary claim. SOP sentence (use this):
 
 > In preliminary work I found that cross-testbed DoS detectors are already *high-confidence* wrong
-> on 33–100% of real target attack flows — exactly the operating point that label-free monitors
+> on 32–100% of real target attack flows — exactly the operating point that label-free monitors
 > (such as Average Thresholded Confidence) are meant to protect — and that those monitors are
 > model-dependently blind to it. A traffic-plausibly-constrained, score-only adversary widens this
 > hole where the detector still has headroom but adds nothing where it is already saturated, and
 > the obvious responder-side defence does not close the gap because the features it would watch do
 > not transfer across networks either.
 
-Caveats to carry with it: **pilot** (3 seeds, one NetFlow v2 family, feature-space, two pairs);
-the quiet-monitor failure is clearest for LogisticRegression on BoT-IoT→CSE-CIC-IDS2018, which is
-also where the adversary is redundant (detector already fully open); for LightGBM the confidence
-monitors do fire. Lead with the *latent* failure, not the adversary. Numbers:
-`results/p1/summary_p1.json`.
+Caveats to carry with it: 5-seed full run, but still **one NetFlow v2 family, feature-space, two
+pairs**; the quiet-monitor failure is clearest for LogisticRegression on BoT-IoT→CSE-CIC-IDS2018,
+which is also where the adversary is redundant (detector already fully open, latent 0.999); for
+LightGBM the confidence monitors do fire. Lead with the *latent* failure, not the adversary.
+Numbers: `results/p1/summary_p1.json`.
 
 Shorter variant (one line):
 

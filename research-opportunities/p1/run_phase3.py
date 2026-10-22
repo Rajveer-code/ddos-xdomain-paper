@@ -38,11 +38,11 @@ from p1common import build_fit, read_capped, score_flows  # noqa: E402
 PAIRS = [("nf_unsw_nb15", "nf_cse_cic_ids2018"),
          ("nf_bot_iot", "nf_cse_cic_ids2018")]
 MODELS = ["LightGBM", "LogisticRegression"]
-SEEDS = [42, 43, 44]
+SEEDS = [42, 43, 44, 45, 46]
 FAMILY = "volumetric"
 BUDGET = 200
 ATTACK_CAP = 2000
-TGT_BENIGN = 20_000
+TGT_BENIGN = 50_000
 OUT = RESULTS / "p1"
 MODEL_MONITORS = ("atc_acc_drop", "mean_conf_drop")   # the quiet-monitor story lives here
 
