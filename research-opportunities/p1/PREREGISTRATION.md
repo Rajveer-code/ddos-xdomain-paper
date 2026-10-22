@@ -242,5 +242,29 @@ exactly the credibility the portfolio is built on.
 
 ## 8. Amendments (append-only; each dated)
 
-*None yet. Any change to a frozen choice in Sections 3 or 5 is recorded here with a date and a
-reason, and the git history shows it followed this commit.*
+**2026-10-22 — pilot execution of Phases 1–5.** The author directed execution ahead of the
+Section-10 calendar. Phases 1–5 were run at **pilot scale**: 3 seeds (42–44) rather than 5, and
+caps of 50k/class (source), 2,000 (target attack/family), 20k (target benign). The frozen 5-seed
+full specification is unchanged and remains the Dec–Feb extension. This narrows CIs' seed
+component only; per-flow bootstrap CIs are unaffected.
+
+**2026-10-22 — white-box ablation realised as a strong upper bound.** The primary tree-ensemble
+and LogisticRegression detectors trained here are scored as deployed services; LightGBM is
+non-differentiable, so the pre-registered white-box (gradient) ablation is realised as a
+high-budget coordinate-descent search (`evade.py` mode="strong"), an **upper bound** on a
+score-only adversary. It is labelled as such and never presented as a gradient attack. (Pilot
+result: it adds ≤0.01 HCMR over the score-only search, so the distinction does not affect the
+finding.)
+
+**2026-10-22 — memory-bounded data loading.** On the author's 16 GB machine `src.pipeline.
+get_domain` OOMs reading the 17–30M-row parquets, so P-1 loads via `p1common.read_capped`
+(pyarrow `iter_batches`, columns-only, two-pass Bernoulli per class). The fit/scale/threshold/
+metric logic is unchanged (src primitives). This is an engineering deviation, not a change to a
+frozen scientific choice.
+
+**2026-10-22 — Gate 3 interpretation.** The pre-registered Gate 3 asks for non-trivial HCMR **and**
+model-based monitors quiet during successful attacks, on ≥1 pair. Pilot result: HCMR is non-trivial
+on both pairs; the model-based monitors are quiet specifically for BoT-IoT→CSE-CIC-IDS2018 with
+LogisticRegression (alarm 0.0) and loud for LightGBM. The quiet-monitor world therefore exists and
+Phase 4 was run; for the loud configs the paper reports F-monitor-already-works. No frozen choice
+changed.

@@ -1,0 +1,5 @@
+[nf_unsw_nb15] n_attack=3803  low-controllability indirect features (1/13): ['DST_TO_SRC_SECOND_BYTES']
+[nf_bot_iot] n_attack=53005  low-controllability indirect features (3/13): ['RETRANSMITTED_OUT_BYTES', 'DST_TO_SRC_SECOND_BYTES', 'RETRANSMITTED_OUT_PKTS']
+
+Gate 1 (low-controllability features exist): PASS
+  per source n_low: {'nf_unsw_nb15': 1, 'nf_bot_iot': 3}

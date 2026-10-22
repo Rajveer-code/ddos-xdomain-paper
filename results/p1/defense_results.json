@@ -1,0 +1,314 @@
+[
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 42,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.902336728579988,
+    "hcmr_before_ci": [
+      0.8873576992210904,
+      0.9167165967645297
+    ],
+    "hcmr_after": 0.8262432594367884,
+    "hcmr_after_ci": [
+      0.8076692630317556,
+      0.8436339125224684
+    ],
+    "hcmr_drop": 0.07609346914319959,
+    "defence_catch_rate_of_misses": 0.08432934926958831,
+    "added_benign_review_cost": 0.002059233238447096,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 42,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9005392450569203,
+    "hcmr_before_ci": [
+      0.8855602156980228,
+      0.9149191132414619
+    ],
+    "hcmr_after": 0.8244457759137208,
+    "hcmr_after_ci": [
+      0.8058717795086878,
+      0.8418214499700419
+    ],
+    "hcmr_drop": 0.07609346914319948,
+    "defence_catch_rate_of_misses": 0.08449767132401863,
+    "added_benign_review_cost": 0.002059233238447096,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 43,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.906816760475297,
+    "hcmr_before_ci": [
+      0.8918073796122576,
+      0.9212007504690432
+    ],
+    "hcmr_after": 0.8323952470293934,
+    "hcmr_after_ci": [
+      0.8130081300813008,
+      0.8505315822388994
+    ],
+    "hcmr_drop": 0.07442151344590364,
+    "defence_catch_rate_of_misses": 0.08206896551724138,
+    "added_benign_review_cost": 0.0013435935018932454,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 43,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.908692933083177,
+    "hcmr_before_ci": [
+      0.8936835522201376,
+      0.9230769230769231
+    ],
+    "hcmr_after": 0.8342714196372732,
+    "hcmr_after_ci": [
+      0.8148843026891808,
+      0.8524233896185115
+    ],
+    "hcmr_drop": 0.07442151344590375,
+    "defence_catch_rate_of_misses": 0.08189951823812801,
+    "added_benign_review_cost": 0.0013435935018932454,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 44,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9026171637248935,
+    "hcmr_before_ci": [
+      0.888618381010347,
+      0.91661594643944
+    ],
+    "hcmr_after": 0.8289713937918441,
+    "hcmr_after_ci": [
+      0.8101034692635423,
+      0.8466220328667072
+    ],
+    "hcmr_drop": 0.07364576993304939,
+    "defence_catch_rate_of_misses": 0.0815913688469319,
+    "added_benign_review_cost": 0.0009681127851394688,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 44,
+    "low_controllability_features": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "hcmr_before": 0.9026171637248935,
+    "hcmr_before_ci": [
+      0.888618381010347,
+      0.91661594643944
+    ],
+    "hcmr_after": 0.8283627510651248,
+    "hcmr_after_ci": [
+      0.8094948265368229,
+      0.8460133901399878
+    ],
+    "hcmr_drop": 0.07425441265976873,
+    "defence_catch_rate_of_misses": 0.08226567768037761,
+    "added_benign_review_cost": 0.0009681127851394688,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 42,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.9011384062312762,
+    "hcmr_before_ci": [
+      0.8861593768723787,
+      0.9155182744158179
+    ],
+    "hcmr_after": 0.9011384062312762,
+    "hcmr_after_ci": [
+      0.8861593768723787,
+      0.9155182744158179
+    ],
+    "hcmr_drop": 0.0,
+    "defence_catch_rate_of_misses": 0.0,
+    "added_benign_review_cost": 0.00018169705045121434,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 42,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.9017375674056322,
+    "hcmr_before_ci": [
+      0.8873576992210904,
+      0.9161174355901738
+    ],
+    "hcmr_after": 0.9017375674056322,
+    "hcmr_after_ci": [
+      0.8873576992210904,
+      0.9161174355901738
+    ],
+    "hcmr_drop": 0.0,
+    "defence_catch_rate_of_misses": 0.0,
+    "added_benign_review_cost": 0.00018169705045121434,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 43,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.8993120700437773,
+    "hcmr_before_ci": [
+      0.884302689180738,
+      0.9143214509068167
+    ],
+    "hcmr_after": 0.8980612883051907,
+    "hcmr_after_ci": [
+      0.8830362726704191,
+      0.9130706691682301
+    ],
+    "hcmr_drop": 0.001250781738586615,
+    "defence_catch_rate_of_misses": 0.0013908205841446453,
+    "added_benign_review_cost": 0.00030536215952119215,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 43,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.900562851782364,
+    "hcmr_before_ci": [
+      0.8855534709193246,
+      0.9155722326454033
+    ],
+    "hcmr_after": 0.8993120700437773,
+    "hcmr_after_ci": [
+      0.8842870544090057,
+      0.9143214509068167
+    ],
+    "hcmr_drop": 0.001250781738586615,
+    "defence_catch_rate_of_misses": 0.001388888888888889,
+    "added_benign_review_cost": 0.00030536215952119215,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 44,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.9013998782714546,
+    "hcmr_before_ci": [
+      0.8867924528301887,
+      0.9160073037127207
+    ],
+    "hcmr_after": 0.8849665246500305,
+    "hcmr_after_ci": [
+      0.8697504564820451,
+      0.9007912355447353
+    ],
+    "hcmr_drop": 0.016433353621424174,
+    "defence_catch_rate_of_misses": 0.01823092505064146,
+    "added_benign_review_cost": 0.009197071458824953,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 44,
+    "low_controllability_features": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ],
+    "hcmr_before": 0.9020085209981741,
+    "hcmr_before_ci": [
+      0.8880097382836275,
+      0.9160073037127207
+    ],
+    "hcmr_after": 0.8855751673767498,
+    "hcmr_after_ci": [
+      0.8703590992087644,
+      0.9013998782714546
+    ],
+    "hcmr_drop": 0.016433353621424285,
+    "defence_catch_rate_of_misses": 0.018218623481781375,
+    "added_benign_review_cost": 0.009197071458824953,
+    "gate4_security": false,
+    "gate4_cost_ok": true,
+    "gate4_pass": false
+  }
+]

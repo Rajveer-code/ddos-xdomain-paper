@@ -1,0 +1,20 @@
+[nf_unsw->nf_cse_ Light s42] HCMR(score)=0.902 CI[0.887,0.917] strong=0.907 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['atc_acc_drop', 'mean_conf_drop'] (65s)
+[nf_unsw->nf_cse_ Logis s42] HCMR(score)=0.901 CI[0.886,0.915] strong=0.910 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['atc_acc_drop', 'mean_conf_drop'] (92s)
+[nf_unsw->nf_cse_ Light s43] HCMR(score)=0.907 CI[0.892,0.921] strong=0.909 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['atc_acc_drop', 'mean_conf_drop'] (146s)
+[nf_unsw->nf_cse_ Logis s43] HCMR(score)=0.909 CI[0.894,0.923] strong=0.912 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['atc_acc_drop', 'mean_conf_drop'] (173s)
+[nf_unsw->nf_cse_ Light s44] HCMR(score)=0.903 CI[0.889,0.917] strong=0.915 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['atc_acc_drop', 'mean_conf_drop'] (229s)
+[nf_unsw->nf_cse_ Logis s44] HCMR(score)=0.903 CI[0.889,0.917] strong=0.905 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['atc_acc_drop', 'mean_conf_drop'] (254s)
+[nf_bot_->nf_cse_ Light s42] HCMR(score)=0.901 CI[0.886,0.916] strong=0.902 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['atc_acc_drop', 'mean_conf_drop'] (330s)
+[nf_bot_->nf_cse_ Logis s42] HCMR(score)=0.902 CI[0.887,0.916] strong=0.902 model-mon nat=[] adv=[] (358s)
+[nf_bot_->nf_cse_ Light s43] HCMR(score)=0.899 CI[0.884,0.914] strong=0.900 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['mean_conf_drop'] (433s)
+[nf_bot_->nf_cse_ Logis s43] HCMR(score)=0.901 CI[0.886,0.916] strong=0.901 model-mon nat=[] adv=[] (460s)
+[nf_bot_->nf_cse_ Light s44] HCMR(score)=0.901 CI[0.887,0.916] strong=0.902 model-mon nat=['atc_acc_drop', 'mean_conf_drop'] adv=['atc_acc_drop', 'mean_conf_drop'] (535s)
+[nf_bot_->nf_cse_ Logis s44] HCMR(score)=0.902 CI[0.888,0.916] strong=0.902 model-mon nat=[] adv=[] (562s)
+
+=== Gate 3 (which world) ===
+  nf_unsw_nb15->nf_cse_cic_ids2018: HCMR mean=0.904 nontrivial=True model-mon quiet during attack=False (alarm rate 1.00)
+  nf_bot_iot->nf_cse_cic_ids2018: HCMR mean=0.901 nontrivial=True model-mon quiet during attack=False (alarm rate 0.50)
+
+Proceed to defense (nontrivial HCMR + quiet model monitors on >=1 pair): False
+
+wrote attack_results.json  (12 configs, 562s)

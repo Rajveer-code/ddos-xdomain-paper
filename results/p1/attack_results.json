@@ -1,0 +1,1406 @@
+[
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 42,
+    "n_attack": 1669,
+    "threshold": 0.6203514275981485,
+    "tau_accept": 0.95203819095694,
+    "natural_pred_benign_rate": 0.9796285200718994,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.23417402606578808,
+        "threshold": 0.016489917849141184,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.07887348521495163,
+        "threshold": 0.0026690774126226957,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.6855598853387953,
+        "threshold": 0.06061239731142644,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9904162923030848,
+        "threshold": 0.05314413741598215,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.4527848864547894,
+        "threshold": 0.044425635493596655,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.902336728579988,
+      "hcmr_ci": [
+        0.8873576992210904,
+        0.9167165967645297
+      ],
+      "plain_evasion_rate": 0.9904134212103056,
+      "high_conf_rate": 0.9382863990413421,
+      "feasible_rate": 0.908328340323547,
+      "functional_rate": 0.9904134212103056,
+      "mean_conf_of_misses": 0.9994166915353061,
+      "mean_score_drop": 0.052429268859293755,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.21376698536171768,
+          "threshold": 0.016489917849141184,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.07467627304797264,
+          "threshold": 0.0026690774126226957,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.6705017290377283,
+          "threshold": 0.06061239731142644,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9922132374962565,
+          "threshold": 0.05314413741598215,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.4527848864547894,
+          "threshold": 0.044425635493596655,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9071300179748353,
+      "hcmr_ci": [
+        0.8927351707609347,
+        0.9215098861593769
+      ],
+      "plain_evasion_rate": 0.994008388256441,
+      "high_conf_rate": 0.9418813660874775,
+      "feasible_rate": 0.9125224685440384,
+      "functional_rate": 0.9934092270820851,
+      "mean_conf_of_misses": 0.9995947581084087,
+      "mean_score_drop": 0.05691882405154854,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.21327193585676718,
+          "threshold": 0.016489917849141184,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.07449907869518835,
+          "threshold": 0.0026690774126226957,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.6657945070085799,
+          "threshold": 0.06061239731142644,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9928122192273137,
+          "threshold": 0.05314413741598215,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.4527848864547894,
+          "threshold": 0.044425635493596655,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 42,
+    "n_attack": 1669,
+    "threshold": 0.7334945803349144,
+    "tau_accept": 0.7122119148432999,
+    "natural_pred_benign_rate": 0.9616536848412223,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.3005744973302409,
+        "threshold": 0.013442867811799819,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.10104878826785357,
+        "threshold": 0.003821137091825799,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.2456070364317985,
+        "threshold": 0.06670649738610902,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9904162923030848,
+        "threshold": 0.05314413741598215,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.4527848864547894,
+        "threshold": 0.044425635493596655,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.9005392450569203,
+      "hcmr_ci": [
+        0.8855602156980228,
+        0.9149191132414619
+      ],
+      "plain_evasion_rate": 0.9988016776512882,
+      "high_conf_rate": 0.975434391851408,
+      "feasible_rate": 0.908328340323547,
+      "functional_rate": 0.9892150988615938,
+      "mean_conf_of_misses": 0.9996047466861594,
+      "mean_score_drop": 0.07082315411151448,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.29650409028953684,
+          "threshold": 0.013442867811799819,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.0967437042141499,
+          "threshold": 0.003821137091825799,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.3197195746460382,
+          "threshold": 0.06670649738610902,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.991015274034142,
+          "threshold": 0.05314413741598215,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.4760350455010649,
+          "threshold": 0.044425635493596655,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9095266626722588,
+      "hcmr_ci": [
+        0.8945476333133613,
+        0.9227231875374474
+      ],
+      "plain_evasion_rate": 0.9994008388256441,
+      "high_conf_rate": 0.9838226482923906,
+      "feasible_rate": 0.9137207908927502,
+      "functional_rate": 0.9946075494307969,
+      "mean_conf_of_misses": 0.9969878919552321,
+      "mean_score_drop": 0.07227641063943126,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.29650409028953684,
+          "threshold": 0.013442867811799819,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.09664025394052234,
+          "threshold": 0.003821137091825799,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.3197195746460382,
+          "threshold": 0.06670649738610902,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9904162923030848,
+          "threshold": 0.05314413741598215,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.47626652698254635,
+          "threshold": 0.044425635493596655,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 43,
+    "n_attack": 1599,
+    "threshold": 0.04622127997219262,
+    "tau_accept": 0.9780350004016137,
+    "natural_pred_benign_rate": 0.9186991869918699,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.1768282344777008,
+        "threshold": 0.009365396042136376,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.0320331322292553,
+        "threshold": 0.0019501398745576746,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.6823904147685095,
+        "threshold": 0.06182761207543265,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9946002699865006,
+        "threshold": 0.0912185976752906,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.46999940285242114,
+        "threshold": 0.04263057770850259,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.906816760475297,
+      "hcmr_ci": [
+        0.8918073796122576,
+        0.9212007504690432
+      ],
+      "plain_evasion_rate": 0.9749843652282677,
+      "high_conf_rate": 0.9368355222013759,
+      "feasible_rate": 0.9168230143839899,
+      "functional_rate": 0.99812382739212,
+      "mean_conf_of_misses": 0.9995954919878408,
+      "mean_score_drop": 0.01842727326159704,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.17632748335101078,
+          "threshold": 0.009365396042136376,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.030973701339314097,
+          "threshold": 0.0019501398745576746,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.668275316361619,
+          "threshold": 0.06182761207543265,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9934003299835008,
+          "threshold": 0.0912185976752906,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.46999940285242114,
+          "threshold": 0.04263057770850259,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9093183239524703,
+      "hcmr_ci": [
+        0.8943089430894309,
+        0.9237023139462164
+      ],
+      "plain_evasion_rate": 0.9774859287054409,
+      "high_conf_rate": 0.9368355222013759,
+      "feasible_rate": 0.9180737961225766,
+      "functional_rate": 0.9993746091307066,
+      "mean_conf_of_misses": 0.9997246055694259,
+      "mean_score_drop": 0.02437586478557478,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.17632748335101078,
+          "threshold": 0.009365396042136376,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.03091020270531253,
+          "threshold": 0.0019501398745576746,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.664666103016542,
+          "threshold": 0.06182761207543265,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9934003299835008,
+          "threshold": 0.0912185976752906,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.46999940285242114,
+          "threshold": 0.04263057770850259,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 43,
+    "n_attack": 1599,
+    "threshold": 0.7387697246936041,
+    "tau_accept": 0.7583914317682734,
+    "natural_pred_benign_rate": 0.99812382739212,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.298469889561251,
+        "threshold": 0.01487603217513847,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.08046359916219803,
+        "threshold": 0.004382236478579902,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.29006445551341636,
+        "threshold": 0.057736671799134186,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9946002699865006,
+        "threshold": 0.0912185976752906,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.46999940285242114,
+        "threshold": 0.04263057770850259,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.908692933083177,
+      "hcmr_ci": [
+        0.8936835522201376,
+        0.9230769230769231
+      ],
+      "plain_evasion_rate": 0.99812382739212,
+      "high_conf_rate": 0.9849906191369606,
+      "feasible_rate": 0.9130706691682301,
+      "functional_rate": 0.9943714821763602,
+      "mean_conf_of_misses": 0.9996677933923815,
+      "mean_score_drop": 0.024164616843272424,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.29607741195595416,
+          "threshold": 0.01487603217513847,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.07836046922404805,
+          "threshold": 0.004382236478579902,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.3157017115474487,
+          "threshold": 0.057736671799134186,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9946002699865006,
+          "threshold": 0.0912185976752906,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.4907960949325779,
+          "threshold": 0.04263057770850259,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9118198874296435,
+      "hcmr_ci": [
+        0.8968105065666041,
+        0.9262038774233896
+      ],
+      "plain_evasion_rate": 0.99812382739212,
+      "high_conf_rate": 0.9881175734834271,
+      "feasible_rate": 0.9136960600375235,
+      "functional_rate": 0.9949968730456535,
+      "mean_conf_of_misses": 0.9989021381462936,
+      "mean_score_drop": 0.024722502310383677,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.29607741195595416,
+          "threshold": 0.01487603217513847,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.07831107260674175,
+          "threshold": 0.004382236478579902,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.3157017115474487,
+          "threshold": 0.057736671799134186,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9952002399880007,
+          "threshold": 0.0912185976752906,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.4908331319696149,
+          "threshold": 0.04263057770850259,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 44,
+    "n_attack": 1643,
+    "threshold": 0.4146587221772753,
+    "tau_accept": 0.9508192166349578,
+    "natural_pred_benign_rate": 0.9726110772976263,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.29881406651085685,
+        "threshold": 0.013131618759455387,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.10480395859927782,
+        "threshold": 0.0028283869983214546,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.6795208640533139,
+        "threshold": 0.0659304084720121,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9915713425647201,
+        "threshold": 0.08753403933434187,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.46829164565473186,
+        "threshold": 0.03886927774976188,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.9026171637248935,
+      "hcmr_ci": [
+        0.888618381010347,
+        0.91661594643944
+      ],
+      "plain_evasion_rate": 0.9835666463785758,
+      "high_conf_rate": 0.9488740109555691,
+      "feasible_rate": 0.9123554473524041,
+      "functional_rate": 0.9987827145465612,
+      "mean_conf_of_misses": 0.9994051541882955,
+      "mean_score_drop": 0.0467346520290017,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.2848349801046929,
+          "threshold": 0.013131618759455387,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.10151057459152268,
+          "threshold": 0.0028283869983214546,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.6694799577365227,
+          "threshold": 0.0659304084720121,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.992173389524383,
+          "threshold": 0.08753403933434187,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.46829164565473186,
+          "threshold": 0.03886927774976188,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9147900182592819,
+      "hcmr_ci": [
+        0.9013998782714546,
+        0.928180158247109
+      ],
+      "plain_evasion_rate": 0.9872185027388922,
+      "high_conf_rate": 0.956177723676202,
+      "feasible_rate": 0.91661594643944,
+      "functional_rate": 0.9993913572732805,
+      "mean_conf_of_misses": 0.9995146626883534,
+      "mean_score_drop": 0.05036451093077718,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.2843396581454194,
+          "threshold": 0.013131618759455387,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.10138686887518966,
+          "threshold": 0.0028283869983214546,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.6669975612741322,
+          "threshold": 0.0659304084720121,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.990969295605057,
+          "threshold": 0.08753403933434187,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.474931837283577,
+          "threshold": 0.03886927774976188,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_unsw_nb15",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 44,
+    "n_attack": 1643,
+    "threshold": 0.8366082586452729,
+    "tau_accept": 0.7735007484849827,
+    "natural_pred_benign_rate": 0.9975654290931223,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.3102818231245166,
+        "threshold": 0.013888048411497659,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.08150710317066012,
+        "threshold": 0.0037761611113086334,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.2984385160490476,
+        "threshold": 0.058245083207261725,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9915713425647201,
+        "threshold": 0.08753403933434187,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.46829164565473186,
+        "threshold": 0.03886927774976188,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.9026171637248935,
+      "hcmr_ci": [
+        0.888618381010347,
+        0.91661594643944
+      ],
+      "plain_evasion_rate": 0.9981740718198417,
+      "high_conf_rate": 0.9762629336579428,
+      "feasible_rate": 0.9062690200852099,
+      "functional_rate": 0.9890444309190505,
+      "mean_conf_of_misses": 0.9998405072291902,
+      "mean_score_drop": 0.023232964844209055,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.30797032064790675,
+          "threshold": 0.013888048411497659,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.07944033186365673,
+          "threshold": 0.0037761611113086334,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.3228739414356094,
+          "threshold": 0.058245083207261725,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.990969295605057,
+          "threshold": 0.08753403933434187,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.48685776320950297,
+          "threshold": 0.03886927774976188,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9050517346317711,
+      "hcmr_ci": [
+        0.8910529519172246,
+        0.9190505173463177
+      ],
+      "plain_evasion_rate": 0.9987827145465612,
+      "high_conf_rate": 0.9780888618381011,
+      "feasible_rate": 0.9123554473524041,
+      "functional_rate": 0.9951308581862447,
+      "mean_conf_of_misses": 0.9992368504335931,
+      "mean_score_drop": 0.024240197777418322,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.30797032064790675,
+          "threshold": 0.013888048411497659,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.0793607466931201,
+          "threshold": 0.0037761611113086334,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.3228739414356094,
+          "threshold": 0.058245083207261725,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9927754364840458,
+          "threshold": 0.08753403933434187,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.4871077632095029,
+          "threshold": 0.03886927774976188,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 42,
+    "n_attack": 1669,
+    "threshold": 0.5013819403333445,
+    "tau_accept": 0.9998026977290617,
+    "natural_pred_benign_rate": 0.9886159376872379,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.04920838611440448,
+        "threshold": 0.0044912652594618335,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.0035608573379377617,
+        "threshold": 0.0002279811898471462,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4732230739507217,
+        "threshold": 0.0587719545862942,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9818642485664755,
+        "threshold": 0.08310945984567018,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7208939626093277,
+        "threshold": 0.032829866714189214,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.9011384062312762,
+      "hcmr_ci": [
+        0.8861593768723787,
+        0.9155182744158179
+      ],
+      "plain_evasion_rate": 0.9982025164769323,
+      "high_conf_rate": 0.9161174355901738,
+      "feasible_rate": 0.9017375674056322,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999977689509415,
+      "mean_score_drop": 0.03678115768565359,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.0068541506908621486,
+          "threshold": 0.0044912652594618335,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.0005939941070089994,
+          "threshold": 0.0002279811898471462,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.4732230739507217,
+          "threshold": 0.0587719545862942,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.983464461928257,
+          "threshold": 0.08310945984567018,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7581711937125941,
+          "threshold": 0.032829866714189214,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9017375674056322,
+      "hcmr_ci": [
+        0.8873576992210904,
+        0.9161174355901738
+      ],
+      "plain_evasion_rate": 0.9982025164769323,
+      "high_conf_rate": 0.9167165967645297,
+      "feasible_rate": 0.9017375674056322,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999988579853722,
+      "mean_score_drop": 0.0367822719645153,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.0068541506908621486,
+          "threshold": 0.0044912652594618335,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.0005938918115512282,
+          "threshold": 0.0002279811898471462,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.4732230739507217,
+          "threshold": 0.0587719545862942,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9839978663821842,
+          "threshold": 0.08310945984567018,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7623067551548832,
+          "threshold": 0.032829866714189214,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 42,
+    "n_attack": 1669,
+    "threshold": 0.5813270273346904,
+    "tau_accept": 0.6482740798641297,
+    "natural_pred_benign_rate": 1.0,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": -0.0036818786194138253,
+        "threshold": 0.005998775160249825,
+        "alarm": false
+      },
+      "mean_conf_drop": {
+        "statistic": -0.03174416196447105,
+        "threshold": 0.005095889289300439,
+        "alarm": false
+      },
+      "ks_score": {
+        "statistic": 0.6639520296699575,
+        "threshold": 0.055150972800784126,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9818642485664755,
+        "threshold": 0.08310945984567018,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7208939626093277,
+        "threshold": 0.032829866714189214,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.9017375674056322,
+      "hcmr_ci": [
+        0.8873576992210904,
+        0.9161174355901738
+      ],
+      "plain_evasion_rate": 1.0,
+      "high_conf_rate": 1.0,
+      "feasible_rate": 0.9017375674056322,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999999307593682,
+      "mean_score_drop": 0.00649469886387806,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": -0.0036818786194138253,
+          "threshold": 0.005998775160249825,
+          "alarm": false
+        },
+        "mean_conf_drop": {
+          "statistic": -0.03234040247073122,
+          "threshold": 0.005095889289300439,
+          "alarm": false
+        },
+        "ks_score": {
+          "statistic": 0.6925717736106277,
+          "threshold": 0.055150972800784126,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9813308441125483,
+          "threshold": 0.08310945984567018,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.8041213960984838,
+          "threshold": 0.032829866714189214,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9017375674056322,
+      "hcmr_ci": [
+        0.8873576992210904,
+        0.9161174355901738
+      ],
+      "plain_evasion_rate": 1.0,
+      "high_conf_rate": 1.0,
+      "feasible_rate": 0.9017375674056322,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999999310570776,
+      "mean_score_drop": 0.006494699132333821,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": -0.0036818786194138253,
+          "threshold": 0.005998775160249825,
+          "alarm": false
+        },
+        "mean_conf_drop": {
+          "statistic": -0.03234040249537662,
+          "threshold": 0.005095889289300439,
+          "alarm": false
+        },
+        "ks_score": {
+          "statistic": 0.6925717736106277,
+          "threshold": 0.055150972800784126,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9818642485664755,
+          "threshold": 0.08310945984567018,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.8041213960984838,
+          "threshold": 0.032829866714189214,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 43,
+    "n_attack": 1599,
+    "threshold": 0.4979044748081963,
+    "tau_accept": 0.9999706755957664,
+    "natural_pred_benign_rate": 0.9993746091307066,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.025249769746083506,
+        "threshold": 0.0028327006422703693,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.0022318419245083154,
+        "threshold": 9.647220267821498e-05,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.47775573816945305,
+        "threshold": 0.05381761769863753,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.982999070261655,
+        "threshold": 0.05841881552847828,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7168508738177513,
+        "threshold": 0.030637726927245954,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.8993120700437773,
+      "hcmr_ci": [
+        0.884302689180738,
+        0.9143214509068167
+      ],
+      "plain_evasion_rate": 1.0,
+      "high_conf_rate": 0.9174484052532833,
+      "feasible_rate": 0.900562851782364,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999992610459906,
+      "mean_score_drop": 0.02178197254820584,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.002771608059108588,
+          "threshold": 0.0028327006422703693,
+          "alarm": false
+        },
+        "mean_conf_drop": {
+          "statistic": 0.0003229010045728842,
+          "threshold": 9.647220267821498e-05,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.47775573816945305,
+          "threshold": 0.05381761769863753,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9840616283703014,
+          "threshold": 0.05841881552847828,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7611084973670239,
+          "threshold": 0.030637726927245954,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.8999374609130707,
+      "hcmr_ci": [
+        0.884302689180738,
+        0.9149468417761101
+      ],
+      "plain_evasion_rate": 1.0,
+      "high_conf_rate": 0.9180737961225766,
+      "feasible_rate": 0.900562851782364,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999995430251515,
+      "mean_score_drop": 0.021782313941080066,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.002771608059108588,
+          "threshold": 0.0028327006422703693,
+          "alarm": false
+        },
+        "mean_conf_drop": {
+          "statistic": 0.00032287063194702537,
+          "threshold": 9.647220267821498e-05,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.47775573816945305,
+          "threshold": 0.05381761769863753,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.986718023641918,
+          "threshold": 0.05841881552847828,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.79033712694924,
+          "threshold": 0.030637726927245954,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 43,
+    "n_attack": 1599,
+    "threshold": 0.6617046243741425,
+    "tau_accept": 0.6958967093925705,
+    "natural_pred_benign_rate": 1.0,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": -0.003415910680037215,
+        "threshold": 0.00748888087935098,
+        "alarm": false
+      },
+      "mean_conf_drop": {
+        "statistic": -0.02408551432270667,
+        "threshold": 0.004394961271513095,
+        "alarm": false
+      },
+      "ks_score": {
+        "statistic": 0.7364767279378499,
+        "threshold": 0.05180590083058719,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.982999070261655,
+        "threshold": 0.05841881552847828,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7168508738177513,
+        "threshold": 0.030637726927245954,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.900562851782364,
+      "hcmr_ci": [
+        0.8855534709193246,
+        0.9155722326454033
+      ],
+      "plain_evasion_rate": 1.0,
+      "high_conf_rate": 1.0,
+      "feasible_rate": 0.900562851782364,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.999999999274527,
+      "mean_score_drop": 0.0005912060753054948,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": -0.003415910680037215,
+          "threshold": 0.00748888087935098,
+          "alarm": false
+        },
+        "mean_conf_drop": {
+          "statistic": -0.02413811202561733,
+          "threshold": 0.004394961271513095,
+          "alarm": false
+        },
+        "ks_score": {
+          "statistic": 0.7457423974821209,
+          "threshold": 0.05180590083058719,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9845929074246247,
+          "threshold": 0.05841881552847828,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7953360722408277,
+          "threshold": 0.030637726927245954,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.900562851782364,
+      "hcmr_ci": [
+        0.8855534709193246,
+        0.9155722326454033
+      ],
+      "plain_evasion_rate": 1.0,
+      "high_conf_rate": 1.0,
+      "feasible_rate": 0.900562851782364,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999999992801769,
+      "mean_score_drop": 0.0005912060803935554,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": -0.003415910680037215,
+          "threshold": 0.00748888087935098,
+          "alarm": false
+        },
+        "mean_conf_drop": {
+          "statistic": -0.024138112026069858,
+          "threshold": 0.004394961271513095,
+          "alarm": false
+        },
+        "ks_score": {
+          "statistic": 0.7457423974821209,
+          "threshold": 0.05180590083058719,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9861867445875947,
+          "threshold": 0.05841881552847828,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7953364741079498,
+          "threshold": 0.030637726927245954,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LightGBM",
+    "seed": 44,
+    "n_attack": 1643,
+    "threshold": 0.5311329270435569,
+    "tau_accept": 0.9999556553985159,
+    "natural_pred_benign_rate": 0.9817407181984176,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": 0.045045377473141635,
+        "threshold": 0.0025623990724887857,
+        "alarm": true
+      },
+      "mean_conf_drop": {
+        "statistic": 0.007846308206534647,
+        "threshold": 0.00045296136972438505,
+        "alarm": true
+      },
+      "ks_score": {
+        "statistic": 0.4767872401025349,
+        "threshold": 0.05345688530654362,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9872187458394355,
+        "threshold": 0.07826829962973514,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7211182286135197,
+        "threshold": 0.028187257164648323,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.9013998782714546,
+      "hcmr_ci": [
+        0.8867924528301887,
+        0.9160073037127207
+      ],
+      "plain_evasion_rate": 0.9981740718198417,
+      "high_conf_rate": 0.9147900182592819,
+      "feasible_rate": 0.9020085209981741,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.999999426511366,
+      "mean_score_drop": 0.08590942599666378,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.004924298771985858,
+          "threshold": 0.0025623990724887857,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.0007663841475807898,
+          "threshold": 0.00045296136972438505,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.47719177106246946,
+          "threshold": 0.05345688530654362,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9866861935827453,
+          "threshold": 0.07826829962973514,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7598835916102976,
+          "threshold": 0.028187257164648323,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9020085209981741,
+      "hcmr_ci": [
+        0.8880097382836275,
+        0.9160073037127207
+      ],
+      "plain_evasion_rate": 0.9981740718198417,
+      "high_conf_rate": 0.9153986609860012,
+      "feasible_rate": 0.9020085209981741,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999995498498965,
+      "mean_score_drop": 0.08590970938742551,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": 0.004924298771985858,
+          "threshold": 0.0025623990724887857,
+          "alarm": true
+        },
+        "mean_conf_drop": {
+          "statistic": 0.0007663585223181002,
+          "threshold": 0.00045296136972438505,
+          "alarm": true
+        },
+        "ks_score": {
+          "statistic": 0.47719177106246946,
+          "threshold": 0.05345688530654362,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9872187458394355,
+          "threshold": 0.07826829962973514,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7803329730261042,
+          "threshold": 0.028187257164648323,
+          "alarm": true
+        }
+      }
+    }
+  },
+  {
+    "source": "nf_bot_iot",
+    "target": "nf_cse_cic_ids2018",
+    "model": "LogisticRegression",
+    "seed": 44,
+    "n_attack": 1643,
+    "threshold": 0.6529875777208305,
+    "tau_accept": 0.6770912018751947,
+    "natural_pred_benign_rate": 1.0,
+    "natural_monitors": {
+      "atc_acc_drop": {
+        "statistic": -0.003262362631979654,
+        "threshold": 0.005329241842591719,
+        "alarm": false
+      },
+      "mean_conf_drop": {
+        "statistic": -0.026947552925358997,
+        "threshold": 0.0035136438700163514,
+        "alarm": false
+      },
+      "ks_score": {
+        "statistic": 0.7206035062066902,
+        "threshold": 0.05248277943266554,
+        "alarm": true
+      },
+      "proxy_a_distance": {
+        "statistic": 1.9872187458394355,
+        "threshold": 0.07826829962973514,
+        "alarm": true
+      },
+      "max_wasserstein": {
+        "statistic": 0.7211182286135197,
+        "threshold": 0.028187257164648323,
+        "alarm": true
+      }
+    },
+    "score": {
+      "hcmr": 0.9020085209981741,
+      "hcmr_ci": [
+        0.8880097382836275,
+        0.9160073037127207
+      ],
+      "plain_evasion_rate": 1.0,
+      "high_conf_rate": 1.0,
+      "feasible_rate": 0.9020085209981741,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.999999995808506,
+      "mean_score_drop": 0.0020662765364899997,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": -0.0033173984052322636,
+          "threshold": 0.005329241842591719,
+          "alarm": false
+        },
+        "mean_conf_drop": {
+          "statistic": -0.027129692423729312,
+          "threshold": 0.0035136438700163514,
+          "alarm": false
+        },
+        "ks_score": {
+          "statistic": 0.7490983679408705,
+          "threshold": 0.05248277943266554,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9877512980961256,
+          "threshold": 0.07826829962973514,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7996023489702355,
+          "threshold": 0.028187257164648323,
+          "alarm": true
+        }
+      }
+    },
+    "strong": {
+      "hcmr": 0.9020085209981741,
+      "hcmr_ci": [
+        0.8880097382836275,
+        0.9160073037127207
+      ],
+      "plain_evasion_rate": 1.0,
+      "high_conf_rate": 1.0,
+      "feasible_rate": 0.9020085209981741,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 0.9999999958170178,
+      "mean_score_drop": 0.0020662765441678724,
+      "adversarial_monitors": {
+        "atc_acc_drop": {
+          "statistic": -0.0033173984052322636,
+          "threshold": 0.005329241842591719,
+          "alarm": false
+        },
+        "mean_conf_drop": {
+          "statistic": -0.027129692424423646,
+          "threshold": 0.0035136438700163514,
+          "alarm": false
+        },
+        "ks_score": {
+          "statistic": 0.7490983679408705,
+          "threshold": 0.05248277943266554,
+          "alarm": true
+        },
+        "proxy_a_distance": {
+          "statistic": 1.9861536413260552,
+          "threshold": 0.07826829962973514,
+          "alarm": true
+        },
+        "max_wasserstein": {
+          "statistic": 0.7996023489702355,
+          "threshold": 0.028187257164648323,
+          "alarm": true
+        }
+      }
+    }
+  }
+]

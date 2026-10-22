@@ -1,0 +1,87 @@
+"""
+Collect every P-1 headline number into one keyed file (results/p1/summary_p1.json), mirroring
+the repo's paper/claims.json discipline: the paper quotes these keys and check_numbers_p1.py
+verifies the manuscript against them. Nothing in the paper is typed by hand.
+"""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import numpy as np
+
+R = Path("results/p1")
+
+
+def load(name):
+    return json.loads((R / name).read_text())
+
+
+def main():
+    base = load("monitor_baseline.json")
+    atk = load("attack_results.json")
+    dfn = load("defense_results.json")
+    lift = load("lift.json")
+    g1 = load("gate1_verdict.json")
+    g3 = load("gate3_verdict.json")
+    g4 = load("gate4_verdict.json")
+
+    def mean(xs):
+        return float(np.mean(xs))
+
+    pairs = [("nf_unsw_nb15", "nf_cse_cic_ids2018"), ("nf_bot_iot", "nf_cse_cic_ids2018")]
+    models = ["LightGBM", "LogisticRegression"]
+    S = {"config": {"seeds": [42, 43, 44], "budget": 200, "attack_cap": 2000,
+                    "source_cap_per_class": 50000, "target_benign": 20000,
+                    "tau_accept_benign_review_budget": 0.01, "scale": "pilot"}}
+
+    # baseline monitor alarm rates
+    S["baseline"] = {
+        m: round(mean([r["monitors"][m]["alarm"] for r in base]), 3)
+        for m in base[0]["monitors"]}
+
+    per = {}
+    for src, tgt in pairs:
+        for mdl in models:
+            A = [r for r in atk if r["source"] == src and r["model"] == mdl]
+            D = [r for r in dfn if r["source"] == src and r["model"] == mdl]
+            L = [r for r in lift if r["source"] == src and r["model"] == mdl]
+            B = [r for r in base if r["source"] == src and r["model"] == mdl]
+            key = f"{src}__{mdl}"
+            per[key] = {
+                "baseline_external_auc": round(mean([r["external_auc"] for r in B]), 3),
+                "natural_pred_benign_rate": round(mean([r["natural_pred_benign_rate"] for r in A]), 3),
+                "natural_hcmr": round(mean([r["natural_hcmr"] for r in L]), 3),
+                "hcmr": round(mean([r["score"]["hcmr"] for r in A]), 3),
+                "hcmr_strong": round(mean([r["strong"]["hcmr"] for r in A]), 3),
+                "adversarial_lift": round(mean([r["adversarial_lift"] for r in L]), 3),
+                "plain_evasion_rate": round(mean([r["score"]["plain_evasion_rate"] for r in A]), 3),
+                "feasible_rate": round(mean([r["score"]["feasible_rate"] for r in A]), 3),
+                "functional_rate": round(mean([r["score"]["functional_rate"] for r in A]), 3),
+                "mean_conf_of_misses": round(mean([r["score"]["mean_conf_of_misses"] for r in A]), 3),
+                "mean_score_drop": round(mean([r["score"]["mean_score_drop"] for r in A]), 4),
+                "model_monitor_alarm_natural": round(mean([
+                    any(r["natural_monitors"][m]["alarm"] for m in ("atc_acc_drop", "mean_conf_drop"))
+                    for r in A]), 2),
+                "model_monitor_alarm_adversarial": round(mean([
+                    any(r["score"]["adversarial_monitors"][m]["alarm"]
+                        for m in ("atc_acc_drop", "mean_conf_drop")) for r in A]), 2),
+                "defense_hcmr_drop": round(mean([r["hcmr_drop"] for r in D]), 3),
+                "defense_benign_cost": round(mean([r["added_benign_review_cost"] for r in D]), 3),
+                "defense_catch_of_misses": round(mean([r["defence_catch_rate_of_misses"] for r in D]), 3),
+            }
+    S["per_pair_model"] = per
+    S["gate1"] = {"pass": g1["pass"], "n_low_per_source": g1["n_low_per_source"]}
+    S["gate3"] = g3
+    S["gate4"] = {"hcmr_drop_bar": g4["hcmr_drop_bar"], "fpr_ceiling": g4["fpr_ceiling"],
+                  "any_pass": any(v["n_gate4_pass"] > 0 for v in g4["by_source_model"].values())}
+    S["low_controllability_features"] = {
+        s: json.loads((R / "feature_controllability.json").read_text())[s]["low_controllability_features"]
+        for s in ("nf_unsw_nb15", "nf_bot_iot")}
+
+    (R / "summary_p1.json").write_text(json.dumps(S, indent=2))
+    print(json.dumps(S, indent=2))
+
+
+if __name__ == "__main__":
+    main()

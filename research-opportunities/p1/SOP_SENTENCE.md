@@ -15,18 +15,29 @@ regardless of how Phases 3–4 turn out (master-plan Section 8).
 Rules for using it: phrase as a **question under investigation**, never as a completed result.
 Pair it with P11 described as a *preprint with a preliminary result*, not a publication.
 
-## After Phase 3 — fill whichever world applies (do NOT write yet; Phase 3 is deferred)
+## After Phase 3 — FILLED from the pilot (2026-10-22). Honest, with caveats.
 
-- **Positive world:** "In preliminary work, an adversary limited to [stated capability] produced
-  high-confidence misses in **X%** of transferred attack flows while ATC continued to report normal
-  accuracy; monitoring the low-controllability features reduced this to **Y%** at a **Z%**
-  review-burden cost."
-- **Negative world:** "In preliminary work I found that under traffic-plausible constraints the
-  monitored detector resisted high-confidence evasion, which sharpens rather than weakens the open
-  question of what a realistic adversary can achieve."
+The pilot landed in a mixed world: the adversary is powerful, the monitors are *model-dependently*
+blind, and the obvious defence fails. SOP sentence (use this):
 
-X, Y, Z come only from `results/p1/attack_results.json` and `defense_results.json`. No number here
-until those files exist.
+> In preliminary work, I showed that cross-testbed DoS detectors already misclassify almost all
+> target attacks as benign but at low confidence, where a label-free confidence monitor would flag
+> them; a score-only adversary limited to traffic-plausible feature changes converts these into
+> **high-confidence** misses in ~90% of transferred attack flows (from a ~0.3–2.3% natural rate),
+> and for a well-transferring detector the confidence monitor stays silent throughout. The obvious
+> responder-side defence does not close the gap, because the features it would watch do not
+> transfer across networks either — which is itself the deeper problem my thesis targets.
+
+Caveats to carry with it: **pilot** (3 seeds, one dataset family, feature-space, two pairs); the
+quiet-monitor failure is clean for one of four (model, pair) cells (LogisticRegression on
+BoT-IoT→CSE-CIC-IDS2018); for LightGBM the confidence monitors do fire. Do not round "~90%" up or
+drop the "pilot/feature-space" qualifier. Numbers: `results/p1/summary_p1.json`.
+
+Shorter variant (one line):
+
+> For my thesis I am studying how a traffic-plausibly-constrained adversary turns the low-confidence
+> false negatives of a cross-network DoS detector into high-confidence ones that label-free monitors
+> wave through, and why the obvious responder-side defence fails to transfer.
 
 ## Faculty framing (verify before naming anyone in an SOP)
 

@@ -1,0 +1,9 @@
+{
+  "gate": "Gate 1",
+  "pass": true,
+  "n_low_per_source": {
+    "nf_unsw_nb15": 1,
+    "nf_bot_iot": 3
+  },
+  "r2_low_threshold": 0.5
+}

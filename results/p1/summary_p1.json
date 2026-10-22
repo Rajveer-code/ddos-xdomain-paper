@@ -1,0 +1,139 @@
+{
+  "config": {
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "budget": 200,
+    "attack_cap": 2000,
+    "source_cap_per_class": 50000,
+    "target_benign": 20000,
+    "tau_accept_benign_review_budget": 0.01,
+    "scale": "pilot"
+  },
+  "baseline": {
+    "atc_acc_drop": 0.75,
+    "mean_conf_drop": 0.75,
+    "ks_score": 1.0,
+    "proxy_a_distance": 1.0,
+    "max_wasserstein": 1.0
+  },
+  "per_pair_model": {
+    "nf_unsw_nb15__LightGBM": {
+      "baseline_external_auc": 0.248,
+      "natural_pred_benign_rate": 0.957,
+      "natural_hcmr": 0.02,
+      "hcmr": 0.904,
+      "hcmr_strong": 0.91,
+      "adversarial_lift": 0.884,
+      "plain_evasion_rate": 0.983,
+      "feasible_rate": 0.913,
+      "functional_rate": 0.996,
+      "mean_conf_of_misses": 0.999,
+      "mean_score_drop": 0.0392,
+      "model_monitor_alarm_natural": 1.0,
+      "model_monitor_alarm_adversarial": 1.0,
+      "defense_hcmr_drop": 0.075,
+      "defense_benign_cost": 0.001,
+      "defense_catch_of_misses": 0.083
+    },
+    "nf_unsw_nb15__LogisticRegression": {
+      "baseline_external_auc": 0.379,
+      "natural_pred_benign_rate": 0.986,
+      "natural_hcmr": 0.023,
+      "hcmr": 0.904,
+      "hcmr_strong": 0.909,
+      "adversarial_lift": 0.881,
+      "plain_evasion_rate": 0.998,
+      "feasible_rate": 0.909,
+      "functional_rate": 0.991,
+      "mean_conf_of_misses": 1.0,
+      "mean_score_drop": 0.0394,
+      "model_monitor_alarm_natural": 1.0,
+      "model_monitor_alarm_adversarial": 1.0,
+      "defense_hcmr_drop": 0.075,
+      "defense_benign_cost": 0.001,
+      "defense_catch_of_misses": 0.083
+    },
+    "nf_bot_iot__LightGBM": {
+      "baseline_external_auc": 0.888,
+      "natural_pred_benign_rate": 0.99,
+      "natural_hcmr": 0.003,
+      "hcmr": 0.901,
+      "hcmr_strong": 0.901,
+      "adversarial_lift": 0.897,
+      "plain_evasion_rate": 0.999,
+      "feasible_rate": 0.901,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 1.0,
+      "mean_score_drop": 0.0482,
+      "model_monitor_alarm_natural": 1.0,
+      "model_monitor_alarm_adversarial": 1.0,
+      "defense_hcmr_drop": 0.006,
+      "defense_benign_cost": 0.003,
+      "defense_catch_of_misses": 0.007
+    },
+    "nf_bot_iot__LogisticRegression": {
+      "baseline_external_auc": 0.757,
+      "natural_pred_benign_rate": 1.0,
+      "natural_hcmr": 0.006,
+      "hcmr": 0.901,
+      "hcmr_strong": 0.901,
+      "adversarial_lift": 0.895,
+      "plain_evasion_rate": 1.0,
+      "feasible_rate": 0.901,
+      "functional_rate": 1.0,
+      "mean_conf_of_misses": 1.0,
+      "mean_score_drop": 0.0031,
+      "model_monitor_alarm_natural": 0.0,
+      "model_monitor_alarm_adversarial": 0.0,
+      "defense_hcmr_drop": 0.006,
+      "defense_benign_cost": 0.003,
+      "defense_catch_of_misses": 0.007
+    }
+  },
+  "gate1": {
+    "pass": true,
+    "n_low_per_source": {
+      "nf_unsw_nb15": 1,
+      "nf_bot_iot": 3
+    }
+  },
+  "gate3": {
+    "world": {
+      "nf_unsw_nb15->nf_cse_cic_ids2018": {
+        "hcmr_mean": 0.9039366657741948,
+        "hcmr_ci_lo_min": 0.8855602156980228,
+        "hcmr_ci_lo_max": 0.8936835522201376,
+        "nontrivial_hcmr": true,
+        "adv_model_monitor_alarm_rate": 1.0,
+        "model_monitors_quiet": false
+      },
+      "nf_bot_iot->nf_cse_cic_ids2018": {
+        "hcmr_mean": 0.901026549122113,
+        "hcmr_ci_lo_min": 0.884302689180738,
+        "hcmr_ci_lo_max": 0.8880097382836275,
+        "nontrivial_hcmr": true,
+        "adv_model_monitor_alarm_rate": 0.5,
+        "model_monitors_quiet": false
+      }
+    },
+    "proceed_to_defense": false
+  },
+  "gate4": {
+    "hcmr_drop_bar": 0.1,
+    "fpr_ceiling": 0.02,
+    "any_pass": false
+  },
+  "low_controllability_features": {
+    "nf_unsw_nb15": [
+      "DST_TO_SRC_SECOND_BYTES"
+    ],
+    "nf_bot_iot": [
+      "RETRANSMITTED_OUT_BYTES",
+      "DST_TO_SRC_SECOND_BYTES",
+      "RETRANSMITTED_OUT_PKTS"
+    ]
+  }
+}

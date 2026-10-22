@@ -1,0 +1,45 @@
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+[nf_unsw->nf_cse_cic Light s42] AUC=0.235 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (26s)
+[nf_unsw->nf_cse_cic Logis s42] AUC=0.540 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (32s)
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+[nf_unsw->nf_cse_cic Light s43] AUC=0.253 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (48s)
+[nf_unsw->nf_cse_cic Logis s43] AUC=0.299 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (56s)
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+[nf_unsw->nf_cse_cic Light s44] AUC=0.257 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (77s)
+[nf_unsw->nf_cse_cic Logis s44] AUC=0.297 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (86s)
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+[nf_bot_->nf_cse_cic Light s42] AUC=0.854 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (132s)
+[nf_bot_->nf_cse_cic Logis s42] AUC=0.797 alarms=3/5 ['ks_score', 'proxy_a_distance', 'max_wasserstein'] (143s)
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+[nf_bot_->nf_cse_cic Light s43] AUC=0.951 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (190s)
+[nf_bot_->nf_cse_cic Logis s43] AUC=0.705 alarms=3/5 ['ks_score', 'proxy_a_distance', 'max_wasserstein'] (202s)
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+C:\Users\Asus\miniconda3\Lib\site-packages\pandas\core\internals\managers.py:1923: RuntimeWarning: overflow encountered in cast
+  result[rl.indexer] = arr
+[nf_bot_->nf_cse_cic Light s44] AUC=0.858 alarms=5/5 ['atc_acc_drop', 'mean_conf_drop', 'ks_score', 'proxy_a_distance', 'max_wasserstein'] (254s)
+[nf_bot_->nf_cse_cic Logis s44] AUC=0.770 alarms=3/5 ['ks_score', 'proxy_a_distance', 'max_wasserstein'] (265s)
+
+baseline alarm rate per monitor (fraction of configs):
+  atc_acc_drop       0.75
+  mean_conf_drop     0.75
+  ks_score           1.00
+  proxy_a_distance   1.00
+  max_wasserstein    1.00
+
+wrote monitor_baseline.json  (12 configs, 265s)

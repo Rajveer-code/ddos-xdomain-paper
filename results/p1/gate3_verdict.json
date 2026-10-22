@@ -1,0 +1,21 @@
+{
+  "world": {
+    "nf_unsw_nb15->nf_cse_cic_ids2018": {
+      "hcmr_mean": 0.9039366657741948,
+      "hcmr_ci_lo_min": 0.8855602156980228,
+      "hcmr_ci_lo_max": 0.8936835522201376,
+      "nontrivial_hcmr": true,
+      "adv_model_monitor_alarm_rate": 1.0,
+      "model_monitors_quiet": false
+    },
+    "nf_bot_iot->nf_cse_cic_ids2018": {
+      "hcmr_mean": 0.901026549122113,
+      "hcmr_ci_lo_min": 0.884302689180738,
+      "hcmr_ci_lo_max": 0.8880097382836275,
+      "nontrivial_hcmr": true,
+      "adv_model_monitor_alarm_rate": 0.5,
+      "model_monitors_quiet": false
+    }
+  },
+  "proceed_to_defense": false
+}

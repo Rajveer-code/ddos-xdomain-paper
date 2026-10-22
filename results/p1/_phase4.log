@@ -1,0 +1,20 @@
+[nf_unsw->nf_cse_ Light s42] HCMR 0.902->0.826 (drop 0.076) catch 0.08 benign-cost 0.002 gate4=no (28s)
+[nf_unsw->nf_cse_ Logis s42] HCMR 0.901->0.824 (drop 0.076) catch 0.08 benign-cost 0.002 gate4=no (34s)
+[nf_unsw->nf_cse_ Light s43] HCMR 0.907->0.832 (drop 0.074) catch 0.08 benign-cost 0.001 gate4=no (65s)
+[nf_unsw->nf_cse_ Logis s43] HCMR 0.909->0.834 (drop 0.074) catch 0.08 benign-cost 0.001 gate4=no (71s)
+[nf_unsw->nf_cse_ Light s44] HCMR 0.903->0.829 (drop 0.074) catch 0.08 benign-cost 0.001 gate4=no (101s)
+[nf_unsw->nf_cse_ Logis s44] HCMR 0.903->0.828 (drop 0.074) catch 0.08 benign-cost 0.001 gate4=no (107s)
+[nf_bot_->nf_cse_ Light s42] HCMR 0.901->0.901 (drop 0.000) catch 0.00 benign-cost 0.000 gate4=no (158s)
+[nf_bot_->nf_cse_ Logis s42] HCMR 0.902->0.902 (drop 0.000) catch 0.00 benign-cost 0.000 gate4=no (164s)
+[nf_bot_->nf_cse_ Light s43] HCMR 0.899->0.898 (drop 0.001) catch 0.00 benign-cost 0.000 gate4=no (215s)
+[nf_bot_->nf_cse_ Logis s43] HCMR 0.901->0.899 (drop 0.001) catch 0.00 benign-cost 0.000 gate4=no (221s)
+[nf_bot_->nf_cse_ Light s44] HCMR 0.901->0.885 (drop 0.016) catch 0.02 benign-cost 0.009 gate4=no (271s)
+[nf_bot_->nf_cse_ Logis s44] HCMR 0.902->0.886 (drop 0.016) catch 0.02 benign-cost 0.009 gate4=no (277s)
+
+=== Gate 4 ===
+  nf_unsw_nb1 LightGBM           drop=0.075 cost=0.001 gate4 0/3
+  nf_unsw_nb1 LogisticRegression drop=0.075 cost=0.001 gate4 0/3
+  nf_bot_iot  LightGBM           drop=0.006 cost=0.003 gate4 0/3
+  nf_bot_iot  LogisticRegression drop=0.006 cost=0.003 gate4 0/3
+
+wrote defense_results.json  (12 configs, 277s)

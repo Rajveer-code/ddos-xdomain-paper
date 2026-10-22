@@ -1,0 +1,30 @@
+{
+  "hcmr_drop_bar": 0.1,
+  "fpr_ceiling": 0.02,
+  "by_source_model": {
+    "nf_unsw_nb15|LightGBM": {
+      "mean_hcmr_drop": 0.07472025084071754,
+      "mean_benign_cost": 0.0014569798418266032,
+      "n_gate4_pass": 0,
+      "n": 3
+    },
+    "nf_unsw_nb15|LogisticRegression": {
+      "mean_hcmr_drop": 0.07492313174962399,
+      "mean_benign_cost": 0.0014569798418266032,
+      "n_gate4_pass": 0,
+      "n": 3
+    },
+    "nf_bot_iot|LightGBM": {
+      "mean_hcmr_drop": 0.005894711786670263,
+      "mean_benign_cost": 0.003228043556265787,
+      "n_gate4_pass": 0,
+      "n": 3
+    },
+    "nf_bot_iot|LogisticRegression": {
+      "mean_hcmr_drop": 0.0058947117866703,
+      "mean_benign_cost": 0.003228043556265787,
+      "n_gate4_pass": 0,
+      "n": 3
+    }
+  }
+}

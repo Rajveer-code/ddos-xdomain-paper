@@ -4,40 +4,69 @@ State lives here, not in chat. Any model should resume from this file alone.
 
 ## Governing docs
 - Spec: `research-opportunities/P1_MASTER_PLAN.md`
-- Pre-registration (frozen choices): `research-opportunities/p1/PREREGISTRATION.md`
+- Pre-registration (frozen choices + dated amendments): `research-opportunities/p1/PREREGISTRATION.md`
+- Paper draft: `research-opportunities/p1/PAPER_DRAFT.md`
+- Keyed numbers: `results/p1/summary_p1.json`; verifier `check_numbers_p1.py` (PASS, 19 keys).
 - SOP deliverables: `research-opportunities/p1/SOP_SENTENCE.md`
 
-## Phase log
+## Code (all under research-opportunities/p1/, reuses src/)
+`constraints.py` (feasible/project/bounds) · `p1common.py` (memory-bounded loader + leakage-safe
+fit) · `monitors.py` (battery, source-val null calibration) · `evade.py` (score + strong search)
+· `defend.py` (low-controllability novelty monitor) · runners `run_phase1/2/3/4.py`,
+`compute_lift.py`, `aggregate_p1.py`. Each module has a runnable self-check.
 
-### Phase 0 — pre-registration + literature gate — COMPLETE (2026-10-22)
-- All seven related works verified to exist (URLs in PREREGISTRATION §2). Row 2
-  (Gnanaratna/Kingston, SecureComm 2026) exists but its internal details are **UNVERIFIED** —
-  abstract not retrievable; re-read the full chapter before citing specifics.
-- **Gate 0 (novelty): PASS.** No paper does the joint object. Closest is Bikdeli (benign-shift
-  audit of label-free monitors); one-sentence delta recorded in PREREGISTRATION §2.
-- Frozen choices set with concrete numbers: τ_accept = 1% benign-review budget; query budget 200
-  (reported at {50,100,200}); 2,000 target attack flows/family cap; seeds 42–46; monitor battery +
-  thresholds on source-validation; Phase 3 "which world" gate; Phase 4 bar = HCMR −10 pp absolute
-  at ≤ +2 pp benign review.
-- Baseline AUCs pinned to `results/matrix_summary.json`: UNSW→IDS2018 LightGBM 0.0697 (inverted);
-  BoT-IoT→IDS2018 LightGBM 0.9656 (threshold-dominated).
-- SOP proposed-thesis sentence written (SOP_SENTENCE §"After Phase 0").
-- **Ruling (scope):** master-plan Section 10 and the kickoff's point 5 both make GRE outrank P-1
-  until 2026-11-20 and limit current work to Phase 0 (reading/writing). Phases 1–5 need the Kaggle
-  data downloaded and days of attack-search compute, dated 2026-11-21+. So Phase 0 was executed and
-  committed now; Phases 1–5 are **deferred, not skipped**. Cost if wrong: a few weeks' delay, which
-  the calendar already builds in.
+## Phase log — ALL PHASES COMPLETE (pilot scale), 2026-10-22
 
-## Resume here (Phase 1, on/after 2026-11-21)
-1. `research-opportunities/p1/constraints.py` — `feasible()` + `project()`; derive per-family
-   [p1,p99] box and dependency slacks from real source attack flows via `src/data.load`. Save
-   `results/p1/constraints.json`.
-2. Feature-controllability R² of each indirectly-influenced feature from the directly-controllable
-   ones, on real flows. Save `results/p1/feature_controllability.json`. **Gate 1:** some indirect
-   features must have low R² or the defense has nothing to stand on (→ narrow per F-no-defense-features).
-3. Then Phases 2→5 per master plan, honoring every gate. Reuse `src/` (fit_source, apply_to,
-   divergence/ATC, metrics) — do not reimplement.
+### Phase 0 — pre-registration + novelty gate — DONE (commit be3345e)
+Seven works verified; Gate 0 (novelty) PASS; frozen choices committed before code.
 
-## Data note
-`data/` is gitignored (Kaggle mirrors). Confirm the NetFlow v2 quartet is downloaded
-(`python scripts/download_data.py`) before Phase 1; Phase 0 needed no data.
+### Phase 1 — constraints + controllability — DONE
+Per-source [p1,p99] family box (`results/p1/constraints.json`). Controllability R² of each
+indirect feature from the directly-controllable ones (`feature_controllability.json`).
+**Gate 1 PASS but narrow:** only `DST_TO_SRC_SECOND_BYTES` (UNSW) and + `RETRANSMITTED_OUT_BYTES`,
+`RETRANSMITTED_OUT_PKTS` (BoT-IoT) are low-controllability; most responder features are
+predictable from the attacker's direct choices. Thin defensive material — recorded, not hidden.
+
+### Phase 2 — monitor baseline (no attack) — DONE (`monitor_baseline.json`)
+Under natural transfer the distribution monitors (KS, A-distance, Wasserstein) fire ~1.0; the
+model-based monitors (ATC, conf-drop) ~0.75. Natural shift is loud. 12 configs.
+
+### Phase 3 — adaptive high-confidence-miss search — DONE (`attack_results.json`, `lift.json`)
+HCMR 0.901–0.904 on both pairs (bootstrap CIs tight). **Natural HCMR 0.3–2.3%** → adversarial
+**lift +0.88 to +0.90**: natural misses are low-confidence; the constrained score-only adversary
+pushes them over the confidence threshold with a small P-drop (0.003–0.048). feasible ≈0.90,
+functional ≥0.99. Strong search adds ≤0.01 (margin, not search power, is the lever).
+- **Ruling (Gate 3 world):** monitor alarm tracks natural shift, not the attack. For LightGBM the
+  model-based monitors fire (ATC usable → F-monitor-already-works there). For **BoT-IoT→IDS2018 +
+  LogisticRegression** they stay silent (0.0 natural & adversarial) while HCMR=0.901 — the genuine
+  quiet-monitor failure. My global gate3 flag printed `proceed_to_defense=false` (threshold
+  `<0.5`, BoT got exactly 0.5); the honest reading is a quiet world exists in the LogReg configs,
+  so Phase 4 was run. Cost if wrong: a defence evaluated on a case where existing monitors already
+  suffice — reported either way.
+
+### Phase 4 — low-controllability defence — DONE (`defense_results.json`) — NEGATIVE
+IsolationForest on low-controllability features, source-benign fit, 1% budget. **Fails Gate 4
+everywhere:** ΔHCMR 0.075 (UNSW) / 0.006 (BoT-IoT) vs the 0.10 bar; catches ≤8% of misses.
+Reason (ties to P11): the low-controllability features do not transfer across independent
+testbeds, so a source-fitted monitor on them cannot separate adversarial target flows from
+benign target traffic. Reported as the result, per Gate 4's negative branch.
+
+### Phase 5 — write-up + verifier + SOP — DONE
+`PAPER_DRAFT.md` (pilot-labelled, numbers pinned); `check_numbers_p1.py` PASS; SOP sentence
+updated to the honest positive-with-caveat world.
+
+## Deviations ruled & ledgered (also in PREREGISTRATION §8)
+1. **Memory loader.** On this 16 GB machine (~1.5 GB free under load) `get_domain` OOMs on the
+   17–30M-row parquets. `p1common.read_capped` streams with pyarrow `iter_batches` (columns-only,
+   two-pass Bernoulli per class). ML logic unchanged (src primitives). Cost if wrong: a different
+   capped sample than P11's; mitigated by fixed seeds + the two sources both being single-family.
+2. **White-box ablation → strong upper bound.** Tree ensembles are non-differentiable; the
+   pre-registered white-box mode is realised as a high-budget coordinate-descent upper bound,
+   labelled as such, never claimed as gradients.
+3. **Pilot scale.** 3 seeds (not 5), caps 50k/2k/20k. Full spec deferred to Dec–Feb.
+
+## Resume / extend (full spec, Dec–Feb)
+- Bump SEEDS to (42..46) and caps in run_phase2/3/4.py; re-run; re-aggregate; re-check.
+- Optional Phase 1-R wire-realism check (one family, nfstream) to lift "feature-space" to
+  "wire-valid" for that family.
+- Add a second DoS family if a source with reflection/low-rate families is used.
