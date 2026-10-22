@@ -1,4 +1,6 @@
-# Hiding in the Shift: Label-Free Monitors Do Not See a Cross-Testbed DoS Detector That Is Already High-Confidence Wrong
+# A Shift Alarm Is Not a Safety Certificate: Recall Certification for Cross-Testbed Intrusion Detectors
+
+*(working name: "Hiding in the Shift")*
 
 **Rajveer Singh Pall** (sole author)
 
@@ -39,9 +41,12 @@ to a collapse of attack recall** — on the worst cell ATC reports 99.9% estimat
 attack recall is 0% — and the feature-distribution monitors that could see it instead fire on
 benign shift, so neither class is a usable cross-network recall alarm. The practical danger is
 therefore not a clever adversary but a detector that is a thin margin from waving everything through
-and a label-free safety net calibrated on the wrong network. Scope: feature-space, one feature
-family, the tested pairs; "suggests", not "proves" — except the recall-invisibility result, which
-is a proposition.
+and a label-free safety net calibrated on the wrong network. The corollary is operational: since a
+score-only monitor cannot certify recall, the minimal sufficient evidence is a labelled audit — and
+we show a 10-flow Clopper-Pearson recall audit cuts the confidence monitors' false-assurance rate
+from 15% to 0.03% across the 240 configurations. Scope: feature-space, one feature family, the
+tested pairs; "suggests", not "proves" — except the recall-invisibility result, which is a
+proposition.
 
 ## 1. Introduction
 
@@ -129,6 +134,17 @@ To our knowledge, no prior work measures adversarial high-confidence false negat
 joint detector-plus-label-free-monitor system under cross-testbed distribution shift and stated
 traffic-plausibility constraints, together with a monitor-side defence evaluated for both security
 gain and false-alarm cost.
+
+**Risk monitoring with a label budget.** The certification corollary (§5.5) uses, rather than
+invents, finite-sample risk monitoring: Podkopaev & Ramdas (2022) track a deployed model's risk and
+detect harmful shift from a labelled stream; prediction-powered risk monitoring (Zhang et al., ICML
+2026) corrects unlabelled predictions with a small labelled set under an anytime-valid bound; and
+RiskGate-IDS (2026) calibrates a NetFlow detector to a target with a small labelled budget. Our gate
+is the forced consequence of the recall-invisibility theorem — a labelled audit is *necessary*
+because the score-only monitor is provably insufficient — and our contribution is that necessity and
+the measured budget, not the audit estimator, which these works already provide. On attack realism,
+PLAA (2026) demonstrates packet-level realizable evasion; we stay in feature space and do not claim
+wire-realizability (PAVE).
 
 ## 3. Threat model and constraints
 
@@ -267,6 +283,14 @@ alarm.
 
 Numbers are keyed to `results/p1/summary_p1.json` (`matrix`, `per_pair_model`) and
 `matrix_latent.json`; `check_numbers_p1.py` verifies them against this text.
+
+We separate three tasks that the literature often conflates: **ranking quality** (can the detector
+rank attacks above benign? — external AUC), **operating-point safety** (does it catch attacks at the
+deployed threshold? — recall / high-confidence-miss rate), and **monitoring reliability** (do the
+label-free signals reveal when the operating point is unsafe?). The paper's thesis is that these
+come apart: a detector can rank well (AUC 0.919) yet be operating-point-unsafe (latent recall ≈ 0),
+and the confidence monitors track neither — they track distribution movement. §5.1–5.2 establish the
+first two tasks' divorce; §4.5 and §5.5 establish the third.
 
 **Table 1.** The two representative pairs × four models (mean over 5 seeds). *lat* = latent
 high-confidence-miss rate (no attack); *proj* = projected floor (project into the feasible box, no
@@ -411,6 +435,30 @@ detector, with no attack (latent) and under the score-only attack. The blindness
 model-dependent and persists under attack — worst for LogisticRegression (0.33 → 0.58), absent for
 RandomForest (0.00 / 0.00).
 
+### 5.5 What evidence certifies recall: a small labelled audit
+
+The recall-invisibility proposition (§4.5) has an operational corollary: since no score-only monitor
+can certify attack recall, the minimal sufficient evidence is a *labelled* one — a budgeted audit of
+target flows. We do not propose a new estimator; finite-sample risk monitoring with a trickle of
+labels is established (Podkopaev & Ramdas 2022; prediction-powered risk monitoring, Zhang et al.
+2026; budgeted target calibration for NIDS, RiskGate-IDS 2026). We instead measure, on the full
+240-config matrix, what that evidence buys against the confidence monitors it replaces.
+
+Treat a configuration as *unsafe* if the detector's true attack recall at its deployed threshold is
+below 0.5 (227 of 240 configs are unsafe — the cross-testbed detector catches under half of real
+attacks on most transfers). A deployment gate that trusts the **score-only** confidence monitors —
+accept when neither ATC nor confidence-drift fires — gives **false assurance on 15.0% of
+configurations** (it accepts unsafe detectors because the monitors are silent, §4.5). A gate that
+instead draws **k labelled target attack flows and forms a Clopper-Pearson lower bound on recall**
+(accept if the bound clears 0.5, escalate if the upper bound falls below it, else *insufficient
+evidence*) cuts false assurance to **0.0003 at k = 10**, with coverage 0.81 and 86% of unsafe
+configurations correctly escalated; at k = 50, coverage 0.90 and 95% escalated
+(`results/p1/riskgate_pilot.json`). Ten labelled flows turn a 15% false-assurance rate into
+essentially zero — consistent with P11's finding (F7) that ten labelled target flows beat every
+zero-label method. The contribution here is not the audit machinery but the theorem that makes it
+*necessary* and the measurement of how little of it suffices; the gate's third verdict,
+*insufficient evidence*, is the honest output the confidence monitors never give.
+
 ## 6. Discussion
 
 The uncomfortable alignment in §5.2 is the paper's core message for practice. Label-free
@@ -474,7 +522,11 @@ about all NIDS or all monitors. The recall-invisibility proposition (§4.5) is e
 deployments with identical score distributions; a real adversary matches the source score
 distribution only approximately (hence the empirical ATC gap is small but nonzero), and the
 proposition's precondition — feasible reachability of the high-confidence-benign region — is the
-model-dependent quantity the empirical study measures, not an assumption.
+model-dependent quantity the empirical study measures, not an assumption. Finally, the 240
+configurations are **not** 240 independent environments: they are 12 ordered pairs × 4 models × 5
+seeds, and configurations sharing a pair or a model are correlated. We therefore report per-pair and
+per-model breakdowns throughout and read the aggregate counts (e.g. 74/240) as descriptive of this
+design, not as a sample of independent deployments.
 
 ## 8. Ethics and responsible disclosure
 
@@ -518,3 +570,11 @@ amendments for the pilot-vs-full scale, the strong-search ablation, and the memo
    Predict Out-of-Distribution Performance (ATC).* ICLR 2022. arXiv:2201.04234.
 9. R. S. Pall. *Confidently Wrong: Cross-Network Generalisation of Flow-Based DoS Detectors* (P11,
    this repository), 2026.
+10. A. Podkopaev, A. Ramdas. *Tracking the risk of a deployed model and detecting harmful
+    distribution shifts.* arXiv:2110.06177, 2022.
+11. G. Zhang, Y. Cai, G. Yu, O. Simeone. *Prediction-Powered Risk Monitoring of Deployed Models for
+    Detecting Harmful Distribution Shifts.* ICML 2026. arXiv:2602.02229.
+12. *RiskGate-IDS: Budget-aware two-stage NetFlow intrusion detection under domain shift.*
+    ScienceDirect, 2026 (pii S187454822600048X).
+13. J. You et al. *PLAA: Packet-level Adversarial Attacks in Network Traffic Detection.*
+    arXiv:2606.28439, 2026.

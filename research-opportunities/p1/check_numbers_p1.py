@@ -79,6 +79,14 @@ def main() -> int:
     add("BoT defense drop", f3(per["nf_bot_iot__LightGBM"]["defense_hcmr_drop"]))
     add("gate4 bar", "0.10")
 
+    # deployment-gate pilot (§5.5)
+    gpath = R / "riskgate_pilot.json"
+    if gpath.exists():
+        g = json.loads(gpath.read_text())
+        add("gate n_unsafe", g["n_unsafe"])
+        add("gate score-only false-assurance", f"{g['score_only']['false_assurance_rate']*100:.1f}%")
+        add("gate k=10 false-assurance", f"{g['audit_gate']['10']['false_assurance_rate']:.4f}")
+
     # recall-invisibility illustration (theory §4.5)
     tpath = R / "theory_illustration.json"
     if tpath.exists():

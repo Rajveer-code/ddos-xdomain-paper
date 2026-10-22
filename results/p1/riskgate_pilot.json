@@ -1,0 +1,36 @@
+{
+  "n_configs": 240,
+  "recall_floor": 0.5,
+  "n_unsafe": 227,
+  "score_only": {
+    "false_assurance_rate": 0.15,
+    "accept_rate": 0.15
+  },
+  "audit_gate": {
+    "10": {
+      "false_assurance_rate": 0.0003,
+      "coverage": 0.813,
+      "unsafe_correctly_escalated": 0.857
+    },
+    "25": {
+      "false_assurance_rate": 0.0006,
+      "coverage": 0.881,
+      "unsafe_correctly_escalated": 0.924
+    },
+    "50": {
+      "false_assurance_rate": 0.0004,
+      "coverage": 0.905,
+      "unsafe_correctly_escalated": 0.948
+    },
+    "100": {
+      "false_assurance_rate": 0.0003,
+      "coverage": 0.925,
+      "unsafe_correctly_escalated": 0.963
+    },
+    "250": {
+      "false_assurance_rate": 0.0003,
+      "coverage": 0.943,
+      "unsafe_correctly_escalated": 0.969
+    }
+  }
+}
