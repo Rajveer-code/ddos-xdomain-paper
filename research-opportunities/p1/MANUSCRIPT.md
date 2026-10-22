@@ -179,7 +179,12 @@ with a MinMax scaler, balanced sample weights, and a plateau-robust threshold.
 **Controllability (Phase 1).** For each indirectly-influenced feature we fit a 5-fold
 cross-validated predictor from the directly-controllable features on real flows and report R². A
 low R² means the attacker cannot freely set that feature — the only features the Phase-4 defence
-is permitted to watch, chosen on evidence rather than assumption.
+is permitted to watch, chosen on evidence rather than assumption. The result is that most
+responder-side features are highly predictable from the attacker's direct choices (mean R² 0.84 on
+UNSW-NB15, 0.78 on BoT-IoT): only `DST_TO_SRC_SECOND_BYTES` (R² 0.26 / 0.25) and, on BoT-IoT,
+`RETRANSMITTED_OUT_BYTES` (0.20) and `RETRANSMITTED_OUT_PKTS` (0.39) fall below 0.5. The defence
+therefore has thin material to watch — 1 low-controllability feature on UNSW-NB15 and 3 on BoT-IoT
+— which foreshadows its failure in §5.4.
 
 **Attack (Phase 3).** A constrained search over the directly-controllable features minimises the
 detector's P(attack) subject to feasibility; because a low P(attack) simultaneously flips the
