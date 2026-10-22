@@ -135,3 +135,6 @@ multi-family source; Phase 1-R wire check. None changes the core results.
 
 ### REFRAME (2026-10-22 eve) — recall certification
 Title retired overclaim -> "A Shift Alarm Is Not a Safety Certificate". Added recall-invisibility theorem (4.5), deployment-gate corollary + pilot (5.5: score-only false-assurance 15%% -> 0.03%% with a 10-flow audit), DECISION.md (GO NARROWED + closest-work vs PPRM/RiskGate-IDS/Podkopaev-Ramdas; gate mechanism not novel, theorem+budget is). Kept feature-space. check_numbers 40/40. Pushed f4d5ec6.
+
+### Gate built out (2026-10-23)
+Sequential recall audit (riskgate.py, Bonferroni-CP checkpoints): mean 39 labels / median 10 to a decision at the same 0.94 coverage as fixed k=250. MANUSCRIPT 5.6 baseline table: confidence monitors, PPRM-style risk monitoring, and threshold recalibration all fail to certify recall (4.5 explains why); only the labelled audit does. Novelty kept honest (audit is textbook; theorem+budget is the contribution). Stratified: no first-order gain on a single attack population, noted not oversold. check_numbers 42/42. Pushed 91de54c. 20 commits.
