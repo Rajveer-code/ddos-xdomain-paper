@@ -459,6 +459,32 @@ zero-label method. The contribution here is not the audit machinery but the theo
 *necessary* and the measurement of how little of it suffices; the gate's third verdict,
 *insufficient evidence*, is the honest output the confidence monitors never give.
 
+### 5.6 Sequential auditing, and why the obvious baselines do not certify recall
+
+**Sequential audit.** Fixing the budget wastes labels on easy configurations. A sequential gate that
+applies the Clopper-Pearson test at a geometric checkpoint schedule (10, 20, …, 320), with the
+error budget split across checkpoints so the guarantee holds at each, reaches the same coverage
+(0.94) as the fixed k = 250 audit at a **mean of 39 labelled flows and a median of 10**
+(`results/p1/riskgate.json`): most configurations are decided at the first checkpoint, and only
+those with true recall near the 0.5 floor need more. The certification cost is therefore a few dozen
+labels on average, not hundreds.
+
+**Baselines.** Two standard responses do not certify recall, for structural reasons that §4.5
+predicts:
+
+| method | label cost | certifies recall? | why |
+|---|---|---|---|
+| Confidence monitors (ATC, drift) | 0 | **no** | score-only ⇒ recall-invisible (§4.5); false assurance on 15% of configs |
+| Prediction-powered risk monitoring (PPRM-style) | a trickle | **no** | estimates a base-rate-weighted *overall* risk; at a NIDS base rate that risk ≈ specificity and is recall-blind — on the dangerous cell it reads error ≈ 0.092 while recall is 0. Pointed at recall it needs the labelled audit, and prediction-powering buys nothing because the model's predictions on the attack subpopulation are, by hypothesis, the collapsed quantity |
+| Threshold recalibration (benign-quantile) | 0 | **no** | label-free, so provides no recall guarantee; it only trades the operating point, and on transfers where ranking inverts it does not restore recall (P11 F6: recovers 97% of the headroom on the one ranking-preserving pair, actively harmful on three others) |
+| **Labelled recall audit (fixed / sequential)** | 10–40 flows | **yes** | directly bounds the quantity of interest with a finite-sample interval |
+
+The point is not that the audit is a new estimator — it is textbook — but that it is the *only* one
+of these four that answers the certification question, and the recall-invisibility proposition
+(§4.5) explains why the cheaper three cannot. The sophistication of a monitor (PPRM's anytime-valid
+machinery over the confidence/loss distribution) does not rescue it: a more powerful estimator of a
+recall-blind estimand is still recall-blind.
+
 ## 6. Discussion
 
 The uncomfortable alignment in §5.2 is the paper's core message for practice. Label-free

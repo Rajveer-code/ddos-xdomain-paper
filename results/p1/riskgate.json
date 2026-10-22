@@ -1,0 +1,21 @@
+{
+  "n_configs": 240,
+  "n_unsafe": 227,
+  "recall_floor": 0.5,
+  "checkpoints": [
+    10,
+    20,
+    40,
+    80,
+    160,
+    320
+  ],
+  "alpha": 0.05,
+  "sequential": {
+    "mean_labels_to_decision": 39.3,
+    "median_labels_to_decision": 10,
+    "false_assurance_rate": 0.0002,
+    "coverage": 0.941,
+    "unsafe_correctly_escalated": 0.968
+  }
+}

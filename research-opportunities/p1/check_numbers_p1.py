@@ -86,6 +86,11 @@ def main() -> int:
         add("gate n_unsafe", g["n_unsafe"])
         add("gate score-only false-assurance", f"{g['score_only']['false_assurance_rate']*100:.1f}%")
         add("gate k=10 false-assurance", f"{g['audit_gate']['10']['false_assurance_rate']:.4f}")
+    g2path = R / "riskgate.json"
+    if g2path.exists():
+        g2 = json.loads(g2path.read_text())["sequential"]
+        add("seq mean labels", f"{g2['mean_labels_to_decision']:.0f}")
+        add("seq median labels", g2["median_labels_to_decision"])
 
     # recall-invisibility illustration (theory §4.5)
     tpath = R / "theory_illustration.json"
