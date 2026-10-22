@@ -243,18 +243,24 @@ exactly the credibility the portfolio is built on.
 ## 8. Amendments (append-only; each dated)
 
 **2026-10-22 — pilot execution of Phases 1–5.** The author directed execution ahead of the
-Section-10 calendar. Phases 1–5 were run at **pilot scale**: 3 seeds (42–44) rather than 5, and
-caps of 50k/class (source), 2,000 (target attack/family), 20k (target benign). The frozen 5-seed
-full specification is unchanged and remains the Dec–Feb extension. This narrows CIs' seed
-component only; per-flow bootstrap CIs are unaffected.
+Section-10 calendar. Phases 1–5 were first run at **pilot scale**: 3 seeds (42–44) and caps of
+50k/class (source), 2,000 (target attack/family), 20k (target benign).
+
+**2026-10-22 (later same day) — full frozen-spec run supersedes the pilot.** The author then
+directed the full specification: **5 seeds (42–46), 200k/class source cap, 50k target benign, 2,000
+target attack/family, 200-query budget**, and extended the detector set from two to **four models
+(LightGBM, LogisticRegression, XGBoost, RandomForest)**. All committed `results/p1/*.json` and the
+manuscript reflect this full run; the pilot numbers survive only in git history. `summary_p1.json`'s
+`config` block records the full-run values. Findings are qualitatively unchanged from the pilot.
 
 **2026-10-22 — white-box ablation realised as a strong upper bound.** The primary tree-ensemble
 and LogisticRegression detectors trained here are scored as deployed services; LightGBM is
 non-differentiable, so the pre-registered white-box (gradient) ablation is realised as a
 high-budget coordinate-descent search (`evade.py` mode="strong"), an **upper bound** on a
-score-only adversary. It is labelled as such and never presented as a gradient attack. (Pilot
-result: it adds ≤0.01 HCMR over the score-only search, so the distinction does not affect the
-finding.)
+score-only adversary. It is labelled as such and never presented as a gradient attack. (Full-run
+result: it adds ≤0.012 HCMR over the score-only search on the saturated cells, but up to +0.047
+(XGBoost) and +0.049 (RandomForest) on the strong-transfer BoT-IoT cells — so the distinction does
+matter for the headroom cells, though it leaves the dangerous BoT-IoT/LogReg cell unchanged.)
 
 **2026-10-22 — memory-bounded data loading.** On the author's 16 GB machine `src.pipeline.
 get_domain` OOMs reading the 17–30M-row parquets, so P-1 loads via `p1common.read_capped`

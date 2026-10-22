@@ -52,6 +52,16 @@ def main() -> int:
     # the resisting RF searched HCMR and the saturated LogReg latent
     add("BoT/RF searched HCMR", f3(per["nf_bot_iot__RandomForest"]["hcmr"]))
     add("BoT/LogReg latent", f3(per["nf_bot_iot__LogisticRegression"]["latent_hcm_rate"]))
+    # CIs, per-flow score drops, and strong-search deltas (the audit-fixed numbers)
+    for key, short in [("nf_bot_iot__RandomForest", "BoT/RF"),
+                       ("nf_unsw_nb15__LightGBM", "UNSW/LGBM")]:
+        lo, hi = per[key]["hcmr_ci"]
+        add(f"{short} CI lo", f3(lo))
+        add(f"{short} CI hi", f3(hi))
+    add("BoT/LGBM Pdrop", f3(per["nf_bot_iot__LightGBM"]["mean_score_drop"]))
+    add("BoT/XGB Pdrop", f3(per["nf_bot_iot__XGBoost"]["mean_score_drop"]))
+    add("BoT/XGB strong delta", f"{per['nf_bot_iot__XGBoost']['strong_minus_score']:+.3f}")
+    add("BoT/RF strong delta", f"{per['nf_bot_iot__RandomForest']['strong_minus_score']:+.3f}")
     # defense drops and bar
     add("UNSW defense drop", f3(per["nf_unsw_nb15__LightGBM"]["defense_hcmr_drop"]))
     add("BoT defense drop", f3(per["nf_bot_iot__LightGBM"]["defense_hcmr_drop"]))

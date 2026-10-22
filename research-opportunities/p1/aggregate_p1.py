@@ -31,9 +31,10 @@ def main():
 
     pairs = [("nf_unsw_nb15", "nf_cse_cic_ids2018"), ("nf_bot_iot", "nf_cse_cic_ids2018")]
     models = ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"]
-    S = {"config": {"seeds": [42, 43, 44], "budget": 200, "attack_cap": 2000,
-                    "source_cap_per_class": 50000, "target_benign": 20000,
-                    "tau_accept_benign_review_budget": 0.01, "scale": "pilot"}}
+    S = {"config": {"seeds": [42, 43, 44, 45, 46], "budget": 200, "attack_cap": 2000,
+                    "source_cap_per_class": 200000, "target_benign": 50000,
+                    "models": ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"],
+                    "tau_accept_benign_review_budget": 0.01, "scale": "full"}}
 
     # baseline monitor alarm rates
     S["baseline"] = {
@@ -48,13 +49,18 @@ def main():
             L = [r for r in lift if r["source"] == src and r["model"] == mdl]
             B = [r for r in base if r["source"] == src and r["model"] == mdl]
             key = f"{src}__{mdl}"
+            hcmr_vals = [r["score"]["hcmr"] for r in A]
             per[key] = {
                 "baseline_external_auc": round(mean([r["external_auc"] for r in B]), 3),
                 "natural_pred_benign_rate": round(mean([r["natural_pred_benign_rate"] for r in A]), 3),
                 "latent_hcm_rate": round(mean([r["latent_hcm_rate"] for r in L]), 3),
                 "projected_hcmr": round(mean([r["projected_hcmr"] for r in L]), 3),
-                "hcmr": round(mean([r["score"]["hcmr"] for r in A]), 3),
+                "hcmr": round(mean(hcmr_vals), 3),
+                "hcmr_ci": [round(mean([r["score"]["hcmr_ci"][0] for r in A]), 3),
+                            round(mean([r["score"]["hcmr_ci"][1] for r in A]), 3)],
+                "hcmr_seed_sd": round(float(np.std(hcmr_vals)), 3),
                 "hcmr_strong": round(mean([r["strong"]["hcmr"] for r in A]), 3),
+                "strong_minus_score": round(mean([r["strong"]["hcmr"] for r in A]) - mean(hcmr_vals), 3),
                 "search_lift": round(mean([r["search_lift"] for r in L]), 3),
                 "plain_evasion_rate": round(mean([r["score"]["plain_evasion_rate"] for r in A]), 3),
                 "feasible_rate": round(mean([r["score"]["feasible_rate"] for r in A]), 3),

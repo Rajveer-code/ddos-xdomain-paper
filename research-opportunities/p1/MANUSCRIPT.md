@@ -216,22 +216,29 @@ Numbers are keyed to `results/p1/summary_p1.json` (`matrix`, `per_pair_model`) a
 
 **Table 1.** The two representative pairs × four models (mean over 5 seeds). *lat* = latent
 high-confidence-miss rate (no attack); *proj* = projected floor (project into the feasible box, no
-search); *HCMR* = searched; *lift* = HCMR − proj (the search's own contribution); *mon* = ATC /
-confidence-drop alarm during the attack (1 = fires); *def Δ* = defence HCMR reduction (bar 0.10).
+search); *HCMR* = searched, with its mean per-seed bootstrap 95% CI (N ≥ 2000 over flows); *lift* =
+HCMR − proj (the search's own contribution); *Pdrop* = mean per-flow drop in P(attack); *mon* = ATC
+/ confidence-drop alarm during the attack (1 = fires); *def Δ* = defence HCMR reduction (bar 0.10).
+Seed SD of HCMR is ≤ 0.011 except BoT-IoT/XGBoost (0.083) and BoT-IoT/RandomForest (0.074).
 
-| source | model | ext AUC | lat | proj | HCMR | lift | mon | def Δ |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| UNSW | LightGBM | 0.236 | 0.984 | 0.679 | 0.910 | +0.232 | 1.0 | 0.072 |
-| UNSW | LogisticRegression | 0.316 | 0.953 | 0.658 | 0.909 | +0.251 | 1.0 | 0.072 |
-| UNSW | XGBoost | 0.158 | 0.974 | 0.670 | 0.912 | +0.242 | 1.0 | 0.072 |
-| UNSW | RandomForest | 0.230 | 0.983 | 0.678 | 0.903 | +0.226 | 1.0 | 0.071 |
-| BoT-IoT | LightGBM | 0.930 | 0.319 | 0.282 | 0.889 | +0.607 | 1.0 | 0.012 |
-| BoT-IoT | LogisticRegression | 0.919 | 0.999 | 0.901 | 0.902 | +0.001 | **0.0** | 0.012 |
-| BoT-IoT | XGBoost | 0.886 | 0.330 | 0.301 | 0.851 | +0.551 | 1.0 | 0.012 |
-| BoT-IoT | RandomForest | 0.904 | 0.144 | 0.024 | 0.219 | +0.195 | 1.0 | 0.006 |
+| source | model | ext AUC | lat | proj | HCMR [95% CI] | lift | Pdrop | mon | def Δ |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| UNSW | LightGBM | 0.236 | 0.984 | 0.679 | 0.910 [0.896, 0.924] | +0.232 | 0.010 | 1.0 | 0.072 |
+| UNSW | LogisticRegression | 0.316 | 0.953 | 0.658 | 0.909 [0.895, 0.923] | +0.251 | 0.027 | 1.0 | 0.072 |
+| UNSW | XGBoost | 0.158 | 0.974 | 0.670 | 0.912 [0.898, 0.926] | +0.242 | 0.028 | 1.0 | 0.072 |
+| UNSW | RandomForest | 0.230 | 0.983 | 0.678 | 0.903 [0.889, 0.917] | +0.226 | 0.062 | 1.0 | 0.071 |
+| BoT-IoT | LightGBM | 0.930 | 0.319 | 0.282 | 0.889 [0.874, 0.904] | +0.607 | 0.482 | 1.0 | 0.012 |
+| BoT-IoT | LogisticRegression | 0.919 | 0.999 | 0.901 | 0.902 [0.887, 0.916] | +0.001 | 0.036 | **0.0** | 0.012 |
+| BoT-IoT | XGBoost | 0.886 | 0.330 | 0.301 | 0.851 [0.835, 0.868] | +0.551 | 0.501 | 1.0 | 0.012 |
+| BoT-IoT | RandomForest | 0.904 | 0.144 | 0.024 | 0.219 [0.200, 0.239] | +0.195 | 0.183 | 1.0 | 0.006 |
 
 The one bold `mon` = 0.0 (BoT-IoT/LogisticRegression) is the dangerous cell: a strong-ranking
-detector (AUC 0.919) with 99.9% latent high-confidence misses and a silent monitor.
+detector (AUC 0.919) with 99.9% latent high-confidence misses and a silent monitor. Note the two
+regimes the `Pdrop` and `lift` columns reveal: on the *saturated* cells (all UNSW, and
+BoT-IoT/LogReg) the search barely moves P(attack) (Pdrop ≤ 0.062) and latent exposure does the
+work; on the *headroom* cells (BoT-IoT/LightGBM, XGBoost) the search does substantial,
+feasibility-bounded work (Pdrop ≈ 0.48–0.50, lift +0.55 to +0.61) and the adversary, not latent
+exposure, dominates there.
 
 ### 5.1 Latent high-confidence exposure is pervasive across the quartet
 
@@ -269,19 +276,33 @@ contribution (searched − projected) is **+0.607 (BoT/LightGBM), +0.551 (BoT/XG
 (BoT/RandomForest), and +0.001 (BoT/LogReg)**: the adversary widens the hole where the detector has
 headroom and adds essentially nothing where it is already saturated (BoT/LogReg, latent 0.999).
 One model resists outright: on BoT-IoT→CSE-CIC, **RandomForest holds the searched HCMR to 0.219**
-(latent 0.144) — its coarse, less-overconfident probabilities keep most feasible flows below the
-auto-accept threshold. The per-flow P(attack) drop is small throughout (mean 0.003–0.048) and the
-strong upper-bound search adds ≤ 0.01 over the score-only search; the flows sit a thin margin from
-the confidence threshold, so where the search helps, a feasible nudge suffices. Consistent with
-this, the query budget matters only where the detector has headroom: on BoT-IoT→CSE-CIC, HCMR for
-LightGBM rises from 0.685 at 50 queries to 0.889 at 200, and for XGBoost from 0.697 to 0.851, while
-it is flat for LogisticRegression (≈0.902, already saturated) and stays low for RandomForest
-(0.136→0.219) regardless of budget (Figure 3). Where the detector is saturated or the model
-resists, more queries do nothing; where there is headroom, they help, but the per-flow P(attack)
-drop remains small because the flows begin near the threshold. Figure 4 shows the mechanism — the
-search shifts the benign-confidence distribution across τ_accept.
+(latent 0.144, strong-search 0.268) — its coarse, less-overconfident probabilities keep most
+feasible flows below the auto-accept threshold. The effort the search spends is sharply two-regime
+(Table 1, `Pdrop`): on the saturated cells (all UNSW, BoT-IoT/LogReg) the per-flow P(attack) drop is
+small (0.010–0.062) — the flows begin a thin margin below τ_accept and a feasible nudge carries
+them over, so latent exposure, not the search, dominates. On the headroom cells
+(BoT-IoT/LightGBM, XGBoost) the drop is large (0.482, 0.501) and the search does substantial,
+feasibility-bounded work; there the adversary dominates and the latent rate alone understates the
+risk. The strong upper-bound search accordingly adds little on the saturated cells (≤ 0.012) but up
+to +0.047 (XGBoost) and +0.049 (RandomForest) on BoT-IoT, so the score-only-versus-white-box
+distinction matters for the headroom cells even though it leaves the dangerous BoT-IoT/LogReg cell
+unchanged. The query budget shows the same split: HCMR for BoT-IoT/LightGBM rises from 0.685 at 50
+queries to 0.889 at 200 and for XGBoost from 0.697 to 0.851, while it is flat for LogisticRegression
+(≈0.902, saturated) and stays low for RandomForest (0.136→0.219) regardless of budget (Figure 3).
+Figure 4 shows the mechanism on a headroom cell — the search concentrates the benign-confidence
+distribution across τ_accept. Robustness to the operating point: at a stricter 5% benign-review
+budget (a higher τ_accept), HCMR falls on the headroom cells (BoT-IoT/LightGBM 0.889→0.314,
+RandomForest 0.219→0.011) but is **unchanged on the dangerous BoT-IoT/LogReg cell (0.902→0.902)**,
+whose misses sit at confidence ≈ 1.0 — tightening the monitor cannot recover the cell where it is
+already blind.
 
 ### 5.4 The obvious responder-side defence does not transfer
+
+The pre-registered Gate 3 asked for non-trivial HCMR *and* silent model-based monitors on at least
+one pair before proceeding to a defence; aggregated to the pair level it reads false (the monitors
+fire for three of four models). The quiet-monitor world exists at the *cell* level —
+BoT-IoT/LogisticRegression — so we run the defence there and report it as a pre-registered negative
+rather than suppress it.
 
 A novelty monitor on the low-controllability features (the only ones the attacker cannot freely
 set; Phase 1 found just 1–3 per source) **fails the pre-registered bar everywhere**: it cuts HCMR
@@ -314,8 +335,9 @@ buys confidence, not evasion.
 
 ![Figure 5](fig5_latent_matrix.png)
 **Figure 5.** Latent high-confidence-miss rate across the full NetFlow v2 transfer matrix (mean
-over 4 models, 5 seeds). Exposure is high across most ordered pairs (0.42–1.00) with one benign
-exception (CSE-CIC→BoT-IoT, 0.02); the phenomenon is not confined to the two attacked pairs.
+over 4 models, 5 seeds). Exposure is high on 8 of 12 ordered pairs (0.56–1.00), moderate on three
+(0.42–0.47), and near-zero on CSE-CIC→BoT-IoT (0.02); the phenomenon is not confined to the two
+attacked pairs, but it is also not universal.
 
 ## 6. Discussion
 
@@ -342,14 +364,25 @@ than any zero-label monitor in this setting.
 
 ## 7. Limitations
 
-One feature family (NetFlow v2) and the dataset pairs tested; both of the attacked sources carry a
-single DoS family (volumetric), so the per-family box is one family's. The main study is
-feature-space; no wire-realizability is claimed — the optional single-family wire check (Phase
-1-R) was not run, so the realism argument rests on the constraint model and the controllability
-analysis, not on re-extracted flows. The strong search is an upper bound, not a gradient attack.
-External AUCs are at a fixed sampling cap and are not identical to P11's full-pipeline numbers; we
-report them as internal context, not as P11's results. The findings are a measurement for the
-tested system, not a general claim about all NIDS or all monitors.
+**Evidence base.** The 240-configuration generality result (§5.1–5.2) is *latent* exposure and
+monitor response only — no adversary. The **attack, budget, τ-sensitivity and defence results
+(§5.3–5.4, Table 1) are two source networks (UNSW-NB15, BoT-IoT) against one common target
+(CSE-CIC-IDS2018)**, four models, five seeds; and the headline adversarial quiet-monitor
+demonstration — high HCMR with a silent confidence monitor — is a **single (source, target, model)
+cell, BoT-IoT→CSE-CIC/LogisticRegression**. The broader claim we make is the latent one; the
+adversarial one is a bounded existence result, not a population statement.
+
+One feature family (NetFlow v2); both attacked sources carry a single DoS family (volumetric), so
+the per-family box is one family's. The main study is feature-space; no wire-realizability is
+claimed — the optional single-family wire check (Phase 1-R) was not run, so the realism argument
+rests on the constraint model and the controllability analysis, not on re-extracted flows. The
+strong search is an upper bound, not a gradient attack, and it matters: it raises HCMR by up to
++0.049 over score-only on the BoT-IoT headroom cells (§5.3). **External AUCs differ materially from
+P11's** — e.g. UNSW→CSE-CIC/LightGBM is 0.236 here against P11's 0.0697, and BoT-IoT→CSE-CIC 0.930
+against 0.966 — because of a different sampling cap and a volumetric-only target; the inversion is
+therefore less extreme in our sample, and these AUCs are internal context, not comparable to P11's
+full-pipeline numbers. The findings are a measurement for the tested system, not a general claim
+about all NIDS or all monitors.
 
 ## 8. Ethics and responsible disclosure
 

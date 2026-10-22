@@ -3,14 +3,22 @@
     "seeds": [
       42,
       43,
-      44
+      44,
+      45,
+      46
     ],
     "budget": 200,
     "attack_cap": 2000,
-    "source_cap_per_class": 50000,
-    "target_benign": 20000,
+    "source_cap_per_class": 200000,
+    "target_benign": 50000,
+    "models": [
+      "LightGBM",
+      "LogisticRegression",
+      "XGBoost",
+      "RandomForest"
+    ],
     "tau_accept_benign_review_budget": 0.01,
-    "scale": "pilot"
+    "scale": "full"
   },
   "baseline": {
     "atc_acc_drop": 0.875,
@@ -26,7 +34,13 @@
       "latent_hcm_rate": 0.984,
       "projected_hcmr": 0.679,
       "hcmr": 0.91,
+      "hcmr_ci": [
+        0.896,
+        0.924
+      ],
+      "hcmr_seed_sd": 0.004,
       "hcmr_strong": 0.917,
+      "strong_minus_score": 0.007,
       "search_lift": 0.232,
       "plain_evasion_rate": 0.997,
       "feasible_rate": 0.915,
@@ -45,7 +59,13 @@
       "latent_hcm_rate": 0.953,
       "projected_hcmr": 0.658,
       "hcmr": 0.909,
+      "hcmr_ci": [
+        0.895,
+        0.923
+      ],
+      "hcmr_seed_sd": 0.003,
       "hcmr_strong": 0.913,
+      "strong_minus_score": 0.004,
       "search_lift": 0.251,
       "plain_evasion_rate": 0.999,
       "feasible_rate": 0.911,
@@ -64,7 +84,13 @@
       "latent_hcm_rate": 0.974,
       "projected_hcmr": 0.67,
       "hcmr": 0.912,
+      "hcmr_ci": [
+        0.898,
+        0.926
+      ],
+      "hcmr_seed_sd": 0.003,
       "hcmr_strong": 0.918,
+      "strong_minus_score": 0.006,
       "search_lift": 0.242,
       "plain_evasion_rate": 0.999,
       "feasible_rate": 0.916,
@@ -83,7 +109,13 @@
       "latent_hcm_rate": 0.983,
       "projected_hcmr": 0.678,
       "hcmr": 0.903,
+      "hcmr_ci": [
+        0.889,
+        0.917
+      ],
+      "hcmr_seed_sd": 0.005,
       "hcmr_strong": 0.911,
+      "strong_minus_score": 0.008,
       "search_lift": 0.226,
       "plain_evasion_rate": 0.996,
       "feasible_rate": 0.911,
@@ -102,7 +134,13 @@
       "latent_hcm_rate": 0.319,
       "projected_hcmr": 0.282,
       "hcmr": 0.889,
+      "hcmr_ci": [
+        0.874,
+        0.904
+      ],
+      "hcmr_seed_sd": 0.011,
       "hcmr_strong": 0.901,
+      "strong_minus_score": 0.012,
       "search_lift": 0.607,
       "plain_evasion_rate": 0.956,
       "feasible_rate": 0.902,
@@ -121,7 +159,13 @@
       "latent_hcm_rate": 0.999,
       "projected_hcmr": 0.901,
       "hcmr": 0.902,
+      "hcmr_ci": [
+        0.887,
+        0.916
+      ],
+      "hcmr_seed_sd": 0.001,
       "hcmr_strong": 0.902,
+      "strong_minus_score": 0.0,
       "search_lift": 0.001,
       "plain_evasion_rate": 1.0,
       "feasible_rate": 0.902,
@@ -140,7 +184,13 @@
       "latent_hcm_rate": 0.33,
       "projected_hcmr": 0.301,
       "hcmr": 0.851,
+      "hcmr_ci": [
+        0.835,
+        0.868
+      ],
+      "hcmr_seed_sd": 0.083,
       "hcmr_strong": 0.898,
+      "strong_minus_score": 0.047,
       "search_lift": 0.551,
       "plain_evasion_rate": 0.978,
       "feasible_rate": 0.902,
@@ -159,7 +209,13 @@
       "latent_hcm_rate": 0.144,
       "projected_hcmr": 0.024,
       "hcmr": 0.219,
+      "hcmr_ci": [
+        0.2,
+        0.239
+      ],
+      "hcmr_seed_sd": 0.074,
       "hcmr_strong": 0.268,
+      "strong_minus_score": 0.049,
       "search_lift": 0.195,
       "plain_evasion_rate": 0.997,
       "feasible_rate": 0.902,
