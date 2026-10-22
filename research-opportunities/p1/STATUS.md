@@ -97,6 +97,21 @@ source is added. All findings robust across 5 seeds and 4 models.
 If resuming: re-read summary_p1.json + MANUSCRIPT.md + this file; the manuscript is complete and
 verified — further work is polish, not core results.
 
+### Later same day — review + hardening + generality (autonomous)
+- Fresh senior-reviewer audit of MANUSCRIPT.md; all findings fixed in commit d9c04f2 (stale config
+  block, "small Pdrop throughout" overclaim → two-regime, strong-search "≤0.01" → up to +0.049,
+  CIs now in Table 1, evidence base + P11-AUC in §7, Gate-3 reconciliation, Fig5 caption). τ-accept
+  1%-vs-5% sensitivity added (dangerous cell unchanged). check_numbers 26/26.
+- RUNNING: `matrix_attack.py` → results/p1/matrix_attack.jsonl (+ .json) — the score-only attack
+  across ALL 12 ordered pairs × 4 models × 5 seeds, resumable (skips done configs). Removes the
+  "adversarial result is one cell" limitation. When done: aggregate dangerous-cell count into the
+  summary (`matrix` block or new `matrix_attack` block), add a §5.2/§5.3 sentence + fig, re-check,
+  commit, push.
+- README.md added (commit c0fc571). Repo private; pushed through c0fc571.
+- PDF: pandoc absent, pdflatex (MiKTeX) present — PDF build left as an easy follow-up (adapt
+  scripts/build_pdf_elsarticle.py, or hand-write a short LaTeX wrapper).
+If resuming and matrix_attack.jsonl exists: re-run matrix_attack.py (it resumes), then aggregate.
+
 ## Resume / extend
 - Optional Phase 1-R wire-realism check (one family, nfstream) to lift "feature-space" to
   "wire-valid" for that family.
