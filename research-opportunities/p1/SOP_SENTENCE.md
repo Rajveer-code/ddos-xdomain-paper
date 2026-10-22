@@ -40,6 +40,29 @@ Shorter variant (one line):
 > already wave through most real attacks at high confidence, how far a traffic-plausibly-constrained
 > adversary can widen that blind spot, and why the obvious responder-side defence fails to transfer.
 
+## Strongest framing — theorem + research programme (use this in the SOP)
+
+The upgraded version leads with the *structural result* and connects P-1 to the rest of the
+portfolio, so it reads as a programme, not a one-off:
+
+> In recent work I showed that a widely recommended safety check for deployed intrusion detectors
+> is not merely unreliable but *structurally* blind: any label-free monitor that is a function of a
+> model's score distribution alone — the Average-Thresholded-Confidence family — is provably
+> invisible to a collapse of attack recall, and I measured a cross-network DoS detector on which
+> this monitor reports 99.9% estimated accuracy while catching 0% of attacks, a blind spot a
+> traffic-plausibly-constrained adversary can enter in roughly half of all successful evasions. This
+> is the security instance of the question my work keeps returning to — *when does a reported
+> evaluation metric actually license the conclusion drawn from it?* — which I have also studied for
+> cross-network accuracy (P11), LLM-leaderboard verifiers (P14), benchmark scoring rules (P5),
+> pooled-versus-subgroup clinical AUC (P06b), and the finite-sample validity of these same
+> label-free monitors. My thesis makes this programme its spine: characterising, with theory and
+> adversarial measurement, the gap between what an evaluation reports and what it licenses.
+
+Why it is stronger: it states a *theorem* (not just an empirical finding), gives one unforgettable
+number (99.9% reported / 0% caught), and frames five prior papers as one coherent line — which is
+exactly what an admissions committee reads an SOP for. Numbers:
+`results/p1/summary_p1.json`, `theory_illustration.json`.
+
 ## Faculty framing (verify before naming anyone in an SOP)
 
 - **David Inouye (Purdue ECE)** — explaining/localizing distribution shift; the natural

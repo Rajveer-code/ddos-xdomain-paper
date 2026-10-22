@@ -1,0 +1,44 @@
+{
+  "source_acc": 0.994,
+  "atc_estimated_accuracy": 0.999,
+  "true_accuracy": 0.908,
+  "attack_recall": 0.0,
+  "cell": "nf_bot_iot->nf_cse_cic_ids2018/LogisticRegression",
+  "per_seed": [
+    {
+      "seed": 42,
+      "source_acc": 0.9924822695035461,
+      "atc_estimated_accuracy": 0.9987898789878988,
+      "true_accuracy": 0.9067656765676567,
+      "attack_recall": 0.0
+    },
+    {
+      "seed": 43,
+      "source_acc": 0.9946350416490187,
+      "atc_estimated_accuracy": 0.9997774439436933,
+      "true_accuracy": 0.909475324097257,
+      "attack_recall": 0.0
+    },
+    {
+      "seed": 44,
+      "source_acc": 0.9943286544732738,
+      "atc_estimated_accuracy": 0.9996697853604843,
+      "true_accuracy": 0.9082003302146395,
+      "attack_recall": 0.0
+    },
+    {
+      "seed": 45,
+      "source_acc": 0.9947725346142978,
+      "atc_estimated_accuracy": 0.9992850071499285,
+      "true_accuracy": 0.9088659113408866,
+      "attack_recall": 0.0
+    },
+    {
+      "seed": 46,
+      "source_acc": 0.995188225304274,
+      "atc_estimated_accuracy": 0.9993305439330544,
+      "true_accuracy": 0.9070013947001395,
+      "attack_recall": 0.0
+    }
+  ]
+}

@@ -33,10 +33,15 @@ report normal** — the dangerous pairing is a population property, worst for Lo
 (silent 58%) and absent for RandomForest (0%). The obvious
 responder-side defence — watch the features the adversary cannot freely set — fails a
 pre-registered bar everywhere (ΔHCMR ≤ 0.072 against a 0.10 bar), because those features do not
-transfer across independent testbeds either. The practical danger is therefore not a clever
-adversary but a detector that is a thin margin from waving everything through and a label-free
-safety net calibrated on the wrong network. Scope: feature-space, one feature family, the tested
-pairs; "suggests", not "proves".
+transfer across independent testbeds either. We give the structural reason: any monitor that is a
+function of the detector's score distribution alone (ATC, confidence drift) is **provably invisible
+to a collapse of attack recall** — on the worst cell ATC reports 99.9% estimated accuracy while
+attack recall is 0% — and the feature-distribution monitors that could see it instead fire on
+benign shift, so neither class is a usable cross-network recall alarm. The practical danger is
+therefore not a clever adversary but a detector that is a thin margin from waving everything through
+and a label-free safety net calibrated on the wrong network. Scope: feature-space, one feature
+family, the tested pairs; "suggests", not "proves" — except the recall-invisibility result, which
+is a proposition.
 
 ## 1. Introduction
 
@@ -213,6 +218,51 @@ added cost ≤ 0.02).
 **Statistics.** HCMR and its components carry paired-bootstrap 95% CIs over flows (N ≥ 2000);
 seed variance is reported separately across five seeds.
 
+### 4.5 Why the model-based monitors are structurally blind (a recall-invisibility result)
+
+The empirical silence of ATC and confidence-drift is not a calibration accident; it is forced by
+what those monitors are functions of. Call a label-free monitor **score-only** if its output
+depends on the target deployment solely through the empirical distribution of detector scores
+{p(x)} (equivalently of confidences max(p, 1−p)). ATC, mean-confidence, mean-confidence-drop and
+the KS-on-scores test are score-only; the feature-distribution monitors (proxy A-distance,
+Wasserstein) are not.
+
+At an operational base rate π (attack fraction, with π ≪ 1 for a monitored network), a detector's
+accuracy is (1−π)·specificity + π·recall ≈ specificity — it is dominated by benign traffic and is
+almost independent of attack recall. ATC estimates accuracy, so it tracks specificity and is nearly
+insensitive to recall.
+
+> **Proposition (recall-invisibility).** Let two target deployments D and D′ induce the *same*
+> detector-score distribution, D with every attack flow in the high-score (attack) region and D′
+> with the attack flows moved into the high-confidence low-score (benign) region. Any score-only
+> monitor M satisfies M(D) = M(D′), while attack recall(D) = 1 and recall(D′) = 0.
+>
+> *Proof.* M depends on the deployment only through the score distribution, which is identical for D
+> and D′ by construction, so M(D) = M(D′). Recall is the positive-class true-positive rate, a
+> function of the joint distribution of (label, score); moving the attack class across the decision
+> threshold while preserving the marginal score distribution changes recall from 1 to 0 without
+> changing that marginal. ∎
+
+A score-only monitor therefore cannot, in principle, distinguish a detector with full attack recall
+from one with none when the two induce the same score distribution: its value is uninformative
+about the quantity an operator cares about. Our adversary's task is exactly to realise D′ from D
+under feasibility — to place attack flows in the detector's high-confidence-benign region R while
+leaving the (benign-looking) score distribution intact. Whether R is feasibly reachable is
+model-dependent and is what §5.3 measures (reachable under constraints for LogisticRegression and
+the gradient-boosted models, not for RandomForest, whose R is small). **The blindness is structural
+and universal; its exploitability is empirical and model-dependent.** Empirically, on the dangerous
+BoT-IoT→CSE-CIC / LogisticRegression cell the adversarial deployment has **ATC-estimated accuracy
+0.999 while attack recall is 0.000** (true accuracy 0.908, inflated by the benign base rate;
+`results/p1/theory_illustration.json`, mean over 5 seeds) — the monitor reports "perfect" over a
+detector that catches no attacks.
+
+This also explains the dichotomy in §5.2: the feature-distribution monitors are *not* score-only
+and can in principle see D′, but they fire on benign shift too (non-specific), so they raise no
+actionable recall alarm either. The two monitor classes fail for complementary reasons — score-only
+monitors are recall-blind by construction, feature monitors are recall-aware but not
+recall-specific — which is why, across 240 configurations, neither is a usable cross-network recall
+alarm.
+
 ## 5. Results
 
 Numbers are keyed to `results/p1/summary_p1.json` (`matrix`, `per_pair_model`) and
@@ -384,6 +434,21 @@ the evasion-practicality SoK: the practical danger here is not a powerful evasio
 thin margin from waving everything through. Ten labelled target flows (P11, F7) remain worth more
 than any zero-label monitor in this setting.
 
+**Positioning.** This paper is one instance of a single question: *does a reported evaluation
+metric justify the conclusion drawn from it?* The recall-invisibility result (§4.5) is the sharp
+form here — a label-free "accuracy" estimate can read 0.999 over a detector that catches no attacks,
+because accuracy at an operational base rate is the wrong quantity and a score-only monitor can
+only estimate quantities of that kind. The same failure recurs across settings with different
+metrics: an in-domain accuracy that does not survive a change of network (P11); a leaderboard
+ordering that reverses when the answer-verifier changes (P14); a benchmark score that flips between
+strict and judge-corrected scoring (P5); a pooled AUC that improves while a subgroup's
+capacity-threshold flagging worsens (P06b); and finite-sample validity bounds for exactly these
+label-free monitors (the author's concurrent work). P-1 adds the adversarial and security instance:
+not only is the reported monitor uninformative under benign shift (Bikdeli), it is adversarially
+controllable, and we characterise when (reachability of the high-confidence-benign region) and why
+(the recall-invisibility proposition). The through-line is a programme on when measurement licenses
+a safety claim, and when it does not.
+
 ## 7. Limitations
 
 **Evidence base.** Both the latent result (§5.1–5.2, 240 configs) and the adversarial
@@ -405,7 +470,11 @@ P11's** — e.g. UNSW→CSE-CIC/LightGBM is 0.236 here against P11's 0.0697, and
 against 0.966 — because of a different sampling cap and a volumetric-only target; the inversion is
 therefore less extreme in our sample, and these AUCs are internal context, not comparable to P11's
 full-pipeline numbers. The findings are a measurement for the tested system, not a general claim
-about all NIDS or all monitors.
+about all NIDS or all monitors. The recall-invisibility proposition (§4.5) is exact for two
+deployments with identical score distributions; a real adversary matches the source score
+distribution only approximately (hence the empirical ATC gap is small but nonzero), and the
+proposition's precondition — feasible reachability of the high-confidence-benign region — is the
+model-dependent quantity the empirical study measures, not an assumption.
 
 ## 8. Ethics and responsible disclosure
 

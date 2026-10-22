@@ -79,6 +79,14 @@ def main() -> int:
     add("BoT defense drop", f3(per["nf_bot_iot__LightGBM"]["defense_hcmr_drop"]))
     add("gate4 bar", "0.10")
 
+    # recall-invisibility illustration (theory §4.5)
+    tpath = R / "theory_illustration.json"
+    if tpath.exists():
+        t = json.loads(tpath.read_text())
+        add("ATC estimated accuracy", f3(t["atc_estimated_accuracy"]))
+        add("attack recall", f3(t["attack_recall"]))
+        add("true accuracy (base-rate)", f3(t["true_accuracy"]))
+
     missing = [(lab, lit) for lab, lit in checks if lit not in PAPER]
     for lab, lit in checks:
         print(f"  [{'MISS' if (lab, lit) in missing else 'ok':4s}] {lab:26s} {lit}")
