@@ -1,5 +1,10 @@
 # Hiding in the Shift: Adversarial High-Confidence False Negatives against Label-Free NIDS Monitoring under Cross-Testbed Transfer
 
+> **SUPERSEDED by `MANUSCRIPT.md`** (2026-10-22) — the full submission-quality version with the
+> 4-model study and the 12-pair transfer matrix. This file is the earlier two-pair draft, kept for
+> history. `check_numbers_p1.py` now verifies `MANUSCRIPT.md`.
+
+
 **Rajveer Singh Pall** (sole author). Draft — full frozen-spec run, 2026-10-22.
 
 > **Scale note (read first).** Every number below is from the **full frozen specification**

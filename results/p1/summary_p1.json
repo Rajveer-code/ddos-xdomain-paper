@@ -215,5 +215,36 @@
       "DST_TO_SRC_SECOND_BYTES",
       "RETRANSMITTED_OUT_PKTS"
     ]
+  },
+  "matrix": {
+    "n_configs": 240,
+    "n_ordered_pairs": 12,
+    "n_models": 4,
+    "mean_latent_hcmr": 0.679,
+    "latent_hcmr_min": 0.0,
+    "latent_hcmr_max": 1.0,
+    "atc_alarm_rate": 0.8,
+    "conf_drop_alarm_rate": 0.8,
+    "n_dangerous_cells": 36,
+    "n_vol_configs": 240,
+    "n_dangerous_combos": 9,
+    "per_model": {
+      "LightGBM": {
+        "mean_latent_hcmr": 0.707,
+        "both_monitors_silent_rate": 0.15
+      },
+      "LogisticRegression": {
+        "mean_latent_hcmr": 0.8,
+        "both_monitors_silent_rate": 0.33
+      },
+      "XGBoost": {
+        "mean_latent_hcmr": 0.685,
+        "both_monitors_silent_rate": 0.12
+      },
+      "RandomForest": {
+        "mean_latent_hcmr": 0.524,
+        "both_monitors_silent_rate": 0.0
+      }
+    }
   }
 }

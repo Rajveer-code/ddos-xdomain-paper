@@ -80,8 +80,39 @@ def main():
         s: json.loads((R / "feature_controllability.json").read_text())[s]["low_controllability_features"]
         for s in ("nf_unsw_nb15", "nf_bot_iot")}
 
+    # Full transfer matrix (generality backbone), if present.
+    mpath = R / "matrix_latent.json"
+    if mpath.exists():
+        mx = json.loads(mpath.read_text())
+        vol = [r for r in mx if r.get("has_volumetric")]
+        lat = [r["latent_hcm_rate"] for r in vol]
+        dangerous = [r for r in vol if r["latent_hcm_rate"] > 0.5
+                     and not r["atc_alarm"] and not r["conf_drop_alarm"]]
+        permodel = {}
+        for mdl in ["LightGBM", "LogisticRegression", "XGBoost", "RandomForest"]:
+            rs = [r for r in vol if r["model"] == mdl]
+            if rs:
+                permodel[mdl] = {
+                    "mean_latent_hcmr": round(float(np.mean([r["latent_hcm_rate"] for r in rs])), 3),
+                    "both_monitors_silent_rate": round(float(np.mean(
+                        [(not r["atc_alarm"] and not r["conf_drop_alarm"]) for r in rs])), 2)}
+        S["matrix"] = {
+            "n_configs": len(mx),
+            "n_ordered_pairs": len({(r["source"], r["target"]) for r in mx}),
+            "n_models": len({r["model"] for r in mx}),
+            "mean_latent_hcmr": round(float(np.mean(lat)), 3),
+            "latent_hcmr_min": round(float(min(lat)), 3),
+            "latent_hcmr_max": round(float(max(lat)), 3),
+            "atc_alarm_rate": round(float(np.mean([r["atc_alarm"] for r in mx])), 2),
+            "conf_drop_alarm_rate": round(float(np.mean([r["conf_drop_alarm"] for r in mx])), 2),
+            "n_dangerous_cells": len(dangerous),
+            "n_vol_configs": len(vol),
+            "n_dangerous_combos": len({(r["source"], r["target"], r["model"]) for r in dangerous}),
+            "per_model": permodel,
+        }
+
     (R / "summary_p1.json").write_text(json.dumps(S, indent=2))
-    print(json.dumps(S, indent=2))
+    print("matrix block:", json.dumps(S.get("matrix", {}), indent=2) if "matrix" in S else "none")
 
 
 if __name__ == "__main__":

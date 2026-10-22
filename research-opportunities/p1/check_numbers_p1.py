@@ -1,9 +1,9 @@
 """
-Keyed-number check for the P-1 draft (mirrors scripts/check_numbers.py).
+Keyed-number check for the P-1 manuscript (mirrors scripts/check_numbers.py).
 
-Derives the headline literals from results/p1/summary_p1.json and asserts each appears verbatim
-in research-opportunities/p1/PAPER_DRAFT.md. If the data changes, this fails until the paper is
-updated — no number is hand-typed and left to drift. Exit non-zero on any miss.
+Derives the headline literals from results/p1/summary_p1.json (per_pair_model + matrix) and
+asserts each appears verbatim in MANUSCRIPT.md. If the data changes, this fails until the
+manuscript is updated — no number is hand-typed and left to drift. Exit non-zero on any miss.
 """
 from __future__ import annotations
 
@@ -11,9 +11,9 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-R = ROOT / "results" / "p1"
-PAPER = (Path(__file__).resolve().parent / "PAPER_DRAFT.md").read_text(encoding="utf-8")
+HERE = Path(__file__).resolve().parent
+R = HERE.parents[1] / "results" / "p1"
+PAPER = (HERE / "MANUSCRIPT.md").read_text(encoding="utf-8")
 
 
 def f3(x):
@@ -23,39 +23,45 @@ def f3(x):
 def main() -> int:
     S = json.loads((R / "summary_p1.json").read_text())
     per = S["per_pair_model"]
+    mx = S.get("matrix", {})
     checks: list[tuple[str, str]] = []
 
     def add(label, literal):
         checks.append((label, str(literal)))
 
-    # config
-    add("budget", S["config"]["budget"])
-    add("attack_cap", "2,000")
-    add("review budget", "1%")
+    # matrix (generality backbone)
+    if mx:
+        add("matrix configs", mx["n_configs"])
+        add("matrix pairs", mx["n_ordered_pairs"])
+        add("matrix mean latent", f3(mx["mean_latent_hcmr"]))
+        add("matrix dangerous cells", mx["n_dangerous_cells"])
+        add("matrix dangerous combos", mx["n_dangerous_combos"])
+        add("LogReg matrix latent", f3(mx["per_model"]["LogisticRegression"]["mean_latent_hcmr"]))
+        add("RF matrix latent", f3(mx["per_model"]["RandomForest"]["mean_latent_hcmr"]))
+        add("LogReg silent rate", f"{mx['per_model']['LogisticRegression']['both_monitors_silent_rate']:.2f}")
 
-    for key, short in [("nf_unsw_nb15__LightGBM", "UNSW/LGBM"),
-                       ("nf_unsw_nb15__LogisticRegression", "UNSW/LogReg"),
-                       ("nf_bot_iot__LightGBM", "BoT/LGBM"),
-                       ("nf_bot_iot__LogisticRegression", "BoT/LogReg")]:
-        p = per[key]
-        add(f"{short} searched HCMR", f3(p["hcmr"]))
-        add(f"{short} latent", f3(p["latent_hcm_rate"]))
-        add(f"{short} projected", f3(p["projected_hcmr"]))
-        add(f"{short} search_lift", f"{p['search_lift']:+.3f}")
-
+    # per-cell searched HCMR, search lift, and the resisting RandomForest cell
+    cells = [("nf_bot_iot__LightGBM", "BoT/LGBM"),
+             ("nf_bot_iot__LogisticRegression", "BoT/LogReg"),
+             ("nf_bot_iot__XGBoost", "BoT/XGB"),
+             ("nf_bot_iot__RandomForest", "BoT/RF"),
+             ("nf_unsw_nb15__LogisticRegression", "UNSW/LogReg")]
+    for key, short in cells:
+        if key in per:
+            add(f"{short} search_lift", f"{per[key]['search_lift']:+.3f}")
+    # the resisting RF searched HCMR and the saturated LogReg latent
+    add("BoT/RF searched HCMR", f3(per["nf_bot_iot__RandomForest"]["hcmr"]))
+    add("BoT/LogReg latent", f3(per["nf_bot_iot__LogisticRegression"]["latent_hcm_rate"]))
     # defense drops and bar
     add("UNSW defense drop", f3(per["nf_unsw_nb15__LightGBM"]["defense_hcmr_drop"]))
     add("BoT defense drop", f3(per["nf_bot_iot__LightGBM"]["defense_hcmr_drop"]))
     add("gate4 bar", "0.10")
-    # the quiet-monitor config AUC
-    add("BoT/LogReg AUC", f3(per["nf_bot_iot__LogisticRegression"]["baseline_external_auc"]))
 
     missing = [(lab, lit) for lab, lit in checks if lit not in PAPER]
     for lab, lit in checks:
-        mark = "MISS" if (lab, lit) in missing else "ok"
-        print(f"  [{mark:4s}] {lab:22s} {lit}")
+        print(f"  [{'MISS' if (lab, lit) in missing else 'ok':4s}] {lab:26s} {lit}")
     if missing:
-        print(f"\nFAIL: {len(missing)} number(s) in summary_p1.json not found in PAPER_DRAFT.md:")
+        print(f"\nFAIL: {len(missing)} number(s) not found in MANUSCRIPT.md:")
         for lab, lit in missing:
             print(f"   - {lab}: {lit}")
         return 1
