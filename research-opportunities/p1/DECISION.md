@@ -1,3 +1,33 @@
+# VALIDATION ADDENDUM (2026-10-23) — stricter decision after a second review
+
+A second review demanded scientific validation (sampling design, statistical meaning, novelty vs
+the closest work) before relying on the gate. Outcome: **NARROW further.** Three corrections, all
+now in the manuscript:
+
+1. **The recall-invisibility "theorem" is not novel.** Bikdeli et al. (2026, "Dashboard Says
+   Perfect") already report ATC assigning accuracy 1.000 to a zero-recall detector and **formalise
+   the inversion in two propositions**. §4.5 now credits them explicitly and claims no novelty for
+   the proposition; it is restated only to make the adversarial exploit explicit.
+2. **The audit's sampling was attack-enriched.** The pilot draws k labelled *attack* flows — an
+   attack-reference (active) audit that assumes the auditor can produce known attacks. Realistic for
+   a defender with source attacks, but it certifies recall only against that reference, and passive
+   labelling costs ≈ k/π (100–10 000 labels for k = 10 at π = 0.1–0.001). §5.5 now states this; the
+   "10 flows" headline is "10 attack labels", not 10 random flows.
+3. **0.03% is an empirical benchmark frequency, not a guarantee.** §5.5 now distinguishes it from
+   the per-config α-level false-accept control of the Clopper-Pearson test, and notes the correlated
+   (pair, model, seed) structure. Bikdeli's conformal-abstention drift alarm (which works) is
+   acknowledged as complementary — a drift alarm is not a recall certificate — and flagged untested.
+
+**Surviving, defensible contribution (what is actually ours):** the *adversarial, cross-testbed,
+constraint-modelled* measurement — a constrained attacker deliberately exploiting the (known)
+blind spot across the independent-testbed quartet; the model-dependence spectrum (RandomForest
+resists); the honest latent-vs-adversarial decomposition; the negative defence; and the honest
+cost-of-certification accounting. NOT ours: the blindness proposition (Bikdeli), the audit mechanism
+(PPRM / RiskGate-IDS / Podkopaev–Ramdas), or any claim that a drift alarm cannot exist. The paper is
+honest and SOP-relevant at this scope; it is not a theorem paper and must not be sold as one.
+
+---
+
 # P-1 reframe — strict decision (2026-10-22)
 
 Response to the strategic review proposing a decision-risk / deployment-gate reframe. Per the

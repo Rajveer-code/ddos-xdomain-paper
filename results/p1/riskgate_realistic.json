@@ -1,0 +1,27 @@
+{
+  "audit_sampling": "active / attack-reference (k labelled ATTACK flows); certifies recall against the reference attack distribution, not unknown attacks",
+  "active_cost_labels_per_attack": 1,
+  "passive_cost": {
+    "0.1": {
+      "10": 100,
+      "25": 250,
+      "50": 500
+    },
+    "0.01": {
+      "10": 1000,
+      "25": 2500,
+      "50": 5000
+    },
+    "0.001": {
+      "10": 10000,
+      "25": 25000,
+      "50": 50000
+    }
+  },
+  "note": "passive cost = expected random target labels to observe k attacks = k/pi (negative binomial). Active auditing (replaying known/source attacks) avoids this and is the regime the pilot assumes.",
+  "recall_distribution": {
+    "mean": 0.086,
+    "frac_below_0.5": 0.946,
+    "frac_below_0.1": 0.796
+  }
+}

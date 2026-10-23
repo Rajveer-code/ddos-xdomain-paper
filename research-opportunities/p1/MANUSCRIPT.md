@@ -35,18 +35,25 @@ report normal** — the dangerous pairing is a population property, worst for Lo
 (silent 58%) and absent for RandomForest (0%). The obvious
 responder-side defence — watch the features the adversary cannot freely set — fails a
 pre-registered bar everywhere (ΔHCMR ≤ 0.072 against a 0.10 bar), because those features do not
-transfer across independent testbeds either. We give the structural reason: any monitor that is a
-function of the detector's score distribution alone (ATC, confidence drift) is **provably invisible
-to a collapse of attack recall** — on the worst cell ATC reports 99.9% estimated accuracy while
-attack recall is 0% — and the feature-distribution monitors that could see it instead fire on
-benign shift, so neither class is a usable cross-network recall alarm. The practical danger is
+transfer across independent testbeds either. The structural reason is known — Bikdeli et al. (2026)
+formalise that a score-only monitor (ATC, confidence drift) can report perfect accuracy for a
+zero-recall detector under benign shift — and our contribution on this point is to show an
+*adversary* can deliberately drive flows into that blind spot across independent testbeds (on the
+worst cell ATC reports 99.9% estimated accuracy while attack recall is 0%). The confidence monitors
+we tested are recall-blind by construction; the distance monitors fire on any shift (non-specific);
+a reliable drift alarm exists (Bikdeli's conformal abstention) but a drift alarm certifies *that*
+something changed, not *that recall is acceptable*. The practical danger is
 therefore not a clever adversary but a detector that is a thin margin from waving everything through
 and a label-free safety net calibrated on the wrong network. The corollary is operational: since a
-score-only monitor cannot certify recall, the minimal sufficient evidence is a labelled audit — and
-we show a 10-flow Clopper-Pearson recall audit cuts the confidence monitors' false-assurance rate
-from 15% to 0.03% across the 240 configurations. Scope: feature-space, one feature family, the
-tested pairs; "suggests", not "proves" — except the recall-invisibility result, which is a
-proposition.
+score-only monitor cannot certify recall, the minimal sufficient evidence is a *labelled* one. Using
+a standard finite-sample recall audit (not a new estimator — the machinery is Clopper-Pearson /
+prediction-powered risk monitoring), ten labelled **attack** examples — an attack-reference audit a
+defender runs by replaying known or source attacks — cut the confidence monitors' empirical
+false-certification rate from 15% to 0.03% on this benchmark. Scope and honesty: feature-space, one
+NetFlow v2 family, the tested pairs; the recall-invisibility result and the audit are prior art
+(Bikdeli et al. 2026; PPRM 2026; RiskGate-IDS 2026) — our distinct contribution is the *adversarial,
+cross-testbed* measurement, the model-dependence, and the honest accounting of what certification
+costs; "suggests", not "proves".
 
 ## 1. Introduction
 
@@ -234,21 +241,27 @@ added cost ≤ 0.02).
 **Statistics.** HCMR and its components carry paired-bootstrap 95% CIs over flows (N ≥ 2000);
 seed variance is reported separately across five seeds.
 
-### 4.5 Why the model-based monitors are structurally blind (a recall-invisibility result)
+### 4.5 Why the model-based monitors are structurally blind (recall-invisibility)
 
 The empirical silence of ATC and confidence-drift is not a calibration accident; it is forced by
-what those monitors are functions of. Call a label-free monitor **score-only** if its output
-depends on the target deployment solely through the empirical distribution of detector scores
-{p(x)} (equivalently of confidences max(p, 1−p)). ATC, mean-confidence, mean-confidence-drop and
-the KS-on-scores test are score-only; the feature-distribution monitors (proxy A-distance,
-Wasserstein) are not.
+what those monitors are functions of. **We claim no novelty for this observation:** Bikdeli et al.
+(2026) already report that ATC assigns a predicted accuracy of 1.000 to a detector with zero recall
+on every attack family under benign temporal shift, and formalise the inversion in two propositions.
+We restate it in the form that makes the *adversarial* exploit explicit — the invariance is to any
+relabelling that preserves the score distribution — and use it to explain the model-dependence; the
+result below is theirs in substance, included for self-containedness.
+
+Call a label-free monitor **score-only** if its output depends on the target deployment solely
+through the empirical distribution of detector scores {p(x)} (equivalently of confidences
+max(p, 1−p)). ATC, mean-confidence, mean-confidence-drop and the KS-on-scores test are score-only;
+the feature-distribution monitors (proxy A-distance, Wasserstein) are not.
 
 At an operational base rate π (attack fraction, with π ≪ 1 for a monitored network), a detector's
 accuracy is (1−π)·specificity + π·recall ≈ specificity — it is dominated by benign traffic and is
 almost independent of attack recall. ATC estimates accuracy, so it tracks specificity and is nearly
 insensitive to recall.
 
-> **Proposition (recall-invisibility).** Let two target deployments D and D′ induce the *same*
+> **Proposition (recall-invisibility; cf. Bikdeli et al. 2026, Props 1–2).** Let two target deployments D and D′ induce the *same*
 > detector-score distribution, D with every attack flow in the high-score (attack) region and D′
 > with the attack flows moved into the high-confidence low-score (benign) region. Any score-only
 > monitor M satisfies M(D) = M(D′), while attack recall(D) = 1 and recall(D′) = 0.
@@ -444,20 +457,32 @@ labels is established (Podkopaev & Ramdas 2022; prediction-powered risk monitori
 2026; budgeted target calibration for NIDS, RiskGate-IDS 2026). We instead measure, on the full
 240-config matrix, what that evidence buys against the confidence monitors it replaces.
 
+**Sampling design (stated, because it bounds the claim).** The audit draws **k labelled *attack*
+examples** and forms a Clopper-Pearson lower bound on recall. This is an *attack-reference* (active)
+audit: it assumes the auditor can produce known attacks — replay the source-network attacks the
+detector was trained on, a red-team, or honeypot captures — which is realistic for a defender who
+already holds source attacks, and it certifies recall **against that reference attack distribution,
+not against unknown attacks**. It does *not* assume free labels for target-native attacks. If labels
+instead come from passively labelling random target traffic at base rate π, observing k attacks
+costs ≈ k/π labels (e.g. 100, 1 000, 10 000 random labels for k = 10 at π = 0.1, 0.01, 0.001;
+`results/p1/riskgate_realistic.json`). The gate's *verdicts* are unchanged either way — only the
+label cost differs.
+
 Treat a configuration as *unsafe* if the detector's true attack recall at its deployed threshold is
-below 0.5 (227 of 240 configs are unsafe — the cross-testbed detector catches under half of real
-attacks on most transfers). A deployment gate that trusts the **score-only** confidence monitors —
-accept when neither ATC nor confidence-drift fires — gives **false assurance on 15.0% of
-configurations** (it accepts unsafe detectors because the monitors are silent, §4.5). A gate that
-instead draws **k labelled target attack flows and forms a Clopper-Pearson lower bound on recall**
-(accept if the bound clears 0.5, escalate if the upper bound falls below it, else *insufficient
-evidence*) cuts false assurance to **0.0003 at k = 10**, with coverage 0.81 and 86% of unsafe
-configurations correctly escalated; at k = 50, coverage 0.90 and 95% escalated
-(`results/p1/riskgate_pilot.json`). Ten labelled flows turn a 15% false-assurance rate into
-essentially zero — consistent with P11's finding (F7) that ten labelled target flows beat every
-zero-label method. The contribution here is not the audit machinery but the theorem that makes it
-*necessary* and the measurement of how little of it suffices; the gate's third verdict,
-*insufficient evidence*, is the honest output the confidence monitors never give.
+below 0.5 (227 of 240 configs are unsafe — mean recall 0.086, and 80% of configs catch under 10% of
+attacks, so most are easy to expose). A gate that trusts the **score-only** confidence monitors
+(accept when neither ATC nor confidence-drift fires) accepts **15.0% of configurations that are in
+fact unsafe**. The attack-reference audit (accept if the Clopper-Pearson recall lower bound clears
+0.5, escalate if the upper bound falls below it, else *insufficient evidence*) accepts an unsafe
+config in **0.03% of simulated audits at k = 10** (coverage 0.81, 86% of unsafe configs escalated;
+k = 50: coverage 0.90, 95% escalated; `results/p1/riskgate_pilot.json`). **Statistical meaning:**
+0.03% is the *empirical* false-certification frequency over simulated audit draws on this benchmark;
+*per configuration*, the one-sided test's false-accept probability is controlled at the nominal α by
+the Clopper-Pearson construction, and the empirical rate is far below α only because most detectors
+are deeply unsafe (recall ≈ 0), which few attack labels expose. This is consistent with P11 (F7: ten
+labelled target flows beat every zero-label method). We present the gate not as a new estimator but
+as the honest *cost of certification* once §4.5 rules the confidence monitors out; its third
+verdict, *insufficient evidence*, is the output the confidence monitors never give.
 
 ### 5.6 Sequential auditing, and why the obvious baselines do not certify recall
 
@@ -477,7 +502,8 @@ predicts:
 | Confidence monitors (ATC, drift) | 0 | **no** | score-only ⇒ recall-invisible (§4.5); false assurance on 15% of configs |
 | Prediction-powered risk monitoring (PPRM-style) | a trickle | **no** | estimates a base-rate-weighted *overall* risk; at a NIDS base rate that risk ≈ specificity and is recall-blind — on the dangerous cell it reads error ≈ 0.092 while recall is 0. Pointed at recall it needs the labelled audit, and prediction-powering buys nothing because the model's predictions on the attack subpopulation are, by hypothesis, the collapsed quantity |
 | Threshold recalibration (benign-quantile) | 0 | **no** | label-free, so provides no recall guarantee; it only trades the operating point, and on transfers where ranking inverts it does not restore recall (P11 F6: recovers 97% of the headroom on the one ranking-preserving pair, actively harmful on three others) |
-| **Labelled recall audit (fixed / sequential)** | 10–40 flows | **yes** | directly bounds the quantity of interest with a finite-sample interval |
+| Conformal abstention (Bikdeli et al. 2026) | 0 | **no (certifies drift, not recall)** | Bikdeli report it is the one label-free statistic that behaves reliably — but as a *drift alarm*: it flags that the input distribution changed, not that recall at the operating point is acceptable. Useful and complementary; it does not close the certification gap. We did not re-run it here (a limitation) |
+| **Labelled recall audit (fixed / sequential)** | 10–40 **attack** labels (or ≈k/π random labels) | **yes** | directly bounds the quantity of interest with a finite-sample interval; needs an attack-reference sample (§5.5) |
 
 The point is not that the audit is a new estimator — it is textbook — but that it is the *only* one
 of these four that answers the certification question, and the recall-invisibility proposition
@@ -548,11 +574,18 @@ about all NIDS or all monitors. The recall-invisibility proposition (§4.5) is e
 deployments with identical score distributions; a real adversary matches the source score
 distribution only approximately (hence the empirical ATC gap is small but nonzero), and the
 proposition's precondition — feasible reachability of the high-confidence-benign region — is the
-model-dependent quantity the empirical study measures, not an assumption. Finally, the 240
+model-dependent quantity the empirical study measures, not an assumption. The 240
 configurations are **not** 240 independent environments: they are 12 ordered pairs × 4 models × 5
 seeds, and configurations sharing a pair or a model are correlated. We therefore report per-pair and
 per-model breakdowns throughout and read the aggregate counts (e.g. 74/240) as descriptive of this
-design, not as a sample of independent deployments.
+design, not as a sample of independent deployments. The **recall audit assumes an attack-reference
+sample** (§5.5): it certifies recall against attacks the auditor can produce, not unknown zero-days,
+and passive labelling is expensive at low base rates — the gate is a *cost-of-certification*
+statement, not a claim that recall is cheap to certify in all deployments. Finally, we did **not**
+re-run Bikdeli et al.'s conformal-abstention drift alarm, which they report behaves reliably; our
+"neither monitor is a recall alarm" statement is scoped to the ATC/confidence-drift and distance
+monitors we tested, and a drift alarm (theirs) is complementary to, not a substitute for, a recall
+certificate.
 
 ## 8. Ethics and responsible disclosure
 

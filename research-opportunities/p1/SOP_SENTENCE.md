@@ -45,23 +45,24 @@ Shorter variant (one line):
 The upgraded version leads with the *structural result* and connects P-1 to the rest of the
 portfolio, so it reads as a programme, not a one-off:
 
-> In recent work I showed that a widely recommended safety check for deployed intrusion detectors
-> is not merely unreliable but *structurally* blind: any label-free monitor that is a function of a
-> model's score distribution alone — the Average-Thresholded-Confidence family — is provably
-> invisible to a collapse of attack recall, and I measured a cross-network DoS detector on which
-> this monitor reports 99.9% estimated accuracy while catching 0% of attacks, a blind spot a
-> traffic-plausibly-constrained adversary can enter in roughly half of all successful evasions. This
-> is the security instance of the question my work keeps returning to — *when does a reported
-> evaluation metric actually license the conclusion drawn from it?* — which I have also studied for
-> cross-network accuracy (P11), LLM-leaderboard verifiers (P14), benchmark scoring rules (P5),
-> pooled-versus-subgroup clinical AUC (P06b), and the finite-sample validity of these same
-> label-free monitors. My thesis makes this programme its spine: characterising, with theory and
-> adversarial measurement, the gap between what an evaluation reports and what it licenses.
+> A widely recommended safety check for deployed intrusion detectors — label-free confidence
+> monitoring — is known to be blind to a detector that has silently stopped catching attacks (a
+> monitor can report 99.9% accuracy over a detector catching 0% of attacks). I asked the adversarial
+> version of that question: can an attacker, constrained to traffic-plausible changes, *deliberately*
+> drive attacks into that blind spot after a detector moves to a new network? Across the NetFlow v2
+> quartet I found it happens in roughly half of all successful evasions, that it is sharply
+> model-dependent, and that the obvious responder-side fix does not transfer — and I quantified what
+> a small labelled audit costs to recover the recall the monitors cannot certify. This is the
+> security instance of the question my work keeps returning to — *when does a reported evaluation
+> metric license the conclusion drawn from it?* — alongside cross-network accuracy (P11),
+> LLM-leaderboard verifiers (P14), benchmark scoring (P5), and pooled-versus-subgroup clinical AUC
+> (P06b). My thesis makes that programme its spine.
 
-Why it is stronger: it states a *theorem* (not just an empirical finding), gives one unforgettable
-number (99.9% reported / 0% caught), and frames five prior papers as one coherent line — which is
-exactly what an admissions committee reads an SOP for. Numbers:
-`results/p1/summary_p1.json`, `theory_illustration.json`.
+Honesty guardrails (do not overstate in the SOP): the *blindness* result is Bikdeli et al.'s
+(formalised there first); the audit *mechanism* is prior art (PPRM, RiskGate-IDS). The distinct
+contribution is the **adversarial, cross-testbed measurement**, the model-dependence, and the honest
+cost accounting — not a new theorem or a new monitor. Lead with the adversarial finding and the
+through-line, not with a theorem claim. Numbers: `results/p1/summary_p1.json`.
 
 ## Faculty framing (verify before naming anyone in an SOP)
 

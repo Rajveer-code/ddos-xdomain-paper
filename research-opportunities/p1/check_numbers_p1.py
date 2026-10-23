@@ -85,7 +85,7 @@ def main() -> int:
         g = json.loads(gpath.read_text())
         add("gate n_unsafe", g["n_unsafe"])
         add("gate score-only false-assurance", f"{g['score_only']['false_assurance_rate']*100:.1f}%")
-        add("gate k=10 false-assurance", f"{g['audit_gate']['10']['false_assurance_rate']:.4f}")
+        add("gate k=10 false-assurance", f"{g['audit_gate']['10']['false_assurance_rate']*100:.2f}%")
     g2path = R / "riskgate.json"
     if g2path.exists():
         g2 = json.loads(g2path.read_text())["sequential"]
