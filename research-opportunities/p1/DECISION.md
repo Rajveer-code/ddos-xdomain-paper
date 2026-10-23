@@ -1,3 +1,30 @@
+# PRE-DECLARED PROTOCOL for the final two checks (2026-10-23, before running)
+
+Declared before execution so thresholds are not chosen after seeing results. Existing data/code
+only; no new models/theorems/defences.
+
+**Check 1 — conformal abstention (faithful-as-possible reproduction of Bikdeli's drift signal).**
+Split-conformal nonconformity = 1 − confidence = 1 − max(p, 1−p). Calibrate the conformal threshold
+τ at the 1% quantile of source-validation **benign** nonconformity (≈99% conforming benign). Target
+abstention rate = fraction of the target deployment below τ. Alarm threshold null-calibrated on
+source-validation two-half resampling at the same 1% false-alarm budget as the other monitors (no
+target labels, no adversarial metrics used to tune). Run over the full 12×4×5 matrix.
+*Success criteria (pre-declared):* conformal abstention is a **useful danger signal** iff its alarm
+rate on unsafe configs (true recall < 0.5) is high (≥ 0.8) AND it is more specific than ATC/
+confidence-drift (does not simply fire on every transfer). It is **non-specific** if it alarms at a
+similar rate on safe and unsafe configs. A drift alarm is never treated as a recall certificate.
+Report whichever holds, by model and direction; label faithful-vs-approximate honestly.
+
+**Check 2 — passive-sampling audit.** π ∈ {0.1, 0.01, 0.001}; labelling budgets N ∈ {100, 1000}.
+Simulate random target draws (attack w.p. π, caught w.p. config recall). Report: (a) the
+negative-binomial distribution of random labels to observe k = 10 attacks; (b) P(< 10 attacks within
+budget N); (c) the Clopper-Pearson recall interval and gate verdict given the attacks observed; (d)
+whether 10 labelled attacks can *certify safe* (recall ≥ 0.5) at 95% — stated from the CP math, not
+assumed. Expected cost (k/π) kept separate from any guarantee. Active (attack-reference) result kept
+separate from passive.
+
+---
+
 # VALIDATION ADDENDUM (2026-10-23) — stricter decision after a second review
 
 A second review demanded scientific validation (sampling design, statistical meaning, novelty vs

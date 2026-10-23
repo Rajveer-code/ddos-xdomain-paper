@@ -468,6 +468,18 @@ costs ≈ k/π labels (e.g. 100, 1 000, 10 000 random labels for k = 10 at π = 
 `results/p1/riskgate_realistic.json`). The gate's *verdicts* are unchanged either way — only the
 label cost differs.
 
+**Passive sampling, validated (not just the k/π estimate).** Simulating random target labelling
+(`results/p1/audit_passive.json`) confirms passive auditing is expensive and often infeasible at low
+base rates: at π = 0.1 a 100-label budget fails to yield 10 attacks 45% of the time; at π = 0.01 a
+100-label budget *never* reaches 10 attacks and a 1 000-label budget fails 46% of the time; at
+π = 0.001 even 1 000 labels never suffice. And a further honest limit: **ten labelled attacks
+certify a detector *unsafe* easily but can only certify it *safe* if 9 of the 10 are caught** (the
+one-sided Clopper-Pearson recall lower bound is 0.606 at 9/10, 0.493 at 8/10). Because 227/240 of our
+configurations are deeply unsafe (mean recall 0.086), the audit's job here is overwhelmingly correct
+*escalation*, not safe-certification — the "ten flows" result is a cheap way to *catch* a broken
+detector, not a cheap safety certificate. We state this rather than imply the audit certifies safety
+for free.
+
 Treat a configuration as *unsafe* if the detector's true attack recall at its deployed threshold is
 below 0.5 (227 of 240 configs are unsafe — mean recall 0.086, and 80% of configs catch under 10% of
 attacks, so most are easy to expose). A gate that trusts the **score-only** confidence monitors

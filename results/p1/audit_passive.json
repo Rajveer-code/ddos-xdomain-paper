@@ -1,0 +1,72 @@
+{
+  "recall_floor": 0.5,
+  "alpha": 0.05,
+  "k_attacks": 10,
+  "min_caught_of_10_to_certify_safe": 9,
+  "cp_lower_at_m": {
+    "6": 0.304,
+    "7": 0.393,
+    "8": 0.493,
+    "9": 0.606,
+    "10": 0.741
+  },
+  "passive": {
+    "0.1": {
+      "mean_labels_k_pi": 100,
+      "median_labels_for_10_attacks": 97,
+      "p90_labels_for_10_attacks": 140,
+      "by_budget": {
+        "100": {
+          "P_fewer_than_10_attacks": 0.451,
+          "false_assurance_rate": 0.0008,
+          "insufficient_rate": 0.193,
+          "no_attack_sample_rate": 0.0
+        },
+        "1000": {
+          "P_fewer_than_10_attacks": 0.0,
+          "false_assurance_rate": 0.0007,
+          "insufficient_rate": 0.065,
+          "no_attack_sample_rate": 0.0
+        }
+      }
+    },
+    "0.01": {
+      "mean_labels_k_pi": 1000,
+      "median_labels_for_10_attacks": 967,
+      "p90_labels_for_10_attacks": 1418,
+      "by_budget": {
+        "100": {
+          "P_fewer_than_10_attacks": 1.0,
+          "false_assurance_rate": 0.0,
+          "insufficient_rate": 0.628,
+          "no_attack_sample_rate": 0.369
+        },
+        "1000": {
+          "P_fewer_than_10_attacks": 0.457,
+          "false_assurance_rate": 0.0008,
+          "insufficient_rate": 0.197,
+          "no_attack_sample_rate": 0.0
+        }
+      }
+    },
+    "0.001": {
+      "mean_labels_k_pi": 10000,
+      "median_labels_for_10_attacks": 9669,
+      "p90_labels_for_10_attacks": 14204,
+      "by_budget": {
+        "100": {
+          "P_fewer_than_10_attacks": 1.0,
+          "false_assurance_rate": 0.0,
+          "insufficient_rate": 0.094,
+          "no_attack_sample_rate": 0.906
+        },
+        "1000": {
+          "P_fewer_than_10_attacks": 1.0,
+          "false_assurance_rate": 0.0,
+          "insufficient_rate": 0.629,
+          "no_attack_sample_rate": 0.368
+        }
+      }
+    }
+  }
+}
