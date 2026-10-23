@@ -1,3 +1,53 @@
+# FINAL DECISION after both checks (2026-10-23): **NARROW (GO at narrowed scope)**
+
+Both pre-declared checks executed; results folded in honestly. No material correctness problem
+remains. Recommendation: proceed with the manuscript at its narrowed scope; do not expand.
+
+**What is genuinely novel (ours):** the *adversarial, cross-testbed, constraint-modelled*
+measurement — a constrained attacker deliberately exploiting the known blind spot across the
+independent-testbed NetFlow v2 quartet; the model-dependence spectrum (RandomForest resists, LogReg
+worst); the honest latent-vs-adversarial decomposition; the negative responder-side defence; and the
+honest certification-cost accounting, including the empirical finding that in this setting **no
+tested label-free signal — confidence (ATC/drift), distance (A-dist/Wasserstein), or an approximate
+conformal-abstention drift alarm — specifically flags the dangerous confident-miss cells** (conformal
+caught only 25% of them, and alarmed more on safe than unsafe configs).
+
+**What overlaps with prior work (not ours):** the label-free-monitoring blindness and its
+formalisation (Bikdeli et al. 2026, "Dashboard Says Perfect"); the labelled-audit / risk-monitoring
+machinery (PPRM 2026; RiskGate-IDS 2026; Podkopaev–Ramdas 2022); conformal abstention as a drift
+alarm (Bikdeli). We claim none of these as contributions.
+
+**Claims the evidence supports:** the 240-config adversarial + latent measurement with CIs; the
+model-dependence; the Gate-4 defence negative; and the certification-cost accounting — an
+attack-reference audit of ~10 labelled attacks *escalates* the unsafe majority, passive sampling is
+expensive/infeasible at low base rates (π=0.01: a 100-label budget never reaches 10 attacks), and 10
+attacks certify *safe* only at 9/10 caught. The 0.03% is an empirical benchmark frequency, not a
+guarantee.
+
+**Untested / limitations:** a faithful (non-approximate) conformal-abstention reproduction;
+wire-realizability (feature-space only; cf. PLAA/PAVE); DoS families beyond volumetric; independence
+across the correlated 12×4×5 design.
+
+### Safe wording for the SOP (use verbatim or close)
+
+> Building on prior evidence that label-free confidence monitors can misjudge a drifted intrusion
+> detector, I asked whether an adversary constrained to traffic-plausible changes could *deliberately*
+> exploit that blind spot after a detector moves to an independently built network. Across the
+> NetFlow v2 quartet I found that it can — in roughly half of successful evasions the confidence
+> monitors stay silent — that the effect is sharply model-dependent, that the obvious responder-side
+> defence does not transfer, and that none of the label-free signals I tested specifically flags the
+> dangerous cases, so certifying that the detector still catches attacks requires a small labelled
+> audit whose cost I quantify. This is the security instance of the question running through my work
+> — when does a reported evaluation metric license the decision made from it? — alongside
+> cross-network clinical AUC (P9), subgroup-versus-pooled screening (P06b), leaderboard verifiers
+> (P14), and cross-network detection failure (P11).
+
+Do **not** write, in the SOP: that you proved a new theorem; that you built a novel monitor or gate;
+that a 10-flow audit certifies safety; or that label-free monitoring is universally blind. Those are
+either prior work or unsupported.
+
+---
+
 # PRE-DECLARED PROTOCOL for the final two checks (2026-10-23, before running)
 
 Declared before execution so thresholds are not chosen after seeing results. Existing data/code

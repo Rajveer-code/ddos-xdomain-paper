@@ -514,7 +514,7 @@ predicts:
 | Confidence monitors (ATC, drift) | 0 | **no** | score-only ⇒ recall-invisible (§4.5); false assurance on 15% of configs |
 | Prediction-powered risk monitoring (PPRM-style) | a trickle | **no** | estimates a base-rate-weighted *overall* risk; at a NIDS base rate that risk ≈ specificity and is recall-blind — on the dangerous cell it reads error ≈ 0.092 while recall is 0. Pointed at recall it needs the labelled audit, and prediction-powering buys nothing because the model's predictions on the attack subpopulation are, by hypothesis, the collapsed quantity |
 | Threshold recalibration (benign-quantile) | 0 | **no** | label-free, so provides no recall guarantee; it only trades the operating point, and on transfers where ranking inverts it does not restore recall (P11 F6: recovers 97% of the headroom on the one ranking-preserving pair, actively harmful on three others) |
-| Conformal abstention (Bikdeli et al. 2026) | 0 | **no (certifies drift, not recall)** | Bikdeli report it is the one label-free statistic that behaves reliably — but as a *drift alarm*: it flags that the input distribution changed, not that recall at the operating point is acceptable. Useful and complementary; it does not close the certification gap. We did not re-run it here (a limitation) |
+| Conformal abstention (Bikdeli et al. 2026) | 0 | **no** | Bikdeli report it as a reliable *drift* alarm under benign temporal shift. We ran an **approximate** reproduction on our matrix: it is non-specific here (alarms on 0.92 of *safe* vs 0.84 of unsafe configs, gap −0.09) and — decisively — silent on **75% of the 36 dangerous cells** (unsafe + confidence-monitors-silent), because those misses are *confident* (low nonconformity) and a score-functional abstention shares the recall-invisibility. Caveat: approximate implementation, and our adversarial cross-testbed setting differs from their benign-temporal one |
 | **Labelled recall audit (fixed / sequential)** | 10–40 **attack** labels (or ≈k/π random labels) | **yes** | directly bounds the quantity of interest with a finite-sample interval; needs an attack-reference sample (§5.5) |
 
 The point is not that the audit is a new estimator — it is textbook — but that it is the *only* one
@@ -593,11 +593,12 @@ per-model breakdowns throughout and read the aggregate counts (e.g. 74/240) as d
 design, not as a sample of independent deployments. The **recall audit assumes an attack-reference
 sample** (§5.5): it certifies recall against attacks the auditor can produce, not unknown zero-days,
 and passive labelling is expensive at low base rates — the gate is a *cost-of-certification*
-statement, not a claim that recall is cheap to certify in all deployments. Finally, we did **not**
-re-run Bikdeli et al.'s conformal-abstention drift alarm, which they report behaves reliably; our
-"neither monitor is a recall alarm" statement is scoped to the ATC/confidence-drift and distance
-monitors we tested, and a drift alarm (theirs) is complementary to, not a substitute for, a recall
-certificate.
+statement, not a claim that recall is cheap to certify in all deployments. Finally, we ran an **approximate**
+reproduction of Bikdeli et al.'s conformal-abstention drift signal (§5.6): in our adversarial
+cross-testbed setting it was non-specific (alarm 0.92 on safe vs 0.84 on unsafe) and silent on 75% of
+the dangerous confident-miss cells. We flag this as approximate — not a faithful reproduction of
+their pipeline, and their benign-temporal setting differs — so it bounds, rather than refutes,
+their finding; a verbatim reproduction remains untested.
 
 ## 8. Ethics and responsible disclosure
 

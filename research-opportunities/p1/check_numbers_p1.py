@@ -92,6 +92,17 @@ def main() -> int:
         add("seq mean labels", f"{g2['mean_labels_to_decision']:.0f}")
         add("seq median labels", g2["median_labels_to_decision"])
 
+    # conformal-abstention check (§5.6)
+    cpath = R / "matrix_conformal.json"
+    if cpath.exists():
+        import numpy as _np
+        cr = [x for x in json.loads(cpath.read_text()) if x.get("has_volumetric")]
+        us = [x for x in cr if x["unsafe"]]
+        sf = [x for x in cr if not x["unsafe"]]
+        if us and sf:
+            add("conformal alarm unsafe", f"{_np.mean([x['conformal_alarm'] for x in us]):.2f}")
+            add("conformal alarm safe", f"{_np.mean([x['conformal_alarm'] for x in sf]):.2f}")
+
     # recall-invisibility illustration (theory §4.5)
     tpath = R / "theory_illustration.json"
     if tpath.exists():
