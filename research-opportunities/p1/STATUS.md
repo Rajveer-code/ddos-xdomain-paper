@@ -141,3 +141,6 @@ Sequential recall audit (riskgate.py, Bonferroni-CP checkpoints): mean 39 labels
 
 ### Validation pass (2026-10-23) — decision NARROW
 2nd review -> validated the gate. Theorem NOT novel (Bikdeli Props 1-2 credited, 4.5 de-claimed). Audit samples known ATTACK flows (attack-reference; passive cost ~k/pi stated; riskgate_realistic.py). 0.03% = empirical frequency, not guarantee. Conformal-abstention drift alarm acknowledged, untested. Surviving contribution = adversarial+cross-testbed+constraint measurement + model-dependence + cost-of-certification. DECISION.md addendum. Abstract/SOP de-claimed. check_numbers 42/42. Pushed 08d809e.
+
+### Final validation (2026-10-23) — decision NARROW, STOP
+Two pre-declared checks run. Check 1 conformal abstention (approx): non-specific (0.92 safe vs 0.84 unsafe), silent on 75% of dangerous cells -> fails usefulness criterion. Check 2 passive audit: expensive/infeasible at low base rate; 10 attacks escalate unsafe but certify-safe needs 9/10. DECISION.md FINAL DECISION=NARROW with safe SOP wording + do-not-claim list. No correctness problem. check_numbers 44/44. Pushed 07865c3, 25 commits. Per instruction: stop, no further work unless a correctness problem appears.
