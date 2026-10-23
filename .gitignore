@@ -43,3 +43,8 @@ results/.locks/
 
 # assistant project rules, kept local
 CLAUDE.md
+
+# latex build artifacts
+research-opportunities/p1/*.aux
+research-opportunities/p1/*.out
+research-opportunities/p1/*.log
