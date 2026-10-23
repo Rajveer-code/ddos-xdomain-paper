@@ -138,3 +138,6 @@ Title retired overclaim -> "A Shift Alarm Is Not a Safety Certificate". Added re
 
 ### Gate built out (2026-10-23)
 Sequential recall audit (riskgate.py, Bonferroni-CP checkpoints): mean 39 labels / median 10 to a decision at the same 0.94 coverage as fixed k=250. MANUSCRIPT 5.6 baseline table: confidence monitors, PPRM-style risk monitoring, and threshold recalibration all fail to certify recall (4.5 explains why); only the labelled audit does. Novelty kept honest (audit is textbook; theorem+budget is the contribution). Stratified: no first-order gain on a single attack population, noted not oversold. check_numbers 42/42. Pushed 91de54c. 20 commits.
+
+### Validation pass (2026-10-23) — decision NARROW
+2nd review -> validated the gate. Theorem NOT novel (Bikdeli Props 1-2 credited, 4.5 de-claimed). Audit samples known ATTACK flows (attack-reference; passive cost ~k/pi stated; riskgate_realistic.py). 0.03% = empirical frequency, not guarantee. Conformal-abstention drift alarm acknowledged, untested. Surviving contribution = adversarial+cross-testbed+constraint measurement + model-dependence + cost-of-certification. DECISION.md addendum. Abstract/SOP de-claimed. check_numbers 42/42. Pushed 08d809e.
