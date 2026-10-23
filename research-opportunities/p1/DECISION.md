@@ -1,3 +1,9 @@
+# ATTRIBUTION CORRECTION (2026-10-23)
+
+*The Dashboard Says "Perfect"* is by **Wali Ahmed, Md Azizul Rahaman, Pappu Roy, Parves Alam** (Frontiers in AI 2026, DOI 10.3389/frai.2026.1928858), verified from the article's citation metadata. Earlier drafts wrongly credited "Bikdeli" (propagated from the master plan); corrected everywhere. Also per the final review: the conformal result is stated as ~84% sensitivity / ~8% specificity (did not separate dangerous from safe IN OUR setting, not generally); the audit's safe threshold (recall>=0.5) and one-sided 95% convention are stated; passive sampling is framed as probability-of-too-few-attacks, not impossibility. MANUSCRIPT.md rewritten clean/humanised for arXiv; check_numbers 44/44.
+
+---
+
 # FINAL DECISION after both checks (2026-10-23): **NARROW (GO at narrowed scope)**
 
 Both pre-declared checks executed; results folded in honestly. No material correctness problem
@@ -13,9 +19,9 @@ conformal-abstention drift alarm — specifically flags the dangerous confident-
 caught only 25% of them, and alarmed more on safe than unsafe configs).
 
 **What overlaps with prior work (not ours):** the label-free-monitoring blindness and its
-formalisation (Bikdeli et al. 2026, "Dashboard Says Perfect"); the labelled-audit / risk-monitoring
+formalisation (Ahmed et al. 2026, "Dashboard Says Perfect"); the labelled-audit / risk-monitoring
 machinery (PPRM 2026; RiskGate-IDS 2026; Podkopaev–Ramdas 2022); conformal abstention as a drift
-alarm (Bikdeli). We claim none of these as contributions.
+alarm (Ahmed et al.). We claim none of these as contributions.
 
 **Claims the evidence supports:** the 240-config adversarial + latent measurement with CIs; the
 model-dependence; the Gate-4 defence negative; and the certification-cost accounting — an
@@ -53,7 +59,7 @@ either prior work or unsupported.
 Declared before execution so thresholds are not chosen after seeing results. Existing data/code
 only; no new models/theorems/defences.
 
-**Check 1 — conformal abstention (faithful-as-possible reproduction of Bikdeli's drift signal).**
+**Check 1 — conformal abstention (faithful-as-possible reproduction of Ahmed et al.'s drift signal).**
 Split-conformal nonconformity = 1 − confidence = 1 − max(p, 1−p). Calibrate the conformal threshold
 τ at the 1% quantile of source-validation **benign** nonconformity (≈99% conforming benign). Target
 abstention rate = fraction of the target deployment below τ. Alarm threshold null-calibrated on
@@ -81,7 +87,7 @@ A second review demanded scientific validation (sampling design, statistical mea
 the closest work) before relying on the gate. Outcome: **NARROW further.** Three corrections, all
 now in the manuscript:
 
-1. **The recall-invisibility "theorem" is not novel.** Bikdeli et al. (2026, "Dashboard Says
+1. **The recall-invisibility "theorem" is not novel.** Ahmed et al. (2026, "Dashboard Says
    Perfect") already report ATC assigning accuracy 1.000 to a zero-recall detector and **formalise
    the inversion in two propositions**. §4.5 now credits them explicitly and claims no novelty for
    the proposition; it is restated only to make the adversarial exploit explicit.
@@ -92,14 +98,14 @@ now in the manuscript:
    "10 flows" headline is "10 attack labels", not 10 random flows.
 3. **0.03% is an empirical benchmark frequency, not a guarantee.** §5.5 now distinguishes it from
    the per-config α-level false-accept control of the Clopper-Pearson test, and notes the correlated
-   (pair, model, seed) structure. Bikdeli's conformal-abstention drift alarm (which works) is
+   (pair, model, seed) structure. Ahmed et al.'s conformal-abstention drift alarm (which works) is
    acknowledged as complementary — a drift alarm is not a recall certificate — and flagged untested.
 
 **Surviving, defensible contribution (what is actually ours):** the *adversarial, cross-testbed,
 constraint-modelled* measurement — a constrained attacker deliberately exploiting the (known)
 blind spot across the independent-testbed quartet; the model-dependence spectrum (RandomForest
 resists); the honest latent-vs-adversarial decomposition; the negative defence; and the honest
-cost-of-certification accounting. NOT ours: the blindness proposition (Bikdeli), the audit mechanism
+cost-of-certification accounting. NOT ours: the blindness proposition (Ahmed et al.), the audit mechanism
 (PPRM / RiskGate-IDS / Podkopaev–Ramdas), or any claim that a drift alarm cannot exist. The paper is
 honest and SOP-relevant at this scope; it is not a theorem paper and must not be sold as one.
 

@@ -49,7 +49,7 @@ section is written.
 
 | # | Work (URL) | Setting | What it establishes | What it leaves open (the wedge) | Full text read? |
 |---|---|---|---|---|---|
-| 1 | **Bikdeli et al., "The Dashboard Says 'Perfect'"**, Frontiers in AI 2026, DOI [10.3389/frai.2026.1928858](https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1928858/full) | Label-free monitoring + TTA under a natural one-year temporal shift; CIC-IDS2017↔CSE-CIC-IDS2018, 7 classes, 77 shared features; 16 method variants, both directions | No evaluated variant beats the unadapted source model in both directions; structural failure modes formalized (Props 1–2). An **audit of benign temporal shift** of label-free monitors. | It is **not an adversary** who deliberately steers flows into the high-confidence-benign region under constraints, and not the independent-testbed NetFlow quartet. **Closest paper; cite as motivation; state the delta precisely.** | Abstract + intro only — re-read before writing |
+| 1 | **Ahmed et al., "The Dashboard Says 'Perfect'"**, Frontiers in AI 2026, DOI [10.3389/frai.2026.1928858](https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2026.1928858/full) | Label-free monitoring + TTA under a natural one-year temporal shift; CIC-IDS2017↔CSE-CIC-IDS2018, 7 classes, 77 shared features; 16 method variants, both directions | No evaluated variant beats the unadapted source model in both directions; structural failure modes formalized (Props 1–2). An **audit of benign temporal shift** of label-free monitors. | It is **not an adversary** who deliberately steers flows into the high-confidence-benign region under constraints, and not the independent-testbed NetFlow quartet. **Closest paper; cite as motivation; state the delta precisely.** | Abstract + intro only — re-read before writing |
 | 2 | **Gnanaratna et al. (Kingston), "Adaptive and Uncertainty-Aware Intrusion Detection with Hybrid Meta-learning Under Proxy-Adversarial Exposure"**, SecureComm 2026, LNICST 705, pp. 74–88, [Springer](https://link.springer.com/book/10.1007/978-3-032-32767-3) | Uncertainty-aware IDS; confidence deferral + meta-learner; proxy adversary in feature space; cross-dataset | A deferral IDS can be *hardened* against a proxy adversary under shift (per title; details UNVERIFIED) | Their adversary is a training-time proxy for robustification; the monitor is the thing being **improved**, not **probed**. Not a measurement of HCMR at a fixed benign-review budget. | **UNVERIFIED** — abstract not retrievable; re-read full chapter before citing specifics |
 | 3 | **Jin & Apostolaki, "Robustifying ML-powered Network Classifiers with PANTS"**, USENIX Security 2025, arXiv [2409.04691](https://arxiv.org/abs/2409.04691) | White-box realizable traffic adversarial samples via AML+SMT, then adversarial training | Realizable packet-sequence attacks against MNCs; ~70.33% of research classifiers vulnerable; 70%/2× better than Amoeba/BAP; code + artifact | Classifier-only, **no confidence-monitor system**; not framed around high-confidence misses or quiet-monitor failure; general traffic classification, not cross-testbed DoS transfer. **Borrow its constraint/SMT discipline; do not duplicate its goal.** | Abstract + blog; skim arXiv HTML before writing |
 | 4 | **"PAVE: a protocol-validity-aware framework…"**, IoT NIDS, ScienceDirect [S2667295226000450](https://www.sciencedirect.com/science/article/pii/S2667295226000450) | Checks whether feature-space attacks map to valid CAN/MQTT/IP artifacts; 3 IoT datasets, 5 architectures, 6 defenses | Standard FGSM/PGD/Square examples are **0–3% valid** on the wire; feature-space vulnerability is overstated | **The main threat to the realism claim.** A naive feature-space attack is not credible. Phase 1's constraint model + Phase 1-R realism gate exist to answer PAVE directly. | Highlights + abstract only |
@@ -63,11 +63,11 @@ section is written.
 No work above measures **adversarial high-confidence false negatives against the joint
 detector-plus-label-free-monitor system, under cross-testbed distribution shift, with a stated
 traffic-plausibility constraint model, together with a monitor-side defense evaluated for both
-security gain and false-alarm cost.** Row 1 (Bikdeli) is the closest and is a *benign*-shift
+security gain and false-alarm cost.** Row 1 (Ahmed et al.) is the closest and is a *benign*-shift
 audit; rows 3–6 are classifier-only or realism-only; rows 2 and 7 concern the monitor as a thing
 to improve or propose, not to adversarially probe.
 
-**One-sentence delta vs. the closest paper (Bikdeli):** *Bikdeli audits whether label-free
+**One-sentence delta vs. the closest paper (Ahmed et al.):** *Ahmed et al. audits whether label-free
 monitors survive a benign one-year temporal drift and finds they do not; P-1 introduces an
 adaptive adversary who, under stated traffic-plausibility constraints, deliberately steers
 malicious flows into the high-confidence-benign region across independently built testbeds, and
@@ -226,7 +226,7 @@ Every headline number in the paper will be pinned to a `results/p1/*.json` key a
   paper; change the headline. **Do not relax constraints to manufacture an attack.**
 - **F-monitor-already-works.** If the existing monitors (ATC etc.) already fire during successful
   evasions, there is no quiet-monitor failure to fix; report "ATC is a usable alarm against this
-  adversary" (an interesting contrast with Bikdeli's benign-shift finding).
+  adversary" (an interesting contrast with Ahmed et al.'s benign-shift finding).
 - **F-no-defense-features.** If Phase 1 finds no low-controllability features (every indirect
   feature is trivially derivable from controllable ones, high R²), there is no responder-side
   defense; report the evasion result alone.

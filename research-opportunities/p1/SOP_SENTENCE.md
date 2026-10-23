@@ -40,7 +40,27 @@ Shorter variant (one line):
 > already wave through most real attacks at high confidence, how far a traffic-plausibly-constrained
 > adversary can widen that blind spot, and why the obvious responder-side defence fails to transfer.
 
-## Strongest framing — theorem + research programme (use this in the SOP)
+## FINAL SOP paragraph (2026-10-23, reviewer-approved, honest-scope) — USE THIS
+
+> My cross-network denial-of-service research led me to ask a harder question: could an attacker
+> deliberately exploit the weaknesses that appear when a detector is moved to a different network? I
+> tested constrained adversarial changes across independently collected network testbeds and found
+> that, in 74 of 145 configurations with high rates of missed attacks, both confidence-based monitors
+> remained silent. I then tested an approximate conformal-abstention method on the same evaluation
+> matrix, but it failed to distinguish unsafe configurations reliably from safe ones. My audit
+> analysis also showed why checking a detector is not as simple as labelling a handful of flows:
+> selecting known attack examples and randomly sampling traffic involve very different costs and
+> assumptions. These findings narrowed my conclusion. Rather than proposing a universal monitoring
+> solution, I want to understand what evidence can establish that a machine-learning system remains
+> reliable when its deployment environment changes.
+
+Do NOT write, in the SOP: that you proved a new theorem; that you built a novel monitor or gate; that
+a small labelled audit is a simple fix; or that label-free monitoring is universally blind. The
+blindness result and its formal propositions are Ahmed et al.'s (not Bikdeli — attribution corrected
+2026-10-23); the audit machinery is prior art (PPRM, RiskGate-IDS). Lead with the adversarial finding
+and the through-line (P9/P06b/P14/P11), not a theorem claim.
+
+## (older) framing — theorem + research programme — SUPERSEDED, do not use the theorem claim
 
 The upgraded version leads with the *structural result* and connects P-1 to the rest of the
 portfolio, so it reads as a programme, not a one-off:
@@ -58,7 +78,7 @@ portfolio, so it reads as a programme, not a one-off:
 > LLM-leaderboard verifiers (P14), benchmark scoring (P5), and pooled-versus-subgroup clinical AUC
 > (P06b). My thesis makes that programme its spine.
 
-Honesty guardrails (do not overstate in the SOP): the *blindness* result is Bikdeli et al.'s
+Honesty guardrails (do not overstate in the SOP): the *blindness* result is Ahmed et al.'s
 (formalised there first); the audit *mechanism* is prior art (PPRM, RiskGate-IDS). The distinct
 contribution is the **adversarial, cross-testbed measurement**, the model-dependence, and the honest
 cost accounting — not a new theorem or a new monitor. Lead with the adversarial finding and the

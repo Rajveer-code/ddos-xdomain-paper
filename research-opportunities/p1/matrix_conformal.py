@@ -3,7 +3,7 @@ Check 1 (pre-declared protocol in DECISION.md): conformal-abstention drift signa
 12x4x5 matrix, compared with the confidence monitors and with offline ground-truth safety.
 
 Faithful-as-possible split-conformal abstention (we label it approximate, not a verbatim
-reproduction of Bikdeli's pipeline): nonconformity s(x) = 1 - max(p, 1-p) = min(p, 1-p). The
+reproduction of Ahmed et al.'s pipeline): nonconformity s(x) = 1 - max(p, 1-p) = min(p, 1-p). The
 conformal threshold q is the (1 - alpha_conf) quantile of s on source-validation BENIGN flows
 (alpha_conf = 0.01, ~99% conforming). The target abstention rate is the fraction of the target
 deployment with s > q. The ALARM threshold is null-calibrated on source-validation two-half

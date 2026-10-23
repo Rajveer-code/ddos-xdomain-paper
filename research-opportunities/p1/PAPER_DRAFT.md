@@ -54,7 +54,7 @@ where it can, and the recommended fix does not survive the move between networks
 P11 established that cross-network flow DoS detection does not merely degrade — it inverts, and
 the failure is representational, not a stale threshold, for most pairs. The field's answer to
 "you cannot label the new network" is label-free monitoring: estimate accuracy or detect shift
-from unlabeled target traffic. Bikdeli et al. (*The Dashboard Says "Perfect"*, Frontiers in AI
+from unlabeled target traffic. Ahmed et al. (*The Dashboard Says "Perfect"*, Frontiers in AI
 2026) showed these monitors fail under a *benign* one-year temporal drift. We take the
 adversarial step they did not: an attacker who *steers* flows into the region the monitors
 trust, under stated traffic-plausibility constraints, across independently built testbeds — and
@@ -63,7 +63,7 @@ a defence that is tested, not assumed.
 ## 2. Related work and the gap
 
 Seven works bound the contribution (full table and the novelty gate in PREREGISTRATION §2):
-Bikdeli (benign-shift audit of label-free monitors — closest; we add the adversary);
+Ahmed et al. (benign-shift audit of label-free monitors — closest; we add the adversary);
 Gnanaratna/Kingston (SecureComm 2026, hardens a deferral IDS against a *training-time* proxy —
 the monitor is improved, not probed); PANTS (USENIX Sec 2025, realizable attacks + adversarial
 training, classifier-only, no confidence monitor); PAVE (feature-space attacks are 0–3% valid
@@ -141,7 +141,7 @@ adversarial deployment's alarms ≈ the natural deployment's.
 
 So where natural shift already lights the model-based monitors — LightGBM, both pairs
 (`model_monitor_alarm_adversarial` = 1.0) — they would fire anyway; ATC is a usable alarm there
-(a contrast with Bikdeli's benign-shift finding). But on **BoT-IoT → CSE-CIC-IDS2018 with
+(a contrast with Ahmed et al.'s benign-shift finding). But on **BoT-IoT → CSE-CIC-IDS2018 with
 LogisticRegression**, both model-based monitors stay **silent** (natural and adversarial alarm
 0.0) while the adversary reaches **HCMR 0.901**. That is the quiet-monitor failure in the clear:
 a strong-ranking detector (external AUC 0.919), a label-free confidence monitor reporting normal,
